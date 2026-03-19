@@ -1,0 +1,79 @@
+* {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 1rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: fit-content;
+    margin: 0;
+    padding: 0;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-sizing: border-box;
+    z-index: auto;
+}
+#collegeLabel {
+    flex-direction: row;
+    width: 100%;
+    padding: 0.5rem 8vw  10px 8vw;
+}
+#collegeLabel img {
+    width: 125px;
+}
+#collegeLabel img:last-child {
+    margin: 0 7.5px 0 7.5px;
+    width: 110px;
+}
+#collegeDetails {
+    max-width: 75%;
+}
+#collegeDetails #name {
+    font-size: 1.5rem;
+    margin: 0 0 10px 0;
+}
+#collegeDetails #address {
+    font-size: .95rem;
+}
+nav {
+    flex-direction: row;
+    align-items: flex-end;
+}
+.navLogo {
+    width: 100%;
+    max-width: 300px;
+    background-color: beige; 
+    justify-content: flex-end;
+    align-items: center;
+}
+.navHighlight {
+    flex-direction: row;
+    justify-content: end;
+    gap: 0.5rem;
+    align-items: start;
+
+    background-color: aquamarine;
+}
+.navHighlight img {
+    width: 75px;
+}
+.navTitle {
+    width: fit-content;
+    background-color: rgb(182, 231, 47);
+}
+.navTitle p {
+    font-size: 0.85rem;
+    padding: 0.25rem
+}
+.navBackground {
+    background-color: brown;
+    width: 100vw;
+    height: 250px;
+    z-index: -10;
+}
+.navLinks {
+    width: 100%;
+    background-color: blueviolet;
+    height: 100px;
+}
