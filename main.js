@@ -38,4 +38,8 @@ function navStickyFunction() {
     }
 };
 
-window.addEventListener("scroll", navStickyFunction);
+const screenWidth = window.innerWidth;
+
+if (screenWidth >= 768) {
+    window.addEventListener("scroll", navStickyFunction);
+}
