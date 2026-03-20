@@ -1,3 +1,10 @@
+/* Global Styles */
+:root {
+    --primaryColor: rgb(56, 70, 135);
+    --secondaryColor: rgb(211, 52, 39);
+    --navLogoHeight: 6vw;
+    --navLinkPadding: 100px;
+}
 * {
     font-family: 'Times New Roman', Times, serif;
     font-size: 1rem;
@@ -5,14 +12,25 @@
     display: flex;
     flex-direction: column;
     width: 100%;
-    height: fit-content;
     margin: 0;
     padding: 0;
     justify-content: center;
     align-items: center;
     text-align: center;
     box-sizing: border-box;
-    z-index: auto;
+    z-index: 0;
+}
+a {
+    color: inherit;
+    text-decoration: none;
+}
+img {
+    max-width: 125px;
+}
+
+/*local styles */
+header {
+    z-index: 2;
 }
 #collegeLabel {
     flex-direction: row;
@@ -36,44 +54,57 @@
 #collegeDetails #address {
     font-size: .95rem;
 }
+/* nav bar styles */
 nav {
     flex-direction: row;
-    align-items: flex-end;
+    height: calc(0.8 * var(--navLogoHeight));
+    background-color: var(--secondaryColor);
+    padding: 0.5rem 0 0.5rem 0;
+    box-shadow: 10px 10px 15px rgba(56, 70, 135, 0.5);
 }
 .navLogo {
-    width: 100%;
-    max-width: 300px;
-    background-color: beige; 
-    justify-content: flex-end;
-    align-items: center;
+    display: none;
+    flex: 0 1 25%;
+    flex-direction: row;
+    align-self: flex-start;
+    align-items: start;
+    justify-content: end;
+    transition: transform 0.15s ease-in-out;
 }
-.navHighlight {
+.navImage {
+    flex: 1 0 fit-content;
     flex-direction: row;
     justify-content: end;
-    gap: 0.5rem;
-    align-items: start;
-
-    background-color: aquamarine;
+    align-items: flex-start;
 }
-.navHighlight img {
-    width: 75px;
+.navImage img {
+    height: var(--navLogoHeight);
+    width: auto;
+    border: 2px solid white;
+    border-radius: 100%;
 }
 .navTitle {
-    width: fit-content;
-    background-color: rgb(182, 231, 47);
+    flex: 0 1 fit-content;
+    justify-content: flex-start;
 }
 .navTitle p {
-    font-size: 0.85rem;
-    padding: 0.25rem
-}
-.navBackground {
-    background-color: brown;
-    width: 100vw;
-    height: 250px;
-    z-index: -10;
+    font-size: 0.95rem;
 }
 .navLinks {
-    width: 100%;
-    background-color: blueviolet;
-    height: 100px;
+    flex: 1 0 75%;
+    flex-direction: row;
+    justify-content: center;
+    align-items: stretch;
+}
+.navLinks a {
+    color: white;
+    font-size: 1.15rem;
+    width: fit-content;
+    padding: calc(0.15 * var(--navLinkPadding)) calc(0.5 * var(--navLinkPadding));
+    transition: transform 0.15s ease-in-out;
+
+}
+.landingSection {
+    background-color:var(--primaryColor);
+    height: 150vh;
 }
