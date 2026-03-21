@@ -1,19 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
-    <head>
+<html lang="en" class="lightMode">
+    <head><meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
         <link rel="stylesheet" href="styles.css">
         <link rel="icon" href="images/logo/favicon.ico" type="image/x-icon">
     </head>
     <body>
-        <div id="topObservingObject" style="position: absolute; top: 0; width: 100vw; z-index: -2;"></div>
+        <div id="topObservingObject"></div>
         <header>
-            <div id="collegeLabel">
+            <div class="collegeLabel">
                 <img src="images/logo/gvp_logo.png" alt="GVP Logo" width="105" height="auto">
-                <div id="collegeDetails">
-                    <p id="name">GAYATRI VIDYA PARISHAD COLLEGE OF ENGINEERING <br/>
+                <div class="collegeDetails">
+                    <p>GAYATRI VIDYA PARISHAD COLLEGE OF ENGINEERING <br/>
                         (Autonomous)</p>
-                    <p id="address">Approved by AICTE & Affiliated to Andhra Pradesh, Visakhapatnam from 2022-23<br/>
+                    <p>Approved by AICTE & Affiliated to Andhra Pradesh, Visakhapatnam from 2022-23<br/>
                         Accredited twice by NAAC with 'A++' Grade with a CGPA of 3.52/4.00<br/>
                         Madhurwada, Visakhapatnam, 530048.</p>
                 </div>
@@ -36,7 +37,7 @@
                     <a class="navLink" href="/teams.html"><span class="navLinkSymbol"><i class="fa-solid fa-users"></i></span>Teams</a>
                     <a class="navLink" href="/"><span class="navLinkSymbol"><i class="fa-solid fa-phone"></i></span>Contact</a>
                 </div>
-                <div class="navHamburger">
+                <div class="navHamburger" onclick="navMobileMenu()">
                     <span class="navHamburgerLine"></span>
                     <span class="navHamburgerLine"></span>
                     <span class="navHamburgerLine"></span>
@@ -45,7 +46,7 @@
         </header>
         <main>
             <section class="landingSection">
-
+                <button onclick="navSticky()">Click Here!</button>
             </section>
         </main>
     </body>

@@ -37,3 +37,27 @@ function navStickyFunctionDesktop() {
         }
     }
 };
+
+
+function navMobileMenu() {
+    const navLinks = document.getElementsByClassName("navLinks")[0];
+    const navHamburgerLines = document.getElementsByClassName("navHamburgerLine");
+    Array.from(navHamburgerLines).forEach(hamburgerLine => {
+        hamburgerLine.classList.toggle("clicked");
+    }) 
+    navLinks.classList.toggle("clicked");
+}
+
+function navSticky() {
+    const navLogo = document.getElementsByClassName("navLogo")[0];
+    const navLinks = document.getElementsByClassName("navLink");
+    Array.from(navLinks).forEach(navLink => {
+        navLink.classList.toggle("clicked");
+    })
+    navLogo.classList.toggle("sticked");
+}
+
+function toggleTheme() {
+  document.documentElement.classList.toggle('lightMode');
+  document.documentElement.classList.toggle('darkMode');
+}

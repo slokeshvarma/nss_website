@@ -1,263 +1,175 @@
-/* Global Styles */
-:root {
+/* #region All Variables, Resets and Base Declaration */
+:root.lightMode {
     --primaryColor: rgb(56, 70, 135);
-    --secondaryColor: rgb(211, 52, 39);
-    --navLogoHeight: 20vw;
-    --navLinkPadding: 20px;
+    --secondaryColor: rgb(255, 255, 255);
+    --accentColor: rgb(211, 52, 39);
+    --text1Color: rgb(0, 0, 0);
+    --text2Color: rgb(255, 255, 255);
+    --background1Color: rgb(255, 255, 255);
+    --background2Color: rgb(0, 0, 0);
+}
+:root.darkMode {
+    --primaryColor: rgb(211, 52, 39);
+    --secondaryColor: rgb(0, 0, 0);
+    --accentColor: rgb(56, 70, 135);
+    --tex1Color: rgb(255, 255, 255);
+    --text2Color: rgb(0, 0, 0);
+    --background1Color: rgb(0, 0, 0);
+    --background2Color: rgb(255, 255, 255);
 }
 * {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 16px;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
+    all: unset;
     margin: 0;
     padding: 0;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
     box-sizing: border-box;
-    z-index: 0;
+}
+html {
+    font-size: 16px;
+    line-height: 1.15;
+}
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--text1Color);
+    background-color: var(--background1Color);
+}
+div, section, article, aside, header, nav, main, footer, p {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+}
+p {
+    text-align: center;
 }
 a {
     color: inherit;
     text-decoration: none;
 }
-/* Mobile Styles */
-body {
-    font-size: 16px;
+a:hover {
+    text-decoration: underline;
 }
+button, input, select, textarea {
+    font: inherit;
+    background: none;
+    border: none;
+    outline: none;
+    padding: 0.5rem;
+    border-radius: 1rem;
+}
+ul, ol {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+/* #endregion */
+
+/* region Mobile–Base styles */
 header {
     z-index: 2;
 }
-#collegeLabel {
+.collegeLabel {
     flex-direction: row;
-    justify-content: space-evenly;
-    width: 100%;
-    padding: 1rem 2vw;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    align-items: flex-start;
+    max-width: 1240px;
+    padding: 0.5rem 2vw;
 }
-#collegeLabel img:first-child {
-    flex: 1 0 15%;
-    max-width: 120px;
-    align-self: flex-end;
+.collegeLabel img:first-child {
+    flex: 1 0 50%;
+    order: 1;
+    max-width: 30vw;
 }
-#collegeLabel img:last-child {
-    flex: 1 0 15%;
-    max-width: 120px;
+.collegeDetails {
+    flex: 0 1 100%;
+    order: 3;
+    margin-top: 0.75rem;
 }
-#collegeDetails {
-    flex: 0 2 70%;
-    margin-top: 1rem;
+.collegeDetails p {
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 0.75rem;
+    font-weight: 550;
+    margin-bottom: 0.25rem;
 }
-#collegeDetails #name {
-    font-size: 1.25rem;
-    margin-bottom: 0.5rem;
+.collegeDetails p:last-child {
+    font-weight: 200;
+    font-size: 0.55rem;
 }
-#collegeDetails #address {
-    font-size: .85rem;
+.collegeLabel img:last-child {
+    flex: 1 0 50%;
+    order: 2;
+    max-width: 24vw;
+    margin: 0 3vw;
 }
-/* nav bar styles */
 nav {
-    display: flex;
     flex-direction: row;
-    color: white;
-    height: calc(0.75 * var(--navLogoHeight));
-    max-height: 100px;
-    background-color: var(--secondaryColor);
-    padding: 0.5rem 0 0.5rem 0;
+    color: var(--text2Color);
+    background-color: var(--primaryColor);
+    height: 8vh;
+    padding: 0.5rem 0;
 }
 .navLogo {
-    display: flex;
-    flex: 0 0 54%;
-    flex-direction: row;
-    align-self: flex-start;
-    align-items: flex-start;
-    justify-content: flex-end;
-    transform: translateX(-10vw);
+    flex: 1 0 65%;
+    opacity: 0.5;
 }
-.navImage {
-    flex: 1 1 60%;
-    flex-direction: row;
-    justify-content: flex-end;
-    align-items: center;
-    padding-top: 0.5rem;
-}
-.navImage img {
-    height: var(--navLogoHeight);
-    max-height: 130px;
-    width: auto;
-    border: 2px solid white;
-    border-radius: 100%;
-}
-.navTitle {
-    flex: 1 0 fit-content;
-    justify-content: flex-start;
-    margin-left: 1vw;
-}
-.navTitle p {
-    font-size: 1.35rem;
-    align-self: flex-start;
-    justify-content: flex-start;
-    text-align: center;
-    font-weight: bold;
-    padding: 1rem 0;
-}
-.landingSection {
-    background-color:var(--primaryColor);
-    height: 150vh;
+.navLogo img {
+    max-width: 20vw;
 }
 .navLinks {
-    display: flex;
     position: absolute;
-    background-color: inherit;
-    width: 22vw;
-    gap: 0.15rem;
-    height: fit-content;
-    top: calc(0.5*var(--navLogoHeight) + 2px);
     right: 0;
+    top: 8vh;
+    width: fit-content;
+    min-width: 30vw;
+    height: fit-content;
+    gap: 0.1rem;
+    background-color: var(--primaryColor);
+
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease-in-out;
+}
+.navLinks.clicked {
+    opacity: 1;
+    pointer-events: auto;
 }
 .navLink {
-    flex-direction: row;
-    text-align: left;
-    justify-content: flex-start;
-    padding: 0.65rem 1.5vw;
-    font-size: 1.75rem;
+    padding: 1vh 4vw;
 }
 .navLink:last-child {
-    padding: 0.65rem 1.5vw 0.8rem;
+    padding-bottom: 2.25vh;
 }
-.navLinkSymbol {
-    flex: 0 1 10%;
-    margin: 0 1.25rem 0 0.75rem;
-}
-.navLinkSymbol i {
-    font-size: 1.75rem;
+.navLink i {
+    margin: 0 2vw;
 }
 .navHamburger {
-    flex: 0 1 42%;
-    background-color: inherit;
-    justify-self: flex-end;
-    justify-content: space-evenly;
+    flex: 0 1 35%;
+    justify-content: center;
     align-items: flex-end;
-    padding-right: 2vw;
-    gap: 0.4rem;
+    gap: 5.6px;
+    padding-right: 6vw;
 }
 .navHamburgerLine {
-    width: 50px;
-    height: 0.4rem;
-    border-radius: 16px;
-    background-color: white;
+    width: 40px;
+    height: 4.4px;
+    border-radius: 5px;
+    background-color: var(--background1Color);
+    opacity: 1;
+    transition: opacity 0.3s ease-in-out;
 }
-
-@media (min-width: 1024px) {
-    :root {
-    --primaryColor: rgb(56, 70, 135);
-    --secondaryColor: rgb(211, 52, 39);
-    --navLogoHeight: 6vw;
-    --navLinkPadding: 100px;
+.navHamburgerLine.clicked {
+    opacity: 0;
 }
-* {
-    font-family: 'Times New Roman', Times, serif;
-    font-size: 1rem;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    box-sizing: border-box;
-    z-index: 0;
+.navHamburgerLine.clicked:first-child {
+    transform: translateY(12.8px) rotate(45deg);
+    opacity: 1;
 }
-a {
-    color: inherit;
-    text-decoration: none;
-}
-img {
-    max-width: 125px;
-}
-    header {
-    z-index: 2;
-}
-#collegeLabel {
-    flex-direction: row;
-    width: 100%;
-}
-#collegeLabel img {
-    width: 125px;
-}
-#collegeLabel img:last-child {
-    margin: 0 7.5px 0 7.5px;
-    width: 110px;
-}
-#collegeDetails {
-    max-width: 75%;
-}
-#collegeDetails #name {
-    font-size: 1.5rem;
-    margin: 0 0 10px 0;
-}
-#collegeDetails #address {
-    font-size: .95rem;
-}
-/* nav bar styles */
-nav {
-    flex-direction: row;
-    height: calc(0.8 * var(--navLogoHeight));
-    background-color: var(--secondaryColor);
-    padding: 0.5rem 0 0.5rem 0;
-    box-shadow: 10px 10px 15px rgba(56, 70, 135, 0.5);
-}
-.navLogo {
-    display: none;
-    flex: 0 1 25%;
-    flex-direction: row;
-    align-self: flex-start;
-    align-items: start;
-    justify-content: end;
-    transition: transform 0.15s ease-in-out;
-}
-.navImage {
-    flex: 1 0 fit-content;
-    flex-direction: row;
-    justify-content: end;
-    align-items: flex-start;
-}
-.navImage img {
-    height: var(--navLogoHeight);
-    width: auto;
-    border: 2px solid white;
-    border-radius: 100%;
-}
-.navTitle {
-    flex: 0 1 fit-content;
-    justify-content: flex-start;
-}
-.navTitle p {
-    font-size: 0.95rem;
-}
-.navLinks {
-    flex: 1 0 75%;
-    flex-direction: row;
-    justify-content: center;
-    align-items: stretch;
-}
-.navLinks a {
-    color: white;
-    font-size: 1.15rem;
-    width: fit-content;
-    padding: calc(0.15 * var(--navLinkPadding)) calc(0.5 * var(--navLinkPadding));
-    transition: transform 0.15s ease-in-out;
-
-}
-.landingSection {
-    background-color:var(--primaryColor);
-    height: 150vh;
-}
-.navHamburger { 
-    display: none;
-}
+.navHamburgerLine.clicked:last-child {
+    transform: translateY(-12.8px) rotate(-45deg);
+    opacity: 1;
 }
