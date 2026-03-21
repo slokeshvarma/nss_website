@@ -1,4 +1,4 @@
-function navStickyFunction() {
+function navStickyFunctionDesktop() {
     const collgeLabelHeight = document.getElementById("collegeLabel").clientHeight;
     const nav = document.getElementsByTagName("nav")[0];
     const navLogo = document.getElementsByClassName("navLogo")[0];
@@ -37,9 +37,3 @@ function navStickyFunction() {
         }
     }
 };
-
-const screenWidth = window.innerWidth;
-
-if (screenWidth >= 768) {
-    window.addEventListener("scroll", navStickyFunction);
-}

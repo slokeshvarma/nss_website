@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
         <link rel="stylesheet" href="styles.css">
         <link rel="icon" href="images/logo/favicon.ico" type="image/x-icon">
     </head>
     <body>
+        <div id="topObservingObject" style="position: absolute; top: 0; width: 100vw; z-index: -2;"></div>
         <header>
             <div id="collegeLabel">
                 <img src="images/logo/gvp_logo.png" alt="GVP Logo" width="105" height="auto">
@@ -24,16 +25,21 @@
                         <img src="images/logo/nss_logo.png" alt="NSS Logo">
                     </div>
                     <div class="navTitle">
-                        <p>National Service Scheme <br\> Not me But YOU!</p>
+                        <p>National Service Scheme <br> Not me But YOU!</p>
                     </div>
                 </div>
                 <div class="navLinks">
-                    <a class="navLink" href="/">Home</a>
-                    <a class="navLink" href="/about.html">About</a>
-                    <a class="navLink" href="/gallery.html">Gallery</a>
-                    <a class="navLink" href="/events.html">Events</a>
-                    <a class="navLink" href="/teams.html">Teams</a>
-                    <a class="navLink" href="/">Contact</a>
+                    <a class="navLink" href="/"><span class="navLinkSymbol"><i class="fa-solid fa-house"></i></span>Home</a>
+                    <a class="navLink" href="/about.html"><span class="navLinkSymbol"><i class="fa-solid fa-user"></i></span>About</a>
+                    <a class="navLink" href="/gallery.html"><span class="navLinkSymbol"><i class="fa-solid fa-image"></i></span>Gallery</a>
+                    <a class="navLink" href="/events.html"><span class="navLinkSymbol"><i class="fa-solid fa-calendar"></i></span>Events</a>
+                    <a class="navLink" href="/teams.html"><span class="navLinkSymbol"><i class="fa-solid fa-users"></i></span>Teams</a>
+                    <a class="navLink" href="/"><span class="navLinkSymbol"><i class="fa-solid fa-phone"></i></span>Contact</a>
+                </div>
+                <div class="navHamburger">
+                    <span class="navHamburgerLine"></span>
+                    <span class="navHamburgerLine"></span>
+                    <span class="navHamburgerLine"></span>
                 </div>
             </nav>
         </header>
