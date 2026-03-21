@@ -49,15 +49,37 @@ function navMobileMenu() {
 }
 
 function navSticky() {
+    const pageScrollValue = window.scrollY || document.documentElement.scrollTop;
+    console.log(pageScrollValue);
+
+    const nav = document.getElementsByTagName("nav")[0];
     const navLogo = document.getElementsByClassName("navLogo")[0];
-    const navLinks = document.getElementsByClassName("navLink");
-    Array.from(navLinks).forEach(navLink => {
-        navLink.classList.toggle("clicked");
+    const navImage = document.getElementsByClassName("navImage")[0];
+    const navTitle = document.getElementsByClassName("navTitle")[0];
+    const navLinksdiv = document.getElementsByClassName("navLinks")[0];
+    const navHamburgerLines = document.getElementsByClassName("navHamburgerLine");
+    const landingSection = document.getElementsByClassName("landingSection")[0];
+
+    Array.from(navHamburgerLines).forEach(hamburgerLine => {
+        hamburgerLine.classList.toggle("sticked");
     })
+    nav.classList.toggle("sticked");
     navLogo.classList.toggle("sticked");
+    navImage.classList.toggle("sticked");
+    navTitle.classList.toggle("sticked");
+    navLinksdiv.classList.toggle("sticked");
+    landingSection.classList.toggle("sticked");
 }
 
 function toggleTheme() {
   document.documentElement.classList.toggle('lightMode');
   document.documentElement.classList.toggle('darkMode');
 }
+
+function nameIT() {
+    const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+    console.log("Mobile scroll:", scrollY);
+}
+
+window.addEventListener('scroll', nameIT, { passive: true });
+window.addEventListener('touchmove', () => console.log("Touch scroll!")); // Mobile bonus

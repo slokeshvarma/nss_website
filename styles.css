@@ -12,7 +12,7 @@
     --primaryColor: rgb(211, 52, 39);
     --secondaryColor: rgb(0, 0, 0);
     --accentColor: rgb(56, 70, 135);
-    --tex1Color: rgb(255, 255, 255);
+    --text1Color: rgb(255, 255, 255);
     --text2Color: rgb(0, 0, 0);
     --background1Color: rgb(0, 0, 0);
     --background2Color: rgb(255, 255, 255);
@@ -29,8 +29,6 @@ html {
 }
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    color: var(--text1Color);
-    background-color: var(--background1Color);
 }
 div, section, article, aside, header, nav, main, footer, p {
     display: flex;
@@ -54,6 +52,9 @@ button, input, select, textarea {
     outline: none;
     padding: 0.5rem;
     border-radius: 1rem;
+}
+button {
+    cursor: pointer;
 }
 ul, ol {
     list-style: none;
@@ -81,62 +82,100 @@ header {
     padding: 0.5rem 2vw;
 }
 .collegeLabel img:first-child {
-    flex: 1 0 50%;
-    order: 1;
-    max-width: 30vw;
+    flex: 1 0 25%;
+    max-width: 15vw;
 }
 .collegeDetails {
-    flex: 0 1 100%;
-    order: 3;
-    margin-top: 0.75rem;
+    flex: 1 1 50%;
+    margin-top: 0.25rem;
 }
 .collegeDetails p {
     font-family: 'Times New Roman', Times, serif;
-    font-size: 0.75rem;
+    font-size: 0.475rem;
     font-weight: 550;
     margin-bottom: 0.25rem;
 }
 .collegeDetails p:last-child {
     font-weight: 200;
-    font-size: 0.55rem;
+    font-size: 0.375rem;
 }
 .collegeLabel img:last-child {
-    flex: 1 0 50%;
-    order: 2;
-    max-width: 24vw;
-    margin: 0 3vw;
+    flex: 1 0 25%;
+    max-width: 12vw;
+    margin: 0 1.5vw;
 }
 nav {
     flex-direction: row;
     color: var(--text2Color);
     background-color: var(--primaryColor);
     height: 8vh;
+    max-height: 70px;
     padding: 0.5rem 0;
 }
-.navLogo {
-    flex: 1 0 65%;
-    opacity: 0.5;
+nav.sticked {
+    color: var(--primaryColor);
+    background-color: var(--background1Color);
 }
-.navLogo img {
-    max-width: 20vw;
+.navLogo {
+    flex: 1 0 70%;
+    flex-direction: row;
+}
+.navImage {
+    display: none;
+    flex: 1 1 32.5%;
+    align-items: flex-end;
+    opacity: 0;
+    transform: scale(0.5) translateY(10px);
+}
+.navImage.sticked {
+    display: flex;
+    opacity: 1;
+    transform: scale(1.1);
+    margin-top: 0.5vh;
+}
+.navImage img {
+    min-height: 8vh;
+    max-height: 10vh;
+    border: 2px solid var(--background1Color);
+    border-radius: 50%;
+    margin: 4px 0 0 2px;
+}
+.navTitle {
+    flex: 1 1 67.5%;
+    justify-content: center;
+    font-size: calc(3.5vw);
+    font-weight: 400;
+    color: var(--text2Color);
+    transform: translateX(-5vw);
+    transition: all 0.4s ease-in-out;
+}
+.navTitle.sticked {
+    color: var(--primaryColor);
+    margin-top: 4px;
+    justify-content: unset;
+    transform: translateX(0);
 }
 .navLinks {
     position: absolute;
     right: 0;
     top: 8vh;
+    justify-content: center;
     width: fit-content;
     min-width: 30vw;
     height: fit-content;
-    gap: 0.1rem;
     background-color: var(--primaryColor);
+    z-index: 4;
 
     opacity: 0;
     pointer-events: none;
-    transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.35s ease-in-out;
 }
 .navLinks.clicked {
     opacity: 1;
     pointer-events: auto;
+}
+.navLinks.sticked {
+    background-color: var(--background1Color);
 }
 .navLink {
     padding: 1vh 4vw;
@@ -148,11 +187,12 @@ nav {
     margin: 0 2vw;
 }
 .navHamburger {
-    flex: 0 1 35%;
+    flex: 0 1 30%;
     justify-content: center;
     align-items: flex-end;
     gap: 5.6px;
     padding-right: 6vw;
+    cursor: pointer;
 }
 .navHamburgerLine {
     width: 40px;
@@ -160,16 +200,30 @@ nav {
     border-radius: 5px;
     background-color: var(--background1Color);
     opacity: 1;
-    transition: opacity 0.3s ease-in-out;
+    transition: opacity 0.3s ease-in-out transform 0.4s ease-in-out;
+}
+.navHamburgerLine.sticked {
+    background-color: var(--primaryColor);
 }
 .navHamburgerLine.clicked {
+    width: 34px;
     opacity: 0;
 }
 .navHamburgerLine.clicked:first-child {
-    transform: translateY(12.8px) rotate(45deg);
+    transform: translateY(10px) rotate(45deg);
     opacity: 1;
 }
 .navHamburgerLine.clicked:last-child {
-    transform: translateY(-12.8px) rotate(-45deg);
+    transform: translateY(-10px) rotate(-45deg);
     opacity: 1;
+}
+.landingSection {
+    background-color: var(--background1Color);
+    height: 50vh;
+}
+.landingSection.sticked {
+    background-color: var(--primaryColor);
+}
+button {
+    margin-top: 7vh;
 }
