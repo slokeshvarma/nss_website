@@ -91,7 +91,7 @@ header {
 }
 .collegeDetails p {
     font-family: 'Times New Roman', Times, serif;
-    font-size: 0.475rem;
+    font-size: 0.45rem;
     font-weight: 550;
     margin-bottom: 0.25rem;
 }
@@ -113,6 +113,10 @@ nav {
     padding: 0.5rem 0;
 }
 nav.sticked {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    max-width: 100vw;
     color: var(--primaryColor);
     background-color: var(--background1Color);
 }
@@ -122,10 +126,10 @@ nav.sticked {
 }
 .navImage {
     display: none;
-    flex: 1 1 32.5%;
+    flex: 1 0 32.5%;
     align-items: flex-end;
     opacity: 0;
-    transform: scale(0.5) translateY(10px);
+    transform: scale(0.5) translate(10px);
 }
 .navImage.sticked {
     display: flex;
@@ -136,15 +140,16 @@ nav.sticked {
 .navImage img {
     min-height: 8vh;
     max-height: 10vh;
+    width: auto;
     border: 2px solid var(--background1Color);
     border-radius: 50%;
     margin: 4px 0 0 2px;
 }
 .navTitle {
-    flex: 1 1 67.5%;
+    flex: 0 1 67.5%;
     justify-content: center;
-    font-size: calc(3.5vw);
-    font-weight: 400;
+    font-size: 0.6rem;
+    font-weight: 510;
     color: var(--text2Color);
     transform: translateX(-5vw);
     transition: all 0.4s ease-in-out;
@@ -219,11 +224,16 @@ nav.sticked {
 }
 .landingSection {
     background-color: var(--background1Color);
-    height: 50vh;
+    height: 150vh;
 }
 .landingSection.sticked {
     background-color: var(--primaryColor);
 }
 button {
     margin-top: 7vh;
+}
+
+/* below average mobile design */
+@media only screen and (max-width: 312px) {
+    
 }
