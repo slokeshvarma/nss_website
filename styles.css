@@ -138,7 +138,8 @@ nav.sticked {
 }
 .navImage img {
     aspect-ratio: 1 / 1;
-    max-height: 10vh;
+    height: 10vh;
+    max-height: 110px;
     width: auto;
     border: 2px solid var(--background1Color);
     border-radius: 50%;
