@@ -137,9 +137,7 @@ nav.sticked {
     margin-top: 0.5vh;
 }
 .navImage img {
-    aspect-ratio: 1 / 1;
-    height: 10vh;
-    max-height: 110px;
+    height: clamp(10vw, 10vw + 4vh, 10vh);
     width: auto;
     border: 2px solid var(--background1Color);
     border-radius: 50%;
@@ -148,17 +146,15 @@ nav.sticked {
 .navTitle {
     flex: 0 1 67.5%;
     justify-content: center;
-    font-size: clamp(0.45rem, 0.425rem + 1vw, 1.5rem);
+    font-size: clamp(0.5rem, 0.425rem + 1.5vw, 1rem);
     font-weight: 510;
     color: var(--text2Color);
-    transform: translateX(-5vw);
     transition: all 0.4s ease-in-out;
 }
 .navTitle.sticked {
     color: var(--primaryColor);
     margin-top: 4px;
-    justify-content: unset;
-    transform: translateX(0);
+    justify-content: center;
 }
 .navLinks {
     position: absolute;
@@ -182,10 +178,16 @@ nav.sticked {
     background-color: var(--background1Color);
 }
 .navLink {
+    text-align: center;
     cursor: pointer;
     font-size: clamp(0.25rem, 1.05rem + 0.35vw, 5rem);
     padding: 1vh clamp(0.06rem, 0.2rem + 1.5vw, 5rem);
     padding-right: clamp(0.06rem, 0.2rem + 7vw, 5rem);
+}
+.navLink.active::before {
+    background-color: var(--accentColor);
+    width: 2rem;
+    z-index: 200;
 }
 .navLink:last-child {
     padding-bottom: 2.25vh;
@@ -250,7 +252,7 @@ button {
         margin: clamp(0.05rem, 0.05rem + 0.6vw, 1rem) 0;
     }
     .navTitle.sticked {
-        transform: translateX(10px);
+        transform: translate(10px);
     }
 }
 @media only screen and (min-width: 768px) {
@@ -299,16 +301,23 @@ button {
         flex: 1 0 40%;
         display: flex;
         align-items: center;
+        transform: translate(-1.5vw, 0);
+    }
+    .navImage {
+        flex: 1 0 50%;
     }
     .navImage img {
-        aspect-ratio: 1 / 1;
-        height: auto;
+        height: clamp(8vw, 3vw + 5vh, 8vw);
+        width: auto;
     }
     .navImage.sticked {
-        transform: translate(1vw, 2vw) scale(1.15);
+        transform: translate(-1vw, 2vw) scale(1.1);
+    }
+    .navTItle {
+        flex: 0 1 50%;
     }
     .navTitle.sticked {
-        font-size: clamp(0.45rem, 0.425rem + 0.75vw, 1.5rem);
+        font-size: clamp(0.4rem, 0.35rem + 1vw, 1.5rem);
     }
     .navLinks {
         flex: 1 0 60%;
@@ -352,14 +361,21 @@ button {
     }
 }
 @media only screen and (min-width: 1024px) {
-    .navImage.sticked {
-        transform: translate(1vw, 2vw) scale(1.3);
+    .navImage img {
+        height: clamp(4vw, 3vw + 5vh, 10vh);
     }
-
+    .navLogo {
+        transform: translateX(-1vw);
+    }
+    .navImage.sticked {
+        transform: translate(-2vw, 2vw) scale(1.3);
+    }
 }
 @media only screen and (min-width: 1440px) {
-    .navImage.sticked {
-        transform: translate(1vw, 2vw) scale(1.45);
+    .navLogo {
+        transform: translateX(-2vw);
     }
-
+    .navImage.sticked {
+        transform: translate(-3vw, 2vw) scale(1.4);
+    }
 }
