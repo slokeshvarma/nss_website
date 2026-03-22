@@ -3,19 +3,19 @@
     --primaryColor: rgb(56, 70, 135);
     --secondaryColor: rgb(255, 255, 255);
     --accentColor: rgb(211, 52, 39);
-    --text1Color: rgb(0, 0, 0);
-    --text2Color: rgb(255, 255, 255);
-    --background1Color: rgb(255, 255, 255);
-    --background2Color: rgb(0, 0, 0);
+    --text1Color: rgb(31, 48, 126);
+    --text2Color: rgb(223, 229, 255);
+    --background1Color: rgb(223, 229, 255);
+    --background2Color:  rgb(16, 21, 43);
 }
 :root.darkMode {
-    --primaryColor: rgb(211, 52, 39);
+    --primaryColor:  rgb(91, 108, 182);
     --secondaryColor: rgb(0, 0, 0);
-    --accentColor: rgb(56, 70, 135);
-    --text1Color: rgb(255, 255, 255);
-    --text2Color: rgb(0, 0, 0);
-    --background1Color: rgb(0, 0, 0);
-    --background2Color: rgb(255, 255, 255);
+    --accentColor: rgb(211, 52, 39);
+    --text1Color: rgb(223, 229, 255);
+    --text2Color: rgb(16, 21, 43);
+    --background1Color: rgb(16, 21, 43);
+    --background2Color: rgb(223, 229, 255);
 }
 * {
     all: unset;
@@ -107,7 +107,7 @@ header {
 }
 nav {
     flex-direction: row;
-    color: var(--text2Color);
+    color: var(--text1Color);
     background-color: var(--primaryColor);
     height: clamp(20px, 20px + 6vh, 80px);
     padding: 0.5rem 0;
@@ -117,7 +117,7 @@ nav.sticked {
     top: 0;
     width: 100%;
     max-width: 100vw;
-    color: var(--primaryColor);
+    color: var(--text1Color);
     background-color: var(--background1Color);
 }
 .navLogo {
@@ -152,7 +152,7 @@ nav.sticked {
     transition: all 0.4s ease-in-out;
 }
 .navTitle.sticked {
-    color: var(--primaryColor);
+    color: var(--text1Color);
     margin-top: 4px;
     justify-content: center;
 }
@@ -163,6 +163,7 @@ nav.sticked {
     justify-content: center;
     width: fit-content;
     height: fit-content;
+    color: var(--text2Color);
     background-color: var(--primaryColor);
     z-index: 4;
 
@@ -175,6 +176,7 @@ nav.sticked {
     pointer-events: auto;
 }
 .navLinks.sticked {
+    color: var(--text1Color);
     background-color: var(--background1Color);
 }
 .navLink {
@@ -218,7 +220,7 @@ nav.sticked {
     background: transparent;
 }
 .navHamburgerLine.sticked {
-    background-color: var(--primaryColor);
+    background-color: var(--text1Color);
 }
 .navHamburgerLine.clicked {
     width: clamp(20px, 20px + 1.25vw, 34px);
@@ -234,15 +236,32 @@ nav.sticked {
     opacity: 1;
     transition: opacity 0.6s ease-in-out transform 0.7s ease-in-out;
 }
-.landingSection {
-    background-color: var(--background1Color);
+main {
     height: 150vh;
+    background-color: var(--background1Color);
+}
+.landingSection {
+    margin-top: 0;
+    color: var(--primaryColor);
+    background-color: var(--background1Color);
 }
 .landingSection.sticked {
+    margin-top: 7vh;
+    padding: 0;
+    padding-top: 7vh;
+    color: var(--text2Color);
     background-color: var(--primaryColor);
 }
 button {
-    margin-top: 7vh;
+    display: block;
+    color: var(--text2Color);
+    background-color: var(--accentColor);
+    width: fit-content;
+    height: fit-content;
+    text-align: center;
+    margin: 10vh 10vw; 
+    padding: 0.35rem 6vw;
+    border-radius: 2rem;
 }
 
 /* below average mobile design */
