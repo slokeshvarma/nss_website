@@ -108,7 +108,7 @@ nav {
     flex-direction: row;
     color: var(--text1Color);
     background-color: var(--primaryColor);
-    height: clamp(20px, 20px + 6vh, 80px);
+    height: clamp(20px, 20px + 6vh, 65px);
     padding: 0.5rem 0;
 }
 nav.sticked {
@@ -137,7 +137,7 @@ nav.sticked {
     margin-top: 0.5vh;
 }
 .navImage img {
-    height: clamp(10vw, 10vw + 4vh, 10vh);
+    height: clamp(10vw, 10vw + 4vh, 8vh);
     width: auto;
     border: 2px solid var(--background1Color);
     border-radius: 50%;
@@ -149,7 +149,7 @@ nav.sticked {
 .navTitle {
     flex: 0 1 67.5%;
     justify-content: center;
-    font-size: clamp(0.5rem, 0.425rem + 1.5vw, 1rem);
+    font-size: clamp(0.5rem, 0.425rem + 1.75vw, 1rem);
     font-weight: 510;
     color: var(--text2Color);
     transition: all 0.4s ease-in-out;
@@ -248,15 +248,71 @@ main {
 }
 .landingSection {
     flex-direction: row;
+    flex-wrap: wrap;
     margin-top: 0;
     padding: 1vh 2vw;
-    color: white; /*var(--text1Color);*/
-    background-color: black; /*var(--background1Color);*/
+    color: var(--text1Color);
+    background-color: var(--background1Color);
 }
 .landingSection.sticked {
-    padding-top: calc(1.4 * var(--navHeight));
+    padding-top: calc(1.85 * var(--navHeight));
     color: var(--text2Color);
     background-color: var(--primaryColor);
+}
+.landingSectionText {
+    flex: 1 0 100%;
+    height: fit-content;
+    max-width: 100vw;
+    font-size: clamp(0.75rem, 0.75rem + 4vw, 2.65rem);
+    font-weight: 600;
+}
+.landingSectionTextTop {
+    flex: 1 0 50%;
+    width: 100%;
+    justify-content: center;
+    gap: 1.5vh;
+}
+.landingSectionTextTop1 {
+    flex: 1 0 50%;
+    flex-direction: row;
+    gap: 2vw;
+    height: fit-content;
+    justify-content: flex-start;
+    padding-left: 16vw;
+}
+.landingSectionTextTop1 p:first-child {
+    font-size: clamp(0.75rem, 0.75rem + 8vw, 3.65rem);
+}
+.landingSectionTextTop1 p:last-child {
+    font-size: clamp(0.25rem, 0.25rem + 3vw, 1.2rem);
+    align-self: flex-end;
+    writing-mode: vertical-lr;
+    text-orientation: upright;
+    transform: translateY(1vh);
+}
+.landingSectionTextTop2 {
+    flex: 0 1 50%;
+    flex-direction: row;
+    gap: 5vw;
+    height: fit-content;
+    justify-content: flex-start;
+    align-items: last baseline;
+    padding-left: 32vw;
+    transform: translateY(-2vh);
+}
+
+.landingSectionTextTop2 p:first-child {
+    font-size: clamp(0.75rem, 0.75rem + 3.5vw, 2.5rem);
+}
+.landingSectionTextTop2 p:last-child {
+    font-size: clamp(0.5rem, 0.5rem + 10vw, 4rem);
+}
+.landingSectionTextBottom {
+    padding: 0 4vw 0 1vw;
+}
+.landingSectionTextBottom p:last-child {
+    text-align: left;
+    font-size: clamp(0.15rem, 0.15rem + 2vw, 1.2rem);
 }
 
 
