@@ -17,10 +17,6 @@ function navMobileMenu() {
 function navSticky() {
     const pageScrollValue = window.scrollY || document.documentElement.scrollTop;
     const collgeLabelHeight = document.getElementsByClassName("collegeLabel")[0].clientHeight;
-    let pageScrolledPassed = false;
-    if (pageScrollValue/collgeLabelHeight >= 1) {
-        pageScrolledPassed = true;
-    }
     const nav = document.getElementsByTagName("nav")[0];
     const navLogo = document.getElementsByClassName("navLogo")[0];
     const navImage = document.getElementsByClassName("navImage")[0];
@@ -29,6 +25,15 @@ function navSticky() {
     const navLinks = document.getElementsByClassName("navLink");
     const navHamburgerLines = document.getElementsByClassName("navHamburgerLine");
     const landingSection = document.getElementsByClassName("landingSection")[0];
+    
+    const root = document.documentElement;
+    root.style.setProperty("--navHeight", nav.offsetHeight + "px");
+
+    let pageScrolledPassed = false;
+    if (pageScrollValue/collgeLabelHeight >= 1) {
+        pageScrolledPassed = true;
+    }
+
     Array.from(navLinks).forEach(navLink => {
         navLink.classList.toggle("clicked", pageScrolledPassed);
     })
