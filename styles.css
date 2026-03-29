@@ -1,7 +1,4 @@
 /* #region All Variables, Resets and Base Declaration */
-:root {
-    --navHeight: 0;
-}
 :root.lightMode {
     --primaryColor: rgb(56, 70, 135);
     --secondaryColor: rgb(255, 255, 255);
@@ -29,6 +26,7 @@
 html {
     font-size: 16px;
     line-height: 1.15;
+    scroll-behavior: smooth;
 }
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -156,7 +154,7 @@ nav.sticked {
 }
 .navTitle.sticked {
     color: var(--text1Color);
-    margin-top: 4px;
+    margin: 4px 0 0 2vw;
     justify-content: center;
 }
 .navLinks {
@@ -247,6 +245,7 @@ main {
     background-color: var(--background1Color);
 }
 .landingSection {
+    flex: 0 0 fit-content;
     flex-direction: row;
     flex-wrap: wrap;
     margin-top: 0;
@@ -263,7 +262,6 @@ main {
     flex: 1 0 100%;
     height: fit-content;
     max-width: 100vw;
-    font-size: clamp(0.75rem, 0.75rem + 4vw, 2.65rem);
     font-weight: 600;
 }
 .landingSectionTextTop {
@@ -278,41 +276,121 @@ main {
     gap: 2vw;
     height: fit-content;
     justify-content: flex-start;
-    padding-left: 16vw;
+    align-items: flex-start;
+    padding-left: clamp(16%, 16% + 2vw, 20%);
 }
 .landingSectionTextTop1 p:first-child {
     font-size: clamp(0.75rem, 0.75rem + 8vw, 3.65rem);
 }
 .landingSectionTextTop1 p:last-child {
-    font-size: clamp(0.25rem, 0.25rem + 3vw, 1.2rem);
     align-self: flex-end;
+    font-size: clamp(0.25rem, 0.25rem + 3.5vw, 1.5rem);
     writing-mode: vertical-lr;
     text-orientation: upright;
-    transform: translateY(1vh);
+    letter-spacing: -0.5vh;
+    transform: translateY(clamp(7px, 20vh, 25px));
 }
 .landingSectionTextTop2 {
     flex: 0 1 50%;
     flex-direction: row;
-    gap: 5vw;
+    gap: 2vw;
     height: fit-content;
     justify-content: flex-start;
     align-items: last baseline;
-    padding-left: 32vw;
-    transform: translateY(-2vh);
+    padding-left: 34%;
+    transform: translateY(-3vh);
 }
 
 .landingSectionTextTop2 p:first-child {
     font-size: clamp(0.75rem, 0.75rem + 3.5vw, 2.5rem);
 }
 .landingSectionTextTop2 p:last-child {
-    font-size: clamp(0.5rem, 0.5rem + 10vw, 4rem);
+    font-size: clamp(0.5rem, 0.5rem + 14vw, 5.5rem);
 }
 .landingSectionTextBottom {
+    display: none;
     padding: 0 4vw 0 1vw;
 }
 .landingSectionTextBottom p:last-child {
     text-align: left;
-    font-size: clamp(0.15rem, 0.15rem + 2vw, 1.2rem);
+    font-size: clamp(0.15rem, 0.15rem + 2vw, 0.85rem);
+    font-weight: 450;
+}
+.aboutUs {
+    flex: 0 0 fit-content;
+    width: 100%;
+    height: fit-content;
+    background-color: var(--primaryColor);
+    color: var(--background1Color);
+    padding: 3vh 4vw 0 4vw;
+}
+.aboutUs.sticked {
+    color: var(--text1Color);
+    background-color: var(--background1Color);
+}
+.aboutUs hr {
+    background-color: var(--text1Color);
+    width: 9vw;
+    height: clamp(1px, 1px + 1vh, 3px);
+    border-radius: 1rem;
+    margin-bottom: clamp(3px, 2px + 1.5vw, 20px);
+}
+.aboutUs hr.sticked {
+    background-color: var(--text2Color)
+}
+.aboutUsHeading {
+    align-items: center;
+    font-size: clamp(0.75rem, 0.75rem + 2vw, 2rem);
+    font-weight: 600;
+}
+.aboutUsHeading h1 {font-size: inherit; margin-bottom: clamp(3px, 2px + 0.5vw, 10px);}
+
+.aboutUsNSS {
+    align-items: center;
+    font-size: clamp(0.5rem, 0.5rem + 1.5vw, 1rem);
+    font-weight: 400;
+}
+.aboutUsNSS h2 {
+    width: 35vw;
+    align-self: flex-start;
+    text-align: center;
+    font-size: clamp(0.5rem, 0.5rem + 2vw, 1.75rem);
+    font-weight: 550;
+    margin-bottom: clamp(3px, 2px + 0.5vw, 10px);
+}
+.aboutUsNSS hr {
+    align-self: flex-start;
+    margin: 0 0 1.414vh 13vw;
+}
+.aboutUsNSS p{
+    text-align: justify;
+    line-height: 1.2;
+    margin-bottom: clamp(7px, 5px + 0.75vw, 15px);
+}
+.aboutUsNSS a {
+    margin-top: clamp(7px, 5px + 0.75vw, 15px);
+    align-self: flex-end;
+    color: var(--secondaryColor);
+    background-color: var(--accentColor);
+    padding: clamp(0.3rem, 0.25rem + 1vh, 4rem) clamp(0.75rem, 0.5rem + 1vw, 4rem);
+}
+.aboutUsDuties {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: clamp(0.3rem, 0.25rem + 1vh, 2rem);
+}
+.aboutUsDuty {
+    flex: 0 0 100%;
+    align-items: center;
+    padding: 0 6vw;
+}
+.aboutUsDuty img {
+    max-width: 40%;
+}
+
+.aboutUsDuty p {
+    margin: clamp(0.3rem, 0.25rem + 0.5vh, 4rem) 0 clamp(0.3rem, 0.25rem + 1vh, 4rem) 0;
 }
 
 
@@ -436,6 +514,36 @@ button {
     }
     .navHamburger {
         display: none;
+    }
+    .landingSection {
+        flex-wrap: nowrap;
+    }
+    .landingSectionText {
+        flex: 1 0 50%;
+    }
+    .landingSectionTextTop1 {
+        padding-left: 8vw;
+    }
+    .landingSectionTextTop2 {
+        padding-left: 16vw;
+    }
+    .landingSectionTextBottom {
+        display: flex;
+    }
+    .landingSectionImage {
+        flex: 1 0 50%;
+    }
+    .aboutUs hr {
+        width: 8vw;
+    }
+    .aboutUsNSS h2 {
+        width: 30vw;
+    }
+    .aboutUsNSS hr {
+        margin: 0 0 1.414vh 11vw;
+    }
+    .aboutUsDuty {
+    flex: 0 0 33%;
     }
 }
 @media only screen and (min-width: 1024px) {

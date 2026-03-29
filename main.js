@@ -25,6 +25,7 @@ function navSticky() {
     const navLinks = document.getElementsByClassName("navLink");
     const navHamburgerLines = document.getElementsByClassName("navHamburgerLine");
     const landingSection = document.getElementsByClassName("landingSection")[0];
+    const aboutUs = document.getElementById("aboutUs");
     
     const root = document.documentElement;
     root.style.setProperty("--navHeight", nav.offsetHeight + "px");
@@ -46,11 +47,12 @@ function navSticky() {
     navTitle.classList.toggle("sticked", pageScrolledPassed);
     navLinksdiv.classList.toggle("sticked", pageScrolledPassed);
     landingSection.classList.toggle("sticked", pageScrolledPassed);
+    aboutUs.classList.toggle("sticked", pageScrolledPassed);
 }
 
 function toggleTheme() {
-  document.documentElement.classList.toggle('lightMode');
-  document.documentElement.classList.toggle('darkMode');
+    document.documentElement.classList.toggle('lightMode');
+    document.documentElement.classList.toggle('darkMode');
 }
 
 window.addEventListener('scroll', navSticky, { passive: true });
@@ -66,3 +68,20 @@ const NSSLogo = document.getElementById("collegeLabelNSSLogo");
 hamburgerMenu.addEventListener("click", navMobileMenu);
 GVPLogo.addEventListener("click", () => openLink("https://www.gvpce.ac.in/"));
 NSSLogo.addEventListener("click", () => openLink("https://nss.gov.in/"));
+
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener("click", function(event) {
+        event.preventDefault();
+
+        let targetID = this.getAttribute("href");
+        let targetSection = document.querySelector(targetID);
+        let navHeight = document.querySelector("nav").offsetHeight;
+        console.log(targetSection.offsetTop - navHeight)
+        if (targetSection) {
+            window.scrollTo({
+                top: targetSection.offsetTop - navHeight,
+                behavior: "smooth"
+            });
+        }
+    });
+});
