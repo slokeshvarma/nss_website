@@ -14,9 +14,7 @@ function navMobileMenu() {
   }
 }
 
-function navSticky() {
-    const pageScrollValue = window.scrollY || document.documentElement.scrollTop;
-    const collgeLabelHeight = document.getElementsByClassName("collegeLabel")[0].clientHeight;
+function navSticky(pageScrolledPassed) {
     const nav = document.getElementsByTagName("nav")[0];
     const navLogo = document.getElementsByClassName("navLogo")[0];
     const navImage = document.getElementsByClassName("navImage")[0];
@@ -26,17 +24,13 @@ function navSticky() {
     const navHamburgerLines = document.getElementsByClassName("navHamburgerLine");
     const landingSection = document.getElementsByClassName("landingSection")[0];
     const aboutUs = document.getElementById("aboutUs");
-    
-    const root = document.documentElement;
-    root.style.setProperty("--navHeight", nav.offsetHeight + "px");
-
-    let pageScrolledPassed = false;
-    if (pageScrollValue/collgeLabelHeight >= 1) {
-        pageScrolledPassed = true;
-    }
+    const aboutUshrs = document.getElementsByClassName("aboutUshr");
 
     Array.from(navLinks).forEach(navLink => {
-        navLink.classList.toggle("clicked", pageScrolledPassed);
+        navLink.classList.toggle("sticked", pageScrolledPassed);
+    })
+    Array.from(aboutUshrs).forEach(aboutUshr => {
+        aboutUshr.classList.toggle("sticked", pageScrolledPassed);
     })
     Array.from(navHamburgerLines).forEach(hamburgerLine => {
         hamburgerLine.classList.toggle("sticked", pageScrolledPassed);
@@ -55,7 +49,27 @@ function toggleTheme() {
     document.documentElement.classList.toggle('darkMode');
 }
 
-window.addEventListener('scroll', navSticky, { passive: true });
+window.addEventListener('scroll', 
+    () => {
+        const pageScrollValue = window.scrollY || document.documentElement.scrollTop;
+        const collgeLabelHeight = document.getElementsByClassName("collegeLabel")[0].clientHeight;
+        const nav = document.getElementsByTagName("nav")[0];
+        const root = document.documentElement;
+        root.style.setProperty("--navHeight", nav.offsetHeight + "px");
+
+        let pageScrolledPassed = false;
+        if (pageScrollValue/collgeLabelHeight >= 1) {
+            pageScrolledPassed = true;
+            root.style.setProperty("--pageScrolledTill", Math.round((pageScrollValue/collgeLabelHeight)*100)/100);
+            if (pageScrollValue/collgeLabelHeight >= 2) {
+                root.style.setProperty("--pageScrolledTill", 2);
+            }
+        }
+        if (!pageScrolledPassed) {
+        }
+        navSticky(pageScrolledPassed);
+
+}, { passive: true });
 window.addEventListener('touchmove', navSticky);
 
 function openLink(link) {
