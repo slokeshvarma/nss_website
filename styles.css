@@ -11,6 +11,8 @@
     --text2Color: rgb(223, 229, 255);
     --background1Color: rgb(223, 229, 255);
     --background2Color:  rgb(16, 21, 43);
+    --background1ColorOpacity: rgba(223, 229, 255, 0.85);
+    --background2ColorOpacity: rgba(16, 21, 43, 0.85);
 }
 :root.darkMode {
     --primaryColor:  rgb(91, 108, 182);
@@ -20,6 +22,8 @@
     --text2Color: rgb(16, 21, 43);
     --background1Color: rgb(16, 21, 43);
     --background2Color: rgb(223, 229, 255);
+    --background1ColorOpacity: rgba(16, 21, 43, 0.85);
+    --background2ColorOpacity: rgba(223, 229, 255, 0.85);
 }
 * {
     all: unset;
@@ -113,7 +117,7 @@ nav {
     height: clamp(20px, 20px + 6vh, 65px);
     padding: 0.5rem 0;
 }
-nav.sticked {
+header.sticked nav {
     position: fixed;
     top: 0;
     width: 100%;
@@ -133,7 +137,7 @@ nav.sticked {
     opacity: 0;
     transform: translate(10px);
 }
-.navImage.sticked {
+header.sticked .navImage {
     display: flex;
     opacity: 1;
     margin-top: 0.5vh;
@@ -145,7 +149,7 @@ nav.sticked {
     border-radius: 50%;
     margin: 4px 0 0 2px;
 }
-.navImage.sticked img {
+header.sticked .navImage img {
     box-shadow: 0vw 0.25vh 4px var(--primaryColor);
 }
 .navTitle {
@@ -156,7 +160,7 @@ nav.sticked {
     color: var(--text2Color);
     transition: all 0.4s ease-in-out;
 }
-.navTitle.sticked {
+header.sticked .navTitle {
     color: var(--text1Color);
     margin: 4px 0 0 2vw;
     justify-content: center;
@@ -183,7 +187,7 @@ nav.sticked {
     box-shadow: -0.2vw 0.2vh 20px var(--primaryColor);
     clip-path: inset(0px -1vw -0.5vh -1vw);
 }
-.navLinks.sticked {
+header.sticked .navLinks {
     color: var(--text1Color);
     background-color: var(--background1Color);
 }
@@ -193,11 +197,6 @@ nav.sticked {
     font-size: clamp(0.25rem, 1.05rem + 0.35vw, 5rem);
     padding: 1vh clamp(0.06rem, 0.2rem + 1.5vw, 5rem);
     padding-right: clamp(0.06rem, 0.2rem + 7vw, 5rem);
-}
-.navLink.active::before {
-    background-color: var(--accentColor);
-    width: 2rem;
-    z-index: 200;
 }
 .navLink:last-child {
     padding-bottom: 2.25vh;
@@ -227,7 +226,7 @@ nav.sticked {
     inset: 2vh 6vw 2vh clamp(6vw, 6vw + 11vw, 16vw);           
     background: transparent;
 }
-.navHamburgerLine.sticked {
+header.sticked .navHamburgerLine {
     background-color: var(--text1Color);
 }
 .navHamburgerLine.clicked {
@@ -250,6 +249,7 @@ main {
     height: 150vh;
     background-color: var(--background1Color);
 }
+/* #region Landing section */
 .landingSection {
     flex: 0 0 fit-content;
     flex-direction: row;
@@ -261,7 +261,7 @@ main {
     background-color: var(--background1Color);
 }
 .landingSection.sticked {
-    padding-top: clamp(1vh, calc(var(--pageScrolledTill)* var(--navHeight)), 100vh);
+    padding-top: clamp(1vh, calc(var(--pageScrolledTill) * var(--navHeight)), 100vh);
     color: var(--text2Color);
     background-color: var(--primaryColor);
 }
@@ -319,6 +319,7 @@ main {
 .landingSectionTextBottom {
     display: none;
 }
+/* #endregion Landing section */
 /* #region about section */
 .aboutUs {
     flex: 0 0 fit-content;
@@ -339,7 +340,7 @@ main {
     border-radius: 1rem;
     margin-bottom: clamp(3px, 2px + 1.5vw, 20px);
 }
-.aboutUshr.sticked {
+.aboutUs.sticked .aboutUshr {
     background-color: var(--background2Color);
 }
 .aboutUsHeading {
@@ -376,7 +377,7 @@ main {
     align-self: flex-end;
     color: var(--secondaryColor);
     background-color: var(--accentColor);
-    padding: clamp(0.3rem, 0.25rem + 1vh, 4rem) clamp(0.75rem, 0.5rem + 1vw, 4rem);
+    padding: clamp(0.3rem, 0.25rem + 1vh, 1rem) clamp(0.75rem, 0.5rem + 1vw, 1rem);
 }
 .aboutUsDuties {
     flex-direction: row;
@@ -392,14 +393,63 @@ main {
 .aboutUsDuty img {
     max-width: 40%;
 }
-
 .aboutUsDuty p {
     margin: clamp(0.3rem, 0.25rem + 0.5vh, 4rem) 0 clamp(0.3rem, 0.25rem + 1vh, 4rem) 0;
 }
 
 /* #endregion about Section */
-
-button {
+/* #region homeGallery */
+.homeGallery {
+    flex: 1 0 fit-content;
+    flex-direction: row;
+    overflow-y: hidden;
+}
+.homeGallery button {
+    z-index: 1;
+    font-size: clamp(0.5rem, 0.5rem + 4vw, 1.75rem);
+    position: absolute;
+    width: fit-content;
+    cursor: default;
+    height: 100%;
+    padding: 0 0.5vw;
+}
+.homeGallery button i {
+    color: var(--text1Color);
+    background-color: var(--background1ColorOpacity);
+    cursor: pointer;
+    border-radius: 2.5rem;
+    padding: 0.35rem 0.35rem;
+}
+#homeGalleryPrev {
+    left: 0;
+}
+#homeGalleryNext {
+    right: 0;
+}
+.homeGalleryImages {
+    order: 1;
+    flex: 1 0 100%;
+    flex-direction: row;
+    justify-content: center;
+    overflow-x: hidden;
+}
+.homeGalleryImages img {
+    flex: 0 0 auto;
+    max-height: calc(100vh - var(--navHeight));
+    transition: transform 0.5s ease-in-out;
+}
+.homeGalleryImages16-9 {
+    display: none;
+}
+.homeGalleryImages4-3 {
+    display: flex;
+    flex-direction: row;
+}
+/* #endregion homeGallery */
+.buttonSection {
+    flex: 1 0 500px;
+}
+.buttonSection button {
     display: block;
     color: var(--text2Color);
     background-color: var(--accentColor);
@@ -458,14 +508,14 @@ button {
         height: clamp(40px, 40px + 2.25vw, 100px);
         align-items: center;
     }
-    nav.sticked {
+    header.sticked nav {
         height: clamp(40px, 40px + 2.75vw, 100px);
         box-shadow: -1vw 0.25vh 8px var(--primaryColor);
     }
     .navLogo {
         display: none;
     }
-    .navLogo.sticked {
+    header.sticked .navLogo {
         flex: 1 0 40%;
         display: flex;
         align-items: center;
@@ -478,13 +528,13 @@ button {
         height: clamp(8vw, 3vw + 5vh, 8vw);
         width: auto;
     }
-    .navImage.sticked {
+    header.sticked .navImage {
         transform: translate(-1vw, 2vw) scale(1.1);
     }
     .navTItle {
         flex: 0 1 50%;
     }
-    .navTitle.sticked {
+    header.sticked .navTitle {
         font-size: clamp(0.4rem, 0.35rem + 1vw, 1.5rem);
     }
     .navLinks {
@@ -504,7 +554,7 @@ button {
         pointer-events: auto;
         transition: none;
     }    
-    .navLinks.sticked {
+    header.sticked .navLinks {
         color: var(--text1Color);
     }
     .navLink {
@@ -512,7 +562,7 @@ button {
         flex: 0 1 10%;
         padding: 1.5vw clamp(0.15rem, 0.25rem + 0.75vw, 1.25rem);
     }
-    .navLink.sticked {
+    header.sticked .navLink {
         flex: 0 1 8%;
         padding: 1.5vw clamp(0.15rem, 0.25rem + 0.5vw, 1.25rem);
     }
@@ -530,7 +580,7 @@ button {
         flex-wrap: nowrap;
     }
     .landingSection.sticked {
-        padding-top: clamp(1vw, calc(var(--pageScrolledTill)* var(--navHeight)), 100vw);
+        padding-top: clamp(1vw, calc(1.25 * var(--pageScrolledTill) * var(--navHeight)), 100vw);
     }
     .landingSectionText {
         flex: 1 0 50%;
@@ -566,6 +616,13 @@ button {
     .aboutUsDuty {
     flex: 0 0 33%;
     }
+    .homeGalleryImages16-9 {
+        display: flex;
+        flex-direction: row;
+    }
+    .homeGalleryImages4-3 {
+        display: none;
+    }
 }
 @media only screen and (min-width: 1024px) {
     .navImage img {
@@ -574,7 +631,7 @@ button {
     .navLogo {
         transform: translateX(-1vw);
     }
-    .navImage.sticked {
+    header.sticked .navImage {
         transform: translate(-2vw, 2vw) scale(1.3);
     }
     .landingSectionTextTop1 {
@@ -589,7 +646,7 @@ button {
     .navLogo {
         transform: translateX(-2vw);
     }
-    .navImage.sticked {
+    header.sticked .navImage {
         transform: translate(-3vw, 2vw) scale(1.4);
     }
 }
