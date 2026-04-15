@@ -421,7 +421,7 @@ main {
     background-color: var(--background2ColorOpacity);
     cursor: pointer;
     border-radius: 2.5rem;
-    padding: 0.35rem 0.35rem;
+    padding: 0.35rem 0.5rem;
 }
 #homeGalleryPrev {
     left: calc(1.5%);
