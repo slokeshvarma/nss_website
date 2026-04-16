@@ -1,13 +1,14 @@
 section,eventName,eventDate,eventUnit,eventDescription,eventPosterLink,eventMobileImageLink,eventNonMobileImageLink
-homeGallery,,,,,,images/eventPhotos/any_photo1_4-3.jpg,images/eventPhotos/any_photo1.jpg
-homeGallery,,,,,,images/eventPhotos/any_photo2_4-3.jpg,images/eventPhotos/any_photo2.jpg
-homeGallery,,,,,,images/eventPhotos/any_photo3_4-3.jpg,images/eventPhotos/any_photo3.jpg
-homeGallery,,,,,,images/eventPhotos/any_photo4_4-3.jpg,images/eventPhotos/any_photo4.jpg
-homeGallery,,,,,,images/eventPhotos/any_photo5_4-3.jpg,images/eventPhotos/any_photo5.jpg
-homeGallery,,,,,,images/eventPhotos/any_photo6_4-3.jpg,images/eventPhotos/any_photo6.jpg
-homeGallery,,,,,,images/eventPhotos/any_photo7_4-3.jpg,images/eventPhotos/any_photo7.jpg
-homeEvents,blood donation,10-04-2026,1&2,an event organized along with rotaract,images/eventPosters/.jpg,,
-homeEvents,blood donation,10-04-2026,1&2,an event organized along with rotaract,images/eventPosters/.jpg,,
-homeEvents,blood donation,10-04-2026,1&2,an event organized along with rotaract,images/eventPosters/.jpg,,
-homeEvents,blood donation,10-04-2026,1&2,an event organized along with rotaract,images/eventPosters/.jpg,,
-homeEvents,blood donation,10-04-2026,1&2,an event organized along with rotaract,images/eventPosters/.jpg,,
+homeGallery,,,,,,images/homePage/gallery/any_photo1_4-3.jpg,images/homePage/gallery/any_photo1.jpg
+homeGallery,,,,,,images/homePage/gallery/any_photo2_4-3.jpg,images/homePage/gallery/any_photo2.jpg
+homeGallery,,,,,,images/homePage/gallery/any_photo3_4-3.jpg,images/homePage/gallery/any_photo3.jpg
+homeGallery,,,,,,images/homePage/gallery/any_photo4_4-3.jpg,images/homePage/gallery/any_photo4.jpg
+homeGallery,,,,,,images/homePage/gallery/any_photo5_4-3.jpg,images/homePage/gallery/any_photo5.jpg
+homeGallery,,,,,,images/homePage/gallery/any_photo6_4-3.jpg,images/homePage/gallery/any_photo6.jpg
+homeGallery,,,,,,images/homePage/gallery/any_photo7_4-3.jpg,images/homePage/gallery/any_photo7.jpg
+homeEvents,blood donation,10-04-2026,Unit 1 & 2,an event organized along with rotaract,images/homePage/eventPosters/any_photo1_4-5.jpg,,
+homeEvents,blood donation,10-04-2026,Unit 1 & 2,an event organized along with rotaract,images/homePage/eventPosters/any_photo2_4-5.jpg,,
+homeEvents,blood donation,10-04-2026,Unit 1 & 2,an event organized along with rotaract,images/homePage/eventPosters/any_photo3_4-5.jpg,,
+homeEvents,blood donation,10-04-2026,Unit 1 & 2,an event organized along with rotaract,images/homePage/eventPosters/any_photo4_4-5.jpg,,
+homeEvents,blood donation,10-04-2026,Unit 1 & 2,an event organized along with rotaract,images/homePage/eventPosters/any_photo5_4-5.jpg,,
+homeEvents,blood donation,10-04-2026,Unit 1 & 2,an event organized along with rotaract,images/homePage/eventPosters/any_photo6_4-5.jpg,,

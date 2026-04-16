@@ -249,10 +249,15 @@ main {
     height: 100vh;
     background-color: var(--background1Color);
 }
+section {
+    color: var(--text1Color);
+    background-color: var(--background1Color);
+}
 /* #region Landing section */
 .landingSection {
     flex: 0 0 fit-content;
     flex-direction: row;
+    align-items: flex-end;
     flex-wrap: wrap;
     margin-top: 0;
     padding: 1vh 1vw;
@@ -268,6 +273,7 @@ main {
 .landingSectionText {
     flex: 0 1 100%;
     height: fit-content;
+    justify-content: flex-end;
     max-width: 100vw;
     font-weight: 600;
 }
@@ -275,6 +281,7 @@ main {
     flex: 0 0 50%;
     width: 100%;
     justify-content: center;
+    margin: 0.75vh 0;
 }
 .landingSectionTextTop1 {
     width: 50%; 
@@ -475,6 +482,48 @@ main {
 .homeGalleryImages4-3 img.right  {  left: calc(100%); }
 
 /* #endregion homeGallery */
+/* #region homeEvents */
+.homeEvents button {
+    flex: 1 0 5%;
+    display: flex;
+    z-index: 1;
+    font-size: clamp(0.5rem, 0.5rem + 4vw, 1.75rem);
+    position: absolute;
+    width: fit-content;
+    cursor: default;
+    height: 100%;
+    padding: 0 0.5vw;
+}
+.homeEvents button i {
+    align-self: flex-end;
+    color: var(--text2Color);
+    background-color: var(--background2ColorOpacity);
+    cursor: pointer;
+    border-radius: 2.5rem;
+    padding: 0.35rem 0.5rem;
+}
+#homeEventsPrev {
+    left: calc(1.5%);
+}
+#homeEventsNext {
+    right: calc(1.5%);
+}
+.homeEventCards {
+    flex-direction: column;
+    width: 100%;
+    gap: calc(0.5%);
+}
+.homeEventCard {
+    width: 100%;
+}
+.homeEventCardImage {
+    flex-direction: row;
+    justify-content: center;
+}
+.homeEventCardImage img {
+    width: 75vw;
+}
+/* #endregion homeEvents */
 .buttonSection {
     flex: 1 0 500px;
 }
@@ -612,12 +661,16 @@ main {
         padding-top: clamp(1vw, calc(1.25 * var(--pageScrolledTill) * var(--navHeight)), 100vw);
     }
     .landingSectionText {
-        flex: 1 0 50%;
+        flex: 0 1 50%;
+        height: 100%;
         align-self: center;
+        gap: 0.95rem;
         height: 100%;
     }
     .landingSectionTextTop {
         height: 70%;
+        transform: scale(1) translateX(0);
+        margin: 0;
     }
     .landingSectionTextTop1 {
         width: 45%; 
@@ -628,10 +681,19 @@ main {
     }
     .landingSectionTextBottom {
         display: flex;
+        align-self: flex-end;
         height: 30%;
+        width: 90%;
+        margin-bottom: 1vw;
+    }
+    .landingSectionTextBottom p {
+        font-size: clamp(0.25rem, calc(0.25rem + 1vw), 1rem);
+        text-align: right;
+        margin-right: 2vw;
     }
     .landingSectionImage {
         flex: 1 0 50%;
+        margin: 0.25rem -2.5px;
     }
     .aboutUs hr {
         width: 8vw;
@@ -646,7 +708,7 @@ main {
     flex: 0 0 33%;
     }
     .homeGalleryImages2-1 {
-        display: block;         /* switch to desktop version */
+        display: block;
         position: relative;
         width: 100%;
         aspect-ratio: 2 / 1;
@@ -654,6 +716,26 @@ main {
     }
     .homeGalleryImages4-3 {
         display: none;
+    }
+    .homeEventCards {
+        flex-direction: row;
+        justify-content: center;
+        gap: calc(0.5%);;
+    }
+    .homeEventCard {
+        display: flex;
+        width: 48%;
+    }
+    .homeEventCard.number-3,
+    .homeEventCard.number-4,
+    .homeEventCard.number-5,
+    .homeEventCard.number-6 {
+        display: none;
+    }
+}
+@media only screen and (min-width: 940px) {
+    .landingSectionText {
+        gap: 2rem;
     }
 }
 @media only screen and (min-width: 1024px) {
@@ -666,12 +748,37 @@ main {
     header.sticked .navImage {
         transform: translate(-2vw, 2vw) scale(1.3);
     }
+    .landingSectionTextTop {
+        height: 70%;
+        transform: scale(1.15);
+    }
     .landingSectionTextTop1 {
         width: 50%; 
     }
     .landingSectionTextTop2 {
         margin-top:  clamp(-5rem, calc(-2.5rem - 1vw), -2rem);
         margin-left: 0;
+    }
+    .homeEventCards {
+        flex-direction: row;
+        justify-content: center;
+        gap: calc(0.25%);
+    }
+    .homeEventCard {
+        width: 33%;
+    }
+    .homeEventCard.number-3 {
+        display: flex;
+    }
+    .homeEventCard.number-4,
+    .homeEventCard.number-5,
+    .homeEventCard.number-6 {
+        display: none;
+    }
+}
+@media only screen and (min-width: 1240px) {
+    .landingSectionTextTop {
+        transform: scale(1.35);
     }
 }
 @media only screen and (min-width: 1440px) {
@@ -680,5 +787,8 @@ main {
     }
     header.sticked .navImage {
         transform: translate(-3vw, 2vw) scale(1.4);
+    }
+    .landingSectionTextTop {
+        transform: scale(1.5);
     }
 }

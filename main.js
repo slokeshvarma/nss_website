@@ -62,6 +62,7 @@ function navSticky() {
     header.classList.toggle("sticked", pageScrolledPassed);
     landingSection.classList.toggle("sticked", pageScrolledPassed);
     aboutUs.classList.toggle("sticked", pageScrolledPassed);
+
 };
 
 function loadCSV(path) {
@@ -126,6 +127,7 @@ function renderImagesinHomeGallery(currentImage, className, imageDiv, imageLinks
                 imageTag = document.createElement("img");
                 imageTag.className = `${directionClassNameCount[classNameCount]} ${className}`;
                 imageTag.src = `${imageLink}`;
+                imageTag.alt = `Home Gallery Image–${classNameCount}`;
                 imageDiv.appendChild(imageTag);
             }
         } else {
@@ -193,11 +195,78 @@ function homeImageGallery(currentImage, direction) {
 }
 
 function renderHomeEvents(data) {
-    if (true) {
-        // console.log(data);
-    }
+    const homeEventsDiv = document.getElementById("homeEvents");
+
+    const homeEventsPrev = document.createElement("button");
+    homeEventsPrev.id = "homeEventsPrev";
+    const homeEventsPrevIcon = document.createElement("i");
+    homeEventsPrevIcon.className = "fa-solid fa-angles-left";
+    homeEventsPrev.appendChild(homeEventsPrevIcon);
+    homeEventsDiv.appendChild(homeEventsPrev);
+    
+    const homeEvents = document.createElement("div");
+    homeEvents.className = "homeEventCards";
+    let count = 1;
+    data.forEach(row => {
+        renderHomeEventsCards(row, count, homeEvents);
+        count++;
+    })
+    homeEventsDiv.appendChild(homeEvents);
+
+    const homeEventsNext = document.createElement("button");
+    homeEventsNext.id = "homeEventsNext";
+    const homeEventsNextIcon = document.createElement("i");
+    homeEventsNextIcon.className = "fa-solid fa-angles-right";
+    homeEventsNext.appendChild(homeEventsNextIcon);
+    homeEventsDiv.appendChild(homeEventsNext);
+
+    Array.from(homeEvents.children).forEach(homeEvent => {
+        const homeEventCardDetails = homeEvent.children[1];
+        const height = homeEventCardDetails.clientHeight;
+        homeEventCardDetails.style.marginTop = `-${height}px`
+        console.log(height);
+    })
 };
 
+function renderHomeEventsCards(dictObj, count, parentDiv) {
+    const homeEventDiv = document.createElement("div");
+    homeEventDiv.className = `homeEventCard number-${count}`;
+    homeEventDiv.id = `${dictObj.eventName}`;
+    const homeEventPoster = document.createElement("img");
+    homeEventPoster.className = "homeEventPoster";
+    homeEventPoster.src = dictObj.eventPosterLink;
+    homeEventPoster.alt = dictObj.eventName;
+
+    const homeEventCardImage = document.createElement("div");
+    homeEventCardImage.className = "homeEventCardImage";
+    const homeEventCardDetails = document.createElement("div");
+    homeEventCardDetails.className = "homeEventCardDetails";
+    const homeEventCardMetaData = document.createElement("div");
+    homeEventCardMetaData.className = "homeEventCardMetaData";
+    const homeEventCardData = document.createElement("div");
+    homeEventCardData.className = "homeEventCardData";
+    
+    const eventNameP = document.createElement("p");
+    eventNameP.innerHTML = `Name: ${dictObj.eventName}`;
+    const eventDateP = document.createElement("p");
+    eventDateP.innerHTML = dictObj.eventDate;
+    const eventUnitP = document.createElement("p");
+    eventUnitP.innerHTML = `Organized by ${dictObj.eventUnit}`;
+    const eventDescriptionP = document.createElement("p");
+    eventDescriptionP.innerHTML = dictObj.eventDescription;
+
+
+    homeEventCardMetaData.appendChild(eventNameP);
+    homeEventCardMetaData.appendChild(eventDateP);
+    homeEventCardMetaData.appendChild(eventUnitP);
+    homeEventCardData.appendChild(eventDescriptionP);
+    homeEventCardImage.appendChild(homeEventPoster);
+    homeEventCardDetails.appendChild(homeEventCardMetaData);
+    homeEventCardDetails.appendChild(homeEventCardData);
+    homeEventDiv.appendChild(homeEventCardImage);
+    homeEventDiv.appendChild(homeEventCardDetails);
+    parentDiv.appendChild(homeEventDiv);
+}
 
 /* csv data loading*/
 let homeGalleryData = [];
@@ -266,6 +335,12 @@ hamburgerMenu.addEventListener("click", (e) => {
 
 document.documentElement.style.setProperty("--navHeight", nav.offsetHeight + "px");
 
+let landingSectionImageLink = "images/homePage/landingSectionImage.jpg";
+imageTag = document.createElement("img");
+imageTag.src = `${landingSectionImageLink}`;
+imageTag.alt = "Image"
+document.getElementById("landingSectionImage").appendChild(imageTag);
+
 /* homeGallery function integration */
 var currentImageNumber = 1;
 let mouseIsOverDiv = false;
@@ -273,25 +348,27 @@ let homeGalleryInteraction = false;
 
 const landingSection = document.getElementsByClassName("landingSection")[0];
 const aboutUs = document.getElementsByClassName("aboutUs")[0];
-const homeGalleryPrevButton = document.getElementById("homeGalleryPrev").children[0];
-const homeGalleryNextButton = document.getElementById("homeGalleryNext").children[0];
+const homeGalleryPrevButton = document.getElementById("homeGalleryPrev");
+const homeGalleryNextButton = document.getElementById("homeGalleryNext");
 const homeGalleryImages = document.getElementsByClassName("homeGalleryImages")[0];
 
-homeGalleryPrevButton.addEventListener('click', () => {
+homeGalleryPrevButton.children[0].addEventListener('click', () => {
     homeImageGallery(currentImageNumber - 1, 'prev');
     homeGalleryInteraction = true;
 });
-homeGalleryNextButton.addEventListener('click', () => {
+homeGalleryNextButton.children[0].addEventListener('click', () => {
     homeImageGallery(currentImageNumber + 1, 'next');
     homeGalleryInteraction = true;
 });
 
-homeGalleryImages.addEventListener("mouseover", () => {
+[homeGalleryPrevButton, homeGalleryNextButton].forEach(button => {
+    button.addEventListener("mouseover", () => {
     mouseIsOverDiv = true;
-})
-homeGalleryImages.addEventListener("mouseover", () => {
-    mouseIsOverDiv = true;
-})
+    });
+    button.addEventListener("mouseout", () => {
+    mouseIsOverDiv = false;
+    });
+});
 homeGalleryImages.addEventListener("touchstart", () => {
     mouseIsOverDiv = false;
 })
