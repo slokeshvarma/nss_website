@@ -1,4 +1,19 @@
 /* functions */
+function academicYearCalculator() {
+    // As Date.getMonth() returns index from 0-11 respectively for Jan-Dec. So, index is directly used for logic comparisions
+    
+    let academicYear;
+    currentDate = new Date();
+    currentMonth = currentDate.getMonth();
+    currentYear = currentDate.getFullYear();
+    if (currentMonth > 2) {
+        academicYear = `${currentYear}-` + `${currentYear + 1}`.slice(2, 4);
+    } else {
+        academicYear = `${currentYear - 1}-` + `${currentYear}`.slice(2, 4);
+    }
+    return academicYear
+};
+
 function toggleTheme() {
     if (!manualChangeOfTheme) {
         manualChangeOfTheme = true;
@@ -41,7 +56,7 @@ function navMobileMenu() {
     });
 
     navLinks.style.top = hamburgerMenuOpened ? `${navHeight - 2}px` : "";
-}
+};
 
 function navSticky() {
     const pageScrollValue = window.scrollY || document.documentElement.scrollTop;
@@ -82,7 +97,7 @@ function preloadImages(imageLinks) {
     });
 
     return Promise.all(promises);
-}
+};
 
 function currentImageDiv() {
     let imageDiv;
@@ -192,13 +207,28 @@ function homeImageGallery(currentImage, direction) {
         currentImageNumber = currentImageWraper(homeGalleryData.length, currentImage);
         renderHomeGallery(homeGalleryData, currentImageNumber);
     }, 400);
-}
+};
 
 function renderHomeEvents(data) {
     const homeEventsDiv = document.getElementById("homeEvents");
 
+    const homeEventsDescription = document.createElement("div");
+    homeEventsDescription.className = "homeEventsDescription";
+    const homeEventsDescriptionH1 = document.createElement("h1");
+    homeEventsDescriptionH1.innerHTML = "Events";
+    const eventsHr = document.createElement("hr");
+    eventsHr.className = "eventsHr";
+    const homeEventsDescriptionP = document.createElement("p");
+    homeEventsDescriptionP.innerHTML = `The recent ${data.length} events conducted in the acedamic year ${academicYear}.`;
+    homeEventsDescription.appendChild(homeEventsDescriptionH1);
+    homeEventsDescription.appendChild(eventsHr);
+    homeEventsDescription.appendChild(homeEventsDescriptionP);
+    homeEventsDiv.appendChild(homeEventsDescription);
+    
+
     const homeEventsPrev = document.createElement("button");
     homeEventsPrev.id = "homeEventsPrev";
+    homeEventsPrev.className = "start";
     const homeEventsPrevIcon = document.createElement("i");
     homeEventsPrevIcon.className = "fa-solid fa-angles-left";
     homeEventsPrev.appendChild(homeEventsPrevIcon);
@@ -215,6 +245,7 @@ function renderHomeEvents(data) {
 
     const homeEventsNext = document.createElement("button");
     homeEventsNext.id = "homeEventsNext";
+    homeEventsNext.className = "start";
     const homeEventsNextIcon = document.createElement("i");
     homeEventsNextIcon.className = "fa-solid fa-angles-right";
     homeEventsNext.appendChild(homeEventsNextIcon);
@@ -223,9 +254,12 @@ function renderHomeEvents(data) {
     Array.from(homeEvents.children).forEach(homeEvent => {
         const homeEventCardDetails = homeEvent.children[1];
         const height = homeEventCardDetails.clientHeight;
-        homeEventCardDetails.style.marginTop = `-${height}px`
-        console.log(height);
-    })
+        homeEventCardDetails.style.marginTop = `-${height}px`;
+        if (height != 0) {
+            homeEventsPrev.style.paddingBottom = `${height + 7}px`;
+            homeEventsNext.style.paddingBottom = `${height + 7}px`;
+        }
+    });
 };
 
 function renderHomeEventsCards(dictObj, count, parentDiv) {
@@ -249,24 +283,31 @@ function renderHomeEventsCards(dictObj, count, parentDiv) {
     const eventNameP = document.createElement("p");
     eventNameP.innerHTML = `Name: ${dictObj.eventName}`;
     const eventDateP = document.createElement("p");
-    eventDateP.innerHTML = dictObj.eventDate;
+    eventDateP.innerHTML = `Dt: ${dictObj.eventDate}`;
     const eventUnitP = document.createElement("p");
     eventUnitP.innerHTML = `Organized by ${dictObj.eventUnit}`;
     const eventDescriptionP = document.createElement("p");
-    eventDescriptionP.innerHTML = dictObj.eventDescription;
+    eventDescriptionP.innerHTML = `&#9; ${dictObj.eventDescription}`;
+    eventDescriptionP.style.whiteSpace = "pre";
+    eventDescriptionP.style.textWrap = "wrap";
+    const eventDetailsLink = document.createElement("a");
+    eventDetailsLink.className = "eventDetailsLink";
+    eventDetailsLink.href = dictObj.eventDetailsLink;
+    eventDetailsLink.innerHTML = "Know More";
 
 
     homeEventCardMetaData.appendChild(eventNameP);
     homeEventCardMetaData.appendChild(eventDateP);
     homeEventCardMetaData.appendChild(eventUnitP);
     homeEventCardData.appendChild(eventDescriptionP);
+    homeEventCardData.appendChild(eventDetailsLink);
     homeEventCardImage.appendChild(homeEventPoster);
     homeEventCardDetails.appendChild(homeEventCardMetaData);
     homeEventCardDetails.appendChild(homeEventCardData);
     homeEventDiv.appendChild(homeEventCardImage);
     homeEventDiv.appendChild(homeEventCardDetails);
     parentDiv.appendChild(homeEventDiv);
-}
+};
 
 /* csv data loading*/
 let homeGalleryData = [];
@@ -286,7 +327,8 @@ loadCSV("dataTables/homePageData.csv").then(data => {
                 eventDate: row.eventDate,
                 eventUnit: row.eventUnit,
                 eventDescription: row.eventDescription,
-                eventPosterLink: row.eventPosterLink
+                eventPosterLink: row.eventPosterLink,
+                eventDetailsLink: row.eventDetailsLink
             })
         }
     });
@@ -296,6 +338,9 @@ loadCSV("dataTables/homePageData.csv").then(data => {
 
 
 /* execution of functions */
+
+let academicYear = academicYearCalculator();
+console.log(academicYear);
 let manualChangeOfTheme = false;
 themeChanger();
 setInterval(() => {

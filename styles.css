@@ -485,14 +485,15 @@ section {
 /* #region homeEvents */
 .homeEvents button {
     flex: 1 0 5%;
-    display: flex;
+    display: none;
     z-index: 1;
     font-size: clamp(0.5rem, 0.5rem + 4vw, 1.75rem);
     position: absolute;
     width: fit-content;
     cursor: default;
     height: 100%;
-    padding: 0 0.5vw;
+    padding: 0 0.25vw;
+    opacity: 0.85;
 }
 .homeEvents button i {
     align-self: flex-end;
@@ -502,26 +503,87 @@ section {
     border-radius: 2.5rem;
     padding: 0.35rem 0.5rem;
 }
-#homeEventsPrev {
-    left: calc(1.5%);
+.homeEventsDescription {
+    align-items: center;
+    font-size: clamp(0.75rem, 0.75rem + 2vw, 1.75rem);
 }
-#homeEventsNext {
-    right: calc(1.5%);
+.homeEventsDescription h1 {font-size: inherit; margin-bottom: clamp(3px, 2px + 0.5vw, 10px); font-weight: 600; }
+.eventsHr {
+    background-color: var(--background2Color);
+    width: 5vw;
+    height: clamp(1px, 1px + 1vh, 3px);
+    border-radius: 1rem;
+    margin-bottom: clamp(3px, 2px + 1.5vw, 20px);
+}
+.homeEventsDescription p{
+    font-size: clamp(0.5rem, 0.5rem + 1.5vw, 0.95rem);
+    text-align: justify;
+    line-height: 1.2;
+    margin-bottom: clamp(7px, 5px + 0.75vw, 15px);
 }
 .homeEventCards {
-    flex-direction: column;
+    align-items: center;
     width: 100%;
-    gap: calc(0.5%);
+    gap: clamp(0.25rem, 0.15rem + 1vh, 1rem);
 }
 .homeEventCard {
-    width: 100%;
+    width: 85%;
+    align-items: center;
 }
 .homeEventCardImage {
     flex-direction: row;
     justify-content: center;
 }
 .homeEventCardImage img {
-    width: 75vw;
+    width: auto;
+}
+.homeEventCardDetails {
+    width: 100%;
+    color: var(--text2Color);
+    background-color: var(--background2Color);
+    backdrop-filter: blur(100px);
+    opacity: .75;
+    padding: 0.25vh 2vw;
+    padding-bottom: clamp(0.125rem, 0.075rem + 0.5vh, 0.5rem);
+}
+.homeEventCardDetails * {
+    filter: blur(0px);
+    opacity: 1;
+}
+.homeEventCardMetaData {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+.homeEventCardMetaData p {
+    flex: 1 0 50%;
+    text-align: right;
+    font-size: clamp(0.5rem, 0.5rem + 2vw, 1.75rem);
+    margin: clamp(0.063rem, 0.04rem + 0.1vh, 0.25rem) 0;
+}
+.homeEventCardMetaData p:first-child {
+    text-align: left;
+}
+.homeEventCardMetaData p:last-child {
+    flex: 1 0 100%;
+    text-align: center; 
+}
+.homeEventCardData {
+    align-items: flex-end;
+    padding: clamp(0.063rem, 0.04rem + 0.85vh, 0.25rem);
+    padding-bottom: clamp(0.063rem, 0.04rem + 0.25vh, 0.25rem);
+}
+.homeEventCardData p {
+    font-size: clamp(0.5rem, 0.5rem + 1.5vw, 0.95rem);
+    width: 100%;
+    text-align: justify;
+}
+.eventDetailsLink {
+    font-size: clamp(0.5rem, 0.5rem + 2vw, 1.75rem);
+    color: var(--text1Color);
+    background-color: var(--accentColor);
+    padding: clamp(0.125rem, 0.075rem + 0.5vh, 0.5rem) 2vw;
+    margin-top: clamp(0.125rem, 0.075rem + 0.5vh, 0.5rem);
+    border-radius: 2rem;
 }
 /* #endregion homeEvents */
 .buttonSection {
@@ -539,7 +601,7 @@ section {
     border-radius: 2rem;
 }
 
-/* below average mobile design */
+/* below average mobile width design */
 @media only screen and (max-width: 312px) {
     .collegeDetails p {
         font-size: clamp(0.025rem, 0.075rem + 1.75vw, 3rem);
@@ -717,6 +779,29 @@ section {
     .homeGalleryImages4-3 {
         display: none;
     }
+    .homeEvents button i { 
+        margin-bottom: 2vh;
+    } 
+    #homeEventsPrev {
+        left: calc(1.25%);
+    }
+    #homeEventsPrev.start {
+        display: none;
+    }
+    #homeEventsPrev.middle,
+    #homeEventsPrev.end {
+        display: flex;
+    }
+    #homeEventsNext {        
+        right: calc(1.25%);
+    }
+    #homeEventsNext.middle, 
+    #homeEventsNext.start {
+        display: flex;
+    }
+    #homeEventsNext.end {
+    display: none;
+    }
     .homeEventCards {
         flex-direction: row;
         justify-content: center;
@@ -731,6 +816,22 @@ section {
     .homeEventCard.number-5,
     .homeEventCard.number-6 {
         display: none;
+    }
+    .homeEventCardDetails {
+    padding: 0.25vh 1vw;
+    }
+    .homeEventCardMetaData p {
+        font-size: clamp(0.5rem, 0.5rem + 0.85vw, 1.75rem);
+    }
+    .homeEventCardData p {
+        font-size: clamp(0.5rem, 0.5rem + 0.75vw, 0.95rem);
+    }
+    .eventDetailsLink {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        font-size: clamp(0.5rem, 0.5rem + 0.85vw, 1.75rem);
+        padding: clamp(0.125rem, 0.075rem + 0.5vh, 0.5rem) 1vw;
     }
 }
 @media only screen and (min-width: 940px) {
@@ -775,6 +876,15 @@ section {
     .homeEventCard.number-6 {
         display: none;
     }
+    .homeEventCardMetaData p {
+        font-size: clamp(0.5rem, 0.5rem + 0.65vw, 1.75rem);
+    }
+    .homeEventCardData p {
+        font-size: clamp(0.5rem, 0.5rem + 0.4vw, 0.95rem);
+    }
+    .eventDetailsLink {
+        font-size: clamp(0.5rem, 0.5rem + 0.65vw, 1.75rem);
+    }
 }
 @media only screen and (min-width: 1240px) {
     .landingSectionTextTop {
@@ -791,4 +901,15 @@ section {
     .landingSectionTextTop {
         transform: scale(1.5);
     }
+}
+
+
+
+@keyframes fadeIn {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+@keyframes fadeOut {
+    0% {opacity: 1; }
+    100% {opacity: 0; }
 }
