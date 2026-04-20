@@ -11,8 +11,6 @@
     --text2Color: rgb(223, 229, 255);
     --background1Color: rgb(223, 229, 255);
     --background2Color:  rgb(16, 21, 43);
-    --background1ColorOpacity: rgba(223, 229, 255, 0.85);
-    --background2ColorOpacity: rgba(16, 21, 43, 0.85);
 }
 :root.darkMode {
     --primaryColor:  rgb(91, 108, 182);
@@ -22,8 +20,6 @@
     --text2Color: rgb(16, 21, 43);
     --background1Color: rgb(16, 21, 43);
     --background2Color: rgb(223, 229, 255);
-    --background1ColorOpacity: rgba(16, 21, 43, 0.85);
-    --background2ColorOpacity: rgba(223, 229, 255, 0.85);
 }
 * {
     all: unset;
@@ -401,6 +397,7 @@ section {
     max-width: 40%;
 }
 .aboutUsDuty p {
+    font-size: clamp(0.5rem, 0.5rem + 1.5vw, 0.95rem);
     margin: clamp(0.3rem, 0.25rem + 0.5vh, 4rem) 0 clamp(0.3rem, 0.25rem + 1vh, 4rem) 0;
 }
 
@@ -425,7 +422,7 @@ section {
 }
 .homeGallery button i {
     color: var(--text2Color);
-    background-color: var(--background2ColorOpacity);
+    background-color: color-mix(in srgb, var(--background2Color) 85%, transparent);
     cursor: pointer;
     border-radius: 2.5rem;
     padding: 0.35rem 0.5rem;
@@ -498,25 +495,50 @@ section {
 .homeEvents button i {
     align-self: flex-end;
     color: var(--text2Color);
-    background-color: var(--background2ColorOpacity);
+    background-color: color-mix(in srgb, var(--accentColor) 85%, transparent);
     cursor: pointer;
     border-radius: 2.5rem;
     padding: 0.35rem 0.5rem;
 }
+:root.darkMode .homeEvents button i {
+    color: var(--text1Color);
+}
+#homeEventsPrev {
+    left: calc(5% + 3px);
+}
+#homeEventsPrev.start {
+    display: none;
+}
+#homeEventsPrev.middle,
+#homeEventsPrev.end {
+    display: flex;
+}
+#homeEventsNext {        
+    right: calc(5% + 3px);
+}
+#homeEventsNext.middle, 
+#homeEventsNext.start {
+    display: flex;
+}
+#homeEventsNext.end {
+    display: none;
+}
 .homeEventsDescription {
     align-items: center;
     font-size: clamp(0.75rem, 0.75rem + 2vw, 1.75rem);
+    padding: 0 4vw;
+    margin-bottom: 2vh;
 }
 .homeEventsDescription h1 {font-size: inherit; margin-bottom: clamp(3px, 2px + 0.5vw, 10px); font-weight: 600; }
 .eventsHr {
     background-color: var(--background2Color);
-    width: 5vw;
+    width: clamp(5vw, 4vw + 2vh, 8vw);
     height: clamp(1px, 1px + 1vh, 3px);
     border-radius: 1rem;
     margin-bottom: clamp(3px, 2px + 1.5vw, 20px);
 }
 .homeEventsDescription p{
-    font-size: clamp(0.5rem, 0.5rem + 1.5vw, 0.95rem);
+    font-size: clamp(0.5rem, 0.5rem + 1.85vw, 1rem);
     text-align: justify;
     line-height: 1.2;
     margin-bottom: clamp(7px, 5px + 0.75vw, 15px);
@@ -527,8 +549,12 @@ section {
     gap: clamp(0.25rem, 0.15rem + 1vh, 1rem);
 }
 .homeEventCard {
-    width: 85%;
+    display: none;
+    width: 90%;
     align-items: center;
+}
+.homeEventCard.number-1 {
+    display: flex;
 }
 .homeEventCardImage {
     flex-direction: row;
@@ -540,12 +566,20 @@ section {
 .homeEventCardDetails {
     width: 100%;
     color: var(--text2Color);
-    background-color: var(--background2Color);
-    backdrop-filter: blur(100px);
-    opacity: .75;
-    padding: 0.25vh 2vw;
+    padding-top: 10vh;
+    background-image: linear-gradient(to bottom,
+                                        color-mix(in srgb, var(--background2Color) 0%, transparent),
+                                        color-mix(in srgb, var(--background2Color) 50%, transparent),
+                                        color-mix(in srgb, var(--background2Color) 79%, transparent),
+                                        color-mix(in srgb, var(--background2Color) 87%, transparent), 
+                                        color-mix(in srgb, var(--background2Color) 91%, transparent),  
+                                        color-mix(in srgb, var(--background2Color) 99%, transparent), 
+                                        var(--background2Color));
+    backdrop-filter: blur(0.85px);
+    padding: 0 4vw;
     padding-bottom: clamp(0.125rem, 0.075rem + 0.5vh, 0.5rem);
 }
+
 .homeEventCardDetails * {
     filter: blur(0px);
     opacity: 1;
@@ -553,12 +587,13 @@ section {
 .homeEventCardMetaData {
     flex-direction: row;
     flex-wrap: wrap;
+    padding-top: 40px;
 }
 .homeEventCardMetaData p {
     flex: 1 0 50%;
     text-align: right;
     font-size: clamp(0.5rem, 0.5rem + 2vw, 1.75rem);
-    margin: clamp(0.063rem, 0.04rem + 0.1vh, 0.25rem) 0;
+    margin: clamp(0.063rem, 0.04rem + 0.2vh, 0.25rem) 0;
 }
 .homeEventCardMetaData p:first-child {
     text-align: left;
@@ -579,11 +614,14 @@ section {
 }
 .eventDetailsLink {
     font-size: clamp(0.5rem, 0.5rem + 2vw, 1.75rem);
-    color: var(--text1Color);
+    color: var(--text2Color);
     background-color: var(--accentColor);
     padding: clamp(0.125rem, 0.075rem + 0.5vh, 0.5rem) 2vw;
-    margin-top: clamp(0.125rem, 0.075rem + 0.5vh, 0.5rem);
+    margin: clamp(0.125rem, 0.075rem + 1.4vh, 1.15rem) 0;
     border-radius: 2rem;
+}
+:root.darkMode .eventDetailsLink {
+    color: var(--text1Color);
 }
 /* #endregion homeEvents */
 .buttonSection {
@@ -611,10 +649,32 @@ section {
         transform: translate(10px);
     }
 }
-
+@media only screen and (max-width: 350px) {
+    .homeEventCardMetaData p {
+        font-size: clamp(0.5rem, 0.5rem + 0.85vw, 1.75rem);
+    }
+    .homeEventCardData p {
+        font-size: clamp(0.5rem, 0.5rem + 0.75vw, 0.95rem);
+    }
+    .eventDetailsLink {
+        font-size: clamp(0.5rem, 0.5rem + 0.85vw, 1.75rem);
+        padding: clamp(0.125rem, 0.075rem + 0.5vh, 0.5rem) 1vw;
+    }
+    .eventDetailsLink {
+        font-size: clamp(0.5rem, 0.5rem + 1vw, 1.75rem);
+        padding: clamp(0.125rem, 0.075rem + 0.25vh, 0.5rem) 2vw;
+        margin: clamp(0.125rem, 0.075rem + 0.05vh, 1.15rem) 0;
+}
+}
 @media only screen and (min-width: 420px) {
     .landingSectionTextTop2 {
         margin-top:  clamp(-5rem, calc(-2.75rem - 1.25vw), -2rem);
+    }
+}
+@media only screen and (max-width: 768px) {
+    #homeEventsPrev i ,
+    #homeEventsNext i {        
+        margin-bottom: 3vw;
     }
 }
 @media only screen and (min-width: 768px) {
@@ -783,33 +843,19 @@ section {
         margin-bottom: 2vh;
     } 
     #homeEventsPrev {
-        left: calc(1.25%);
-    }
-    #homeEventsPrev.start {
-        display: none;
-    }
-    #homeEventsPrev.middle,
-    #homeEventsPrev.end {
-        display: flex;
+        left: calc(4%);
     }
     #homeEventsNext {        
-        right: calc(1.25%);
-    }
-    #homeEventsNext.middle, 
-    #homeEventsNext.start {
-        display: flex;
-    }
-    #homeEventsNext.end {
-    display: none;
+        right: calc(4%);
     }
     .homeEventCards {
         flex-direction: row;
         justify-content: center;
-        gap: calc(0.5%);;
+        gap: calc(4%);
     }
     .homeEventCard {
         display: flex;
-        width: 48%;
+        width: 44%;
     }
     .homeEventCard.number-3,
     .homeEventCard.number-4,
@@ -818,7 +864,8 @@ section {
         display: none;
     }
     .homeEventCardDetails {
-    padding: 0.25vh 1vw;
+        padding: 0.25vh 1vw;
+        backdrop-filter: blur(2px);
     }
     .homeEventCardMetaData p {
         font-size: clamp(0.5rem, 0.5rem + 0.85vw, 1.75rem);
@@ -860,13 +907,20 @@ section {
         margin-top:  clamp(-5rem, calc(-2.5rem - 1vw), -2rem);
         margin-left: 0;
     }
+    #homeEventsPrev {
+        left: calc(1.5%);
+    }
+    #homeEventsNext {        
+        right: calc(1.5%);
+    }
     .homeEventCards {
         flex-direction: row;
         justify-content: center;
-        gap: calc(0.25%);
+        gap: calc(3%);
     }
     .homeEventCard {
-        width: 33%;
+        display: flex;
+        width: 30.33%;
     }
     .homeEventCard.number-3 {
         display: flex;

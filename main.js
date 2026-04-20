@@ -256,8 +256,8 @@ function renderHomeEvents(data) {
         const height = homeEventCardDetails.clientHeight;
         homeEventCardDetails.style.marginTop = `-${height}px`;
         if (height != 0) {
-            homeEventsPrev.style.paddingBottom = `${height + 7}px`;
-            homeEventsNext.style.paddingBottom = `${height + 7}px`;
+            homeEventsPrev.style.paddingBottom = `${0.675 * height}px`;
+            homeEventsNext.style.paddingBottom = `${0.675 * height}px`;
         }
     });
 };
@@ -312,6 +312,7 @@ function renderHomeEventsCards(dictObj, count, parentDiv) {
 /* csv data loading*/
 let homeGalleryData = [];
 let homeEventsData = [];
+let homeEventsImageLinks = [];
 let initialHomeGalleryRender = true;
 
 loadCSV("dataTables/homePageData.csv").then(data => {    
@@ -330,10 +331,13 @@ loadCSV("dataTables/homePageData.csv").then(data => {
                 eventPosterLink: row.eventPosterLink,
                 eventDetailsLink: row.eventDetailsLink
             })
+            homeEventsImageLinks.push(row.eventPosterLink);
         }
     });
     renderHomeGallery(homeGalleryData, currentImageNumber);
-    renderHomeEvents(homeEventsData);
+    preloadImages(homeEventsImageLinks).then(() => {
+        renderHomeEvents(homeEventsData);
+    });
 });
 
 
