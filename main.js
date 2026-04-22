@@ -3,9 +3,9 @@ function academicYearCalculator() {
     // As Date.getMonth() returns index from 0-11 respectively for Jan-Dec. So, index is directly used for logic comparisions
     
     let academicYear;
-    currentDate = new Date();
-    currentMonth = currentDate.getMonth();
-    currentYear = currentDate.getFullYear();
+    const currentDate = new Date();
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
     if (currentMonth > 2) {
         academicYear = `${currentYear}-` + `${currentYear + 1}`.slice(2, 4);
     } else {
@@ -15,29 +15,45 @@ function academicYearCalculator() {
 };
 
 function toggleTheme() {
-    if (!manualChangeOfTheme) {
-        manualChangeOfTheme = true;
+    const root = document.documentElement;
+    if (root.classList.contains("darkMode")) {
+        root.classList.replace("darkMode", "lightMode");
+        localStorage.setItem("theme", "lightMode");
     } else {
-        manualChangeOfTheme = false;
+        root.classList.replace("lightMode", "darkMode");
+        localStorage.setItem("theme", "darkMode");
     }
-    document.documentElement.classList.toggle('lightMode');
-    document.documentElement.classList.toggle('darkMode');
+};
+
+function resetTheme() {
+    localStorage.removeItem("theme");
+    initTheme();
 };
 
 function themeChanger() {
-    currentTime = new Date();
-    currentTimeInMinutes = (60*currentTime.getHours()) + currentTime.getMinutes();
-    if (currentTimeInMinutes > 60*6 && currentTimeInMinutes < 60*18) {
-        if (document.documentElement.classList.contains("darkMode")) {
-            document.documentElement.classList.remove('darkMode');
-        }
-        document.documentElement.classList.add('LightMode');
+    const root = document.documentElement;
+    const currentTime = new Date();
+    const currentTimeInMinutes = (60 * currentTime.getHours()) + currentTime.getMinutes();
+    if (currentTimeInMinutes > 360 && currentTimeInMinutes < 1080) {
+        root.classList.remove('darkMode');
+        root.classList.add('lightMode');
     } else {
-        if (document.documentElement.classList.contains("lightMode")) {
-            document.documentElement.classList.remove('lightMode');
-        }
-        document.documentElement.classList.add('darkMode');
-    };
+        root.classList.remove('lightMode');
+        root.classList.add('darkMode');
+    }
+};
+
+function initTheme() {
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+        document.documentElement.classList.add(savedTheme);
+    } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        document.documentElement.classList.add("darkMode");
+    } else if (window.matchMedia("(prefers-color-scheme: light)").matches) {
+        document.documentElement.classList.add("lightMode");
+    } else {
+        themeChanger();
+    }
 };
 
 function openLink(link) {
@@ -60,9 +76,9 @@ function navMobileMenu() {
 
 function navSticky() {
     const pageScrollValue = window.scrollY || document.documentElement.scrollTop;
-    const collgeLabelHeight = document.getElementsByClassName("collegeLabel")[0].clientHeight;
+    const collegeLabelHeight = document.getElementsByClassName("collegeLabel")[0].clientHeight;
     const root = document.documentElement;
-    const pageScrolledTill = pageScrollValue/collgeLabelHeight;
+    const pageScrolledTill = pageScrollValue/collegeLabelHeight;
     let pageScrolledPassed = false;
     if (pageScrolledTill >= 1) {
         pageScrolledPassed = true;
@@ -101,13 +117,13 @@ function preloadImages(imageLinks) {
 
 function currentImageDiv() {
     let imageDiv;
-    const homeGalleryImages2_1 = document.getElementById("homeGalleryImages2-1");
-    const homeGalleryImages4_3 = document.getElementById("homeGalleryImages4-3");
+    const homeGalleryImagesNonMobile = document.getElementById("homeGalleryImagesNonMobile");
+    const homeGalleryImagesMobile = document.getElementById("homeGalleryImagesMobile");
         
-    if (window.getComputedStyle(homeGalleryImages2_1).display === "none") {
-        imageDiv = homeGalleryImages4_3;
-    } else if (window.getComputedStyle(homeGalleryImages4_3).display === "none") {
-        imageDiv = homeGalleryImages2_1;
+    if (window.getComputedStyle(homeGalleryImagesNonMobile).display === "none") {
+        imageDiv = homeGalleryImagesMobile;
+    } else if (window.getComputedStyle(homeGalleryImagesMobile).display === "none") {
+        imageDiv = homeGalleryImagesNonMobile;
     }
     return imageDiv;
 };
@@ -139,7 +155,7 @@ function renderImagesinHomeGallery(currentImage, className, imageDiv, imageLinks
 
         if (currentImage > 1 && currentImage < totalImagesCount) {
             if (count >= currentImage - 1 && count <= currentImage + 1) {
-                imageTag = document.createElement("img");
+                const imageTag = document.createElement("img");
                 imageTag.className = `${directionClassNameCount[classNameCount]} ${className}`;
                 imageTag.src = `${imageLink}`;
                 imageTag.alt = `Home Gallery Image–${classNameCount}`;
@@ -163,7 +179,7 @@ function renderImagesinHomeGallery(currentImage, className, imageDiv, imageLinks
                 }
 
                 specialImageLinks.forEach(specialImageLink => {
-                    imageTag = document.createElement("img");
+                    const imageTag = document.createElement("img");
                     imageTag.className = `${directionClassNameCount[classNameCount]} ${className}`;
                     imageTag.src = `${specialImageLink}`;
                     imageDiv.appendChild(imageTag);
@@ -180,7 +196,7 @@ function renderHomeGallery(data, currentImage) {
     const imageDivClassName = imageDiv.className;
     let imageLinks = [];
 
-    if (imageDivClassName === "homeGalleryImages2-1") {
+    if (imageDivClassName === "homeGalleryImagesNonMobile") {
         data.forEach(row => {
             imageLinks.push(row.nonMobileImageLink);
         });
@@ -209,111 +225,161 @@ function homeImageGallery(currentImage, direction) {
     }, 400);
 };
 
-function renderHomeEvents(data) {
-    const homeEventsDiv = document.getElementById("homeEvents");
+function homeEventsMetaInfo() {
+    let numberOfCards;
+    let screenWidth = window.innerWidth;
+    if (screenWidth < 768) {
+        numberOfCards = 1;
+    } else if (screenWidth < 1024) {
+        numberOfCards = 2;
+    } else {
+        numberOfCards = 3;
+    }
+    return numberOfCards;
+};
 
+function renderHomeEvents(currentCard, data) {
+    const homeEventsDiv = document.getElementById("homeEvents");
+    while (homeEventsDiv.lastElementChild) {
+        homeEventsDiv.removeChild(homeEventsDiv.lastElementChild);
+    };
     const homeEventsDescription = document.createElement("div");
     homeEventsDescription.className = "homeEventsDescription";
-    const homeEventsDescriptionH1 = document.createElement("h1");
-    homeEventsDescriptionH1.innerHTML = "Events";
-    const eventsHr = document.createElement("hr");
-    eventsHr.className = "eventsHr";
-    const homeEventsDescriptionP = document.createElement("p");
-    homeEventsDescriptionP.innerHTML = `The recent ${data.length} events conducted in the acedamic year ${academicYear}.`;
-    homeEventsDescription.appendChild(homeEventsDescriptionH1);
-    homeEventsDescription.appendChild(eventsHr);
-    homeEventsDescription.appendChild(homeEventsDescriptionP);
+    homeEventsDescription.innerHTML = `
+        <h1>Events</h1>
+        <hr class="eventsHr">
+        <p>The recent ${data.length} events conducted in the acedamic year ${academicYear}.</p>
+    `;
     homeEventsDiv.appendChild(homeEventsDescription);
-    
 
     const homeEventsPrev = document.createElement("button");
     homeEventsPrev.id = "homeEventsPrev";
     homeEventsPrev.className = "start";
-    const homeEventsPrevIcon = document.createElement("i");
-    homeEventsPrevIcon.className = "fa-solid fa-angles-left";
-    homeEventsPrev.appendChild(homeEventsPrevIcon);
+    homeEventsPrev.innerHTML += `<i class="fa-solid fa-angles-left"></i>`;
     homeEventsDiv.appendChild(homeEventsPrev);
-    
-    const homeEvents = document.createElement("div");
-    homeEvents.className = "homeEventCards";
+
+    const homeEventsPrevIcon = document.getElementById("homeEventsPrev").children[0];
+    homeEventsPrevIcon.addEventListener("click", ()=> {
+        homeEventCardSwipe(false, numberOfEventCards);
+    });
+
+    const homeEventCards = document.createElement("div");
+    homeEventCards.className = "homeEventCards";
     let count = 1;
     data.forEach(row => {
-        renderHomeEventsCards(row, count, homeEvents);
+        renderHomeEventCards(currentCard, row, count, homeEventCards);
         count++;
-    })
-    homeEventsDiv.appendChild(homeEvents);
+    });
 
+    homeEventsDiv.appendChild(homeEventCards);    
     const homeEventsNext = document.createElement("button");
     homeEventsNext.id = "homeEventsNext";
     homeEventsNext.className = "start";
-    const homeEventsNextIcon = document.createElement("i");
-    homeEventsNextIcon.className = "fa-solid fa-angles-right";
-    homeEventsNext.appendChild(homeEventsNextIcon);
+    homeEventsNext.innerHTML += `<i class="fa-solid fa-angles-right"></i>`;
     homeEventsDiv.appendChild(homeEventsNext);
 
-    Array.from(homeEvents.children).forEach(homeEvent => {
-        const homeEventCardDetails = homeEvent.children[1];
-        const height = homeEventCardDetails.clientHeight;
-        homeEventCardDetails.style.marginTop = `-${height}px`;
-        if (height != 0) {
-            homeEventsPrev.style.paddingBottom = `${0.675 * height}px`;
-            homeEventsNext.style.paddingBottom = `${0.675 * height}px`;
-        }
+    const homeEventsNextIcon = document.getElementById("homeEventsNext").children[0];
+    homeEventsNextIcon.addEventListener("click", () => {
+        homeEventCardSwipe(true, numberOfEventCards);
     });
 };
 
-function renderHomeEventsCards(dictObj, count, parentDiv) {
-    const homeEventDiv = document.createElement("div");
-    homeEventDiv.className = `homeEventCard number-${count}`;
-    homeEventDiv.id = `${dictObj.eventName}`;
-    const homeEventPoster = document.createElement("img");
-    homeEventPoster.className = "homeEventPoster";
-    homeEventPoster.src = dictObj.eventPosterLink;
-    homeEventPoster.alt = dictObj.eventName;
+function adjustDisplayAndPlacement(currentCard, numberOfCards) {
+    const homeEvents = document.getElementById("homeEvents");
+    const prevButton = homeEvents.children[1];
+    const eventCards = homeEvents.children[2];
+    const nextButton = homeEvents.children[3];
 
-    const homeEventCardImage = document.createElement("div");
-    homeEventCardImage.className = "homeEventCardImage";
+    let eventDescriptionHeight;
+    let count = 1;
+    Array.from(eventCards.children).forEach(eventCard => {
+        eventCard.style.display = "none";
+            eventCard.classList.remove('visible');
+        if (count >= currentCard && count < currentCard + numberOfCards) {
+            eventCard.style.display = "flex";
+            eventCard.classList.add('visible');
+        }
+        const eventDetails = eventCard.children[1];
+        if (window.getComputedStyle(eventCard).display === "flex") {
+            eventDescriptionHeight = eventDetails.clientHeight;
+        };
+        eventDetails.style.marginTop = `-${eventDescriptionHeight}px`;
+
+        count++;
+    });
+    if (numberOfCards === 1) {
+        prevButton.style.paddingBottom = `${0.65 * eventDescriptionHeight}px`;
+        nextButton.style.paddingBottom = `${0.65 * eventDescriptionHeight}px`;
+    } else {
+        prevButton.style.paddingBottom = `${0.55 * eventDescriptionHeight}px`;
+        nextButton.style.paddingBottom = `${0.55 * eventDescriptionHeight}px`;
+    }
+};
+
+function renderHomeEventCards(currentCard, dictObj, count, parentDiv) {
+    const homeEventCard = document.createElement("div");
+    homeEventCard.id = dictObj.eventName;
+    homeEventCard.className = `homeEventCard number-${count}`;
+
+    const cardImageDiv = document.createElement("div");
+    cardImageDiv.className = "homeEventCardImage";
+    const cardImg = document.createElement("img");
+    cardImg.src = dictObj.eventPosterLink;
+    cardImg.alt = dictObj.eventName;
+    cardImageDiv.appendChild(cardImg);
+
     const homeEventCardDetails = document.createElement("div");
     homeEventCardDetails.className = "homeEventCardDetails";
-    const homeEventCardMetaData = document.createElement("div");
-    homeEventCardMetaData.className = "homeEventCardMetaData";
-    const homeEventCardData = document.createElement("div");
-    homeEventCardData.className = "homeEventCardData";
-    
-    const eventNameP = document.createElement("p");
-    eventNameP.innerHTML = `Name: ${dictObj.eventName}`;
-    const eventDateP = document.createElement("p");
-    eventDateP.innerHTML = `Dt: ${dictObj.eventDate}`;
-    const eventUnitP = document.createElement("p");
-    eventUnitP.innerHTML = `Organized by ${dictObj.eventUnit}`;
-    const eventDescriptionP = document.createElement("p");
-    eventDescriptionP.innerHTML = `&#9; ${dictObj.eventDescription}`;
-    eventDescriptionP.style.whiteSpace = "pre";
-    eventDescriptionP.style.textWrap = "wrap";
-    const eventDetailsLink = document.createElement("a");
-    eventDetailsLink.className = "eventDetailsLink";
-    eventDetailsLink.href = dictObj.eventDetailsLink;
-    eventDetailsLink.innerHTML = "Know More";
-
-
-    homeEventCardMetaData.appendChild(eventNameP);
-    homeEventCardMetaData.appendChild(eventDateP);
-    homeEventCardMetaData.appendChild(eventUnitP);
-    homeEventCardData.appendChild(eventDescriptionP);
-    homeEventCardData.appendChild(eventDetailsLink);
-    homeEventCardImage.appendChild(homeEventPoster);
-    homeEventCardDetails.appendChild(homeEventCardMetaData);
-    homeEventCardDetails.appendChild(homeEventCardData);
-    homeEventDiv.appendChild(homeEventCardImage);
-    homeEventDiv.appendChild(homeEventCardDetails);
-    parentDiv.appendChild(homeEventDiv);
+    homeEventCardDetails.innerHTML = `
+            <div class="homeEventCardMetaData">
+                <p>Name: ${dictObj.eventName}</p>
+                <p>Dt: ${dictObj.eventDate}</p>
+                <p>Organised by ${dictObj.eventUnit}</p>
+            </div>
+            <div class="homeEventCardData">
+                <p style="white-space: pre-wrap; ">${dictObj.eventDescription}</p>
+                <a class="eventDetailsLink" href="${dictObj.eventDetailsLink}">Know More</a>
+            </div>
+    `;
+    homeEventCard.appendChild(cardImageDiv);
+    homeEventCard.appendChild(homeEventCardDetails);
+    parentDiv.appendChild(homeEventCard);
 };
+
+function homeEventCardSwipe(moveRight, numberOfCards) {    
+    const eventCardsLength = document.getElementsByClassName("homeEventCards")[0].children.length;
+    const homeEventsPrev = document.getElementById("homeEventsPrev");
+    const homeEventsNext = document.getElementById("homeEventsNext");
+    if (!moveRight && currentEventCard === 1) return;
+    if (moveRight && currentEventCard >= eventCardsLength + 1 - numberOfCards) return;
+
+    if (moveRight) {
+        currentEventCard += 1;
+    } else {
+        currentEventCard -= 1;
+    }
+
+    if (currentEventCard === 1) {
+        homeEventsPrev.className = "start";
+        homeEventsNext.className = "start";
+    } else if (currentEventCard > 1 && currentEventCard < eventCardsLength + 1 - numberOfEventCards) {
+        homeEventsPrev.className = "middle";
+        homeEventsNext.className = "middle";
+    } else {
+        homeEventsPrev.className = "end";
+        homeEventsNext.className = "end";
+    }
+    adjustDisplayAndPlacement(currentEventCard, numberOfEventCards);
+
+}
 
 /* csv data loading*/
 let homeGalleryData = [];
 let homeEventsData = [];
 let homeEventsImageLinks = [];
+
 let initialHomeGalleryRender = true;
+let renderTime;
 
 loadCSV("dataTables/homePageData.csv").then(data => {    
     data.forEach(row => {
@@ -336,22 +402,33 @@ loadCSV("dataTables/homePageData.csv").then(data => {
     });
     renderHomeGallery(homeGalleryData, currentImageNumber);
     preloadImages(homeEventsImageLinks).then(() => {
-        renderHomeEvents(homeEventsData);
+        renderHomeEvents(currentEventCard, homeEventsData);
+        adjustDisplayAndPlacement(currentEventCard, numberOfEventCards);
     });
 });
 
-
 /* execution of functions */
-
-let academicYear = academicYearCalculator();
-console.log(academicYear);
-let manualChangeOfTheme = false;
-themeChanger();
+initTheme();
 setInterval(() => {
-    if (!manualChangeOfTheme) {
+    const savedTheme = localStorage.getItem("theme");
+    const hasSystemPref = window.matchMedia("(prefers-color-scheme: dark)").matches ||
+                          window.matchMedia("(prefers-color-scheme: light)").matches;
+    if (!savedTheme && !hasSystemPref) {
         themeChanger();
     }
-}, 30*1000);
+}, 30 * 1000);
+
+window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
+    if (!localStorage.getItem("theme")) {
+        if (e.matches) {
+            document.documentElement.classList.replace("lightMode", "darkMode");
+        } else {
+            document.documentElement.classList.replace("darkMode", "lightMode");
+        }
+    }
+});
+
+let academicYear = academicYearCalculator();
 
 /* link to the images in header */
 let DOMContentLoaded = false;
@@ -385,7 +462,7 @@ hamburgerMenu.addEventListener("click", (e) => {
 document.documentElement.style.setProperty("--navHeight", nav.offsetHeight + "px");
 
 let landingSectionImageLink = "images/homePage/landingSectionImage.jpg";
-imageTag = document.createElement("img");
+const imageTag = document.createElement("img");
 imageTag.src = `${landingSectionImageLink}`;
 imageTag.alt = "Image"
 document.getElementById("landingSectionImage").appendChild(imageTag);
@@ -424,10 +501,46 @@ homeGalleryImages.addEventListener("touchstart", () => {
 homeGalleryImages.addEventListener("touchend", () => {
     mouseIsOverDiv = false;
 })
-
 setInterval(() => {
     const pageScrollValue = window.scrollY || document.documentElement.scrollTop;
     const homeGalleryImagesOffsetTop = nav.offsetHeight + landingSection.offsetHeight + aboutUs.offsetHeight;
     if (!mouseIsOverDiv && (pageScrollValue/homeGalleryImagesOffsetTop) > 0.8) {
         homeImageGallery(currentImageNumber + 1, 'next');
     }}, 4 * 1000);
+
+/* homeEvents function Integration */
+var currentEventCard = 1;
+var numberOfEventCards = homeEventsMetaInfo();
+let mouseOverSection = null;
+
+window.addEventListener("resize", ()=> {
+    numberOfEventCards = homeEventsMetaInfo();
+    renderHomeEvents(currentEventCard, homeEventsData);
+    adjustDisplayAndPlacement(currentEventCard, numberOfEventCards);
+});
+
+document.getElementsByClassName("homeGalleryImages")[0].addEventListener("mouseenter", () => {
+    mouseOverSection = "gallery";
+});
+document.getElementsByClassName("homeGalleryImages")[0].addEventListener("mouseleave", () => {
+    mouseOverSection = null;
+});
+document.getElementById("homeEvents").addEventListener("mouseenter", () => {
+    mouseOverSection = "events";
+});
+document.getElementById("homeEvents").addEventListener("mouseleave", () => {
+    mouseOverSection = null;
+});
+
+document.addEventListener("keydown", (e) => {
+    if (e.key !== "ArrowLeft" && e.key !== "ArrowRight") return;
+    if (mouseOverSection === "gallery") {
+        e.key === "ArrowLeft"
+            ? homeImageGallery(currentImageNumber - 1, 'prev')
+            : homeImageGallery(currentImageNumber + 1, 'next');
+    } else if (mouseOverSection === "events") {
+        e.key === "ArrowLeft"
+            ? homeEventCardSwipe(false, numberOfEventCards)
+            : homeEventCardSwipe(true, numberOfEventCards);
+    }
+});
