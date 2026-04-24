@@ -245,9 +245,6 @@ header.sticked .navHamburgerLine {
 /* #endregion header section */
 
 main {
-    background-color: var(--background1Color);
-}
-section {
     color: var(--text1Color);
     background-color: var(--background1Color);
 }
@@ -635,7 +632,7 @@ section {
 /* #endregion homeEvents */
 /* #region homeTeams */
 #homeTeams {
-    padding-top: clamp(1rem, 1rem + 2.25vh, 2.5rem);
+    padding: clamp(1rem, 1.5vw + 1.5vh, 3rem) 0;
 }
 .teamsHeading {
     align-items: center;
@@ -688,7 +685,7 @@ section {
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 1.5vw;
+    gap: 1vw;
 }
 .chairmanImage img, 
 .PO_Image img {
@@ -706,7 +703,7 @@ section {
     font-weight: 550;
     width: 100%;
     text-align: center;
-    margin-bottom: 0.5rem;
+    margin-bottom: clamp(0.175rem, 0.175rem + 0.45vw, 0.75rem);
 }
 .unit-1_PO,
 .unit-2_PO {
@@ -720,16 +717,20 @@ section {
     border: 4px solid color-mix(in srgb, var(--background2Color), 75% transparent);
 }
 .PO_Details {
-    width: 75%;
+    width: 100%;
     color: var(--text2Color);
     background-color: var(--background2Color);
-    padding: 0.5rem 5vw;
-    border-radius: 4rem;
+    padding: 0.5rem 0;
+    border-radius: clamp(3rem, 3rem + 1vw, 4rem);
+}
+.PO_Details p:first-child {
+    font-size: clamp(0.75rem, 0.75rem + 1.5vw, 1.75rem);
+    margin:  clamp(0.1rem, 0.1rem + 0.1vw, 0.75rem);
 }
 .PO_Details p {
     text-align: center;
     font-size: clamp(0.75rem, 0.75rem + 0.5vw, 1.75rem);
-    margin: 0.15rem;
+    margin: clamp(0.1rem, 0.1rem + 0.1vw, 0.75rem);
 }
 #homeTeams a {
     cursor: pointer;
@@ -737,67 +738,80 @@ section {
 /* #endregion homeTeams */
 /* #region footer */
 footer {
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    color: var(--text2Color);
+    background-color: var(--background2Color);
+    margin: 0;
+    padding: clamp(0.5rem, 0.5rem + 2vw, 3rem) clamp(0.35rem, 0.35rem + 2vw, 3rem);
+}
+:root.darkMode footer {
     color: var(--text2Color);
     background-color: var(--primaryColor);
 }
+footer * {
+    font-size: clamp(0.75rem, 0.75rem + 0.5vw, 1.75rem);
+}
 .footerTop {
-    align-items: center;
+    width: 100%;
 }
 .footerBrand {
-    width: 100%;
-    padding: 1rem 0;    
+    justify-content: center;
+    align-items: center;
+    padding-bottom: clamp(0.5rem, 0.5rem + 1vw, 3rem);
+}
+.footerBrand * {
+    font-size: clamp(0.45rem, 0.45rem + 1.85vw, 1.35rem);
+    font-weight: 550;
 }
 .footerLinks {
+    width: 100%;
     flex-direction: row;
     justify-content: center;
-    width: 100%;
+    align-items: flex-start;
+    gap: 1.5vw;
+    padding-bottom: clamp(0.5rem, 0.5rem + 1vw, 3rem);
 }
 .footerLinksColumn {
-    flex: 1 1 33%;
+    width: 30%;
     align-items: center;
-    width: 100%;
 }
 .footerLinksColumn p {
-    margin-bottom: 2vh;
-} 
-footer a {
-    width: fit-content;
+    font-size: clamp(0.75rem, 0.75rem + 0.5vw, 1.75rem);
+    font-weight: 525;
+    margin-bottom: clamp(0.25rem, 0.25rem + 0.5vw, 1.5rem);
+}
+.footerLinksColumn a {
+    font-size: clamp(0.75rem, 0.75rem + 0.5vw, 1.75rem);
     cursor: pointer;
+    margin-bottom: clamp(0.125rem, 0.125rem + 0.25vw, 1.5rem);
 }
 .footerBottom {
-    margin-top: 1rem;
+    width: 100%;
 }
-.footerBottom p:first-child {
-    margin-bottom: 0.125rem;
+.footerBottom * {
+    font-size: clamp(0.75rem, 0.75rem + 0.5vw, 1.75rem);
+}
+.actingBr {
+    display: block;
+    height: clamp(0.25rem, 0.25rem + 0.35vw, 1.5rem);
+}
+.actingVr {
+    display: none;
 }
 .footerCopyright {
     width: 100%;
-    align-items: center;
+    margin: clamp(0.25rem, 0.25rem + 0.35vw, 1.5rem) 0;
+    margin-top: clamp(0.25rem, 0.25rem + 1vw, 1.5rem);
 }
-.footerCopyright p {
+.footerCopyright p:first-child {
     flex-direction: row;
-    margin-bottom: 0;
-    margin: 0 1vw;
-}
-.footerBottom p span {
-    margin: 0 0.5vw;
+    width: 100%;
+    justify-content: center;
 }
 /* #endregion footer */
-.buttonSection {
-    justify-content: center;
-    align-items: center;
-    padding: 10vh;
-}
-.buttonSection button {
-    display: block;
-    color: var(--text2Color);
-    background-color: var(--accentColor);
-    width: fit-content;
-    height: fit-content;
-    text-align: center;
-    padding: 0.35rem 6vw;
-    border-radius: 2rem;
-}
+
 
 /* below average mobile width design */
 @media only screen and (max-width: 312px) {
@@ -807,6 +821,26 @@ footer a {
     }
     .navTitle.sticked {
         transform: translate(10px);
+    }
+    .chairman p:first-child {
+        font-size: clamp(0.75rem, 0.75rem + 0.35vw, 1.75rem);
+    }
+    .chairmanDetails {
+        font-size: clamp(0.25rem, 0.25rem + 0.15vw, 1.75rem);
+    }
+    .PO_Details p:first-child {
+        font-size: clamp(0.75rem, 0.75rem + 1vw, 1.75rem);
+        margin:  clamp(0.1rem, 0.1rem + 0.08vw, 0.75rem);
+    }
+    .PO_Details p {
+        font-size: clamp(0.75rem, 0.75rem + 0.4vw, 1.75rem);
+        margin: clamp(0.1rem, 0.1rem + 0.09vw, 0.75rem);
+    }
+    .footerLinksColumn {
+        width: 28%;
+    }
+    .footerLinks div:last-child {
+        width: 44%;
     }
 }
 @media only screen and (max-width: 400px) {
@@ -1043,6 +1077,7 @@ footer a {
     .chairmanDetails p,
     .PO_Details p {
         font-size: clamp(0.5rem, 0.5rem + 0.5vw, 1.5rem);
+        margin: clamp(0.1rem, 0.1rem + 0.1vw, 0.75rem);
     }
     .programmeOfficers {
         flex-direction: row;
@@ -1052,15 +1087,50 @@ footer a {
     .poHeading {
         flex: 1 0 100%;
         margin: 1.5rem 0;
+        font-size: clamp(0.75rem, 0.75rem + 2.5vw, 1.75rem);
+        font-weight: 550;
         margin-bottom: 2rem;
     }
     .PO_Details {
-        width: 65%;
-        padding: 0.5rem 2vw;
+        width: 70%;
+        padding: 0.5rem 0;
+        border-radius: clamp(4rem, 4rem + 1.5vw, 5rem);
     }
     .unit-1_PO,
     .unit-2_PO {
         flex: 1 1 50%;
+    }
+    .facultyRole { 
+        gap: 0.75vw;
+        font-size: clamp(0.5rem, 0.5rem + 0.5vw, 1.5rem);
+    }
+    footer {
+        padding: clamp(0.25rem, 0.25rem + 1vw, 3rem) clamp(0.3rem, 0.3rem + 1vw, 3rem);
+    }
+    footer * {
+        font-size: clamp(0.25rem, 0.25rem + 1vw, 1.15rem);
+    }
+    .footerBrand {
+        padding-bottom: clamp(0.25rem, 0.15rem + 0.75vw, 3rem);
+    }
+    .actingBr {
+        display: none;
+        height: clamp(0.25rem, 0.25rem + 0.35vw, 1.5rem);
+    }
+    .footerLinks {
+        padding-bottom: clamp(0.25rem, 0.15rem + 0.5vw, 3rem);
+    }
+    .footerBottom p:first-child {
+        display: flex;
+        flex-direction: row;
+        width: 100%;
+        justify-content: center;
+    }
+    .actingVr {
+        display: inline;
+    }
+    .footerCopyright {
+        margin: clamp(0.25rem, 0.25rem + 0.35vw, 1.5rem);
     }
 }
 @media only screen and (min-width: 940px) {
@@ -1120,10 +1190,15 @@ footer a {
         width: 34%;
     }
     .chairmanDetails {
-        width: 35%;
+        width: 30%;
     }
     .PO_Details {
-        width: 57%;
+        width: 65%;
+    }
+    .chairmanDetails p,
+    .PO_Details p {
+        font-size: clamp(0.5rem, 0.5rem + 0.65vw, 1.5rem);
+        margin: clamp(0.1rem, 0.1rem + 0.1vw, 0.75rem);
     }
 }
 @media only screen and (min-width: 1240px) {
@@ -1145,11 +1220,13 @@ footer a {
     .PO_Image {
         width: 33%;
     }
-    .chairmanDetails {
-        width: 30%;
-    }
     .PO_Details {
-        width: 50%;
+        width: 60%;
+    }
+    .chairmanDetails p,
+    .PO_Details p {
+        font-size: clamp(0.5rem, 0.5rem + 0.55vw, 1.5rem);
+        margin: clamp(0.1rem, 0.1rem + 0.1vw, 0.75rem);
     }
 }
 @media only screen and (min-width: 1440px) {
@@ -1167,12 +1244,6 @@ footer a {
     }
     .PO_Image {
         width: 33%;
-    }
-    .chairmanDetails {
-        width: 30%;
-    }
-    .PO_Details {
-        width: 50%;
     }
 }
 
