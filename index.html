@@ -32,7 +32,7 @@
                     <a class="navLink active" href="/"><span class="navLinkSymbol"><i class="fa-solid fa-house"></i></span>Home</a>
                     <a class="navLink" href="/gallery.html"><span class="navLinkSymbol"><i class="fa-solid fa-image"></i></span>Gallery</a>
                     <a class="navLink" href="/events.html"><span class="navLinkSymbol"><i class="fa-solid fa-calendar"></i></span>Events</a>
-                    <a class="navLink" href="/teams.html"><span class="navLinkSymbol"><i class="fa-solid fa-users"></i></span>Teams</a>
+                    <a class="navLink" href="/team.html"><span class="navLinkSymbol"><i class="fa-solid fa-users"></i></span>Team</a>
                     <a class="navLink" href="/"><span class="navLinkSymbol"><i class="fa-solid fa-phone"></i></span>Contact</a>
                 </div>
                 <div class="navHamburger">
@@ -100,15 +100,97 @@
             <section id="homeEvents" class="homeEvents">
 
             </section>
+            <section id="homeTeams">
+                <div class="teamsHeading">
+                    <h1>Our Team</h1><hr class="teamsHr">
+                </div>
+                <div class="chairman">
+                    <p>Chairman</p>
+                    <div class="chairmanImage">
+                        <img src="images/homePage/teams/chairman.png" alt="chairman">
+                    </div>
+                    <div class="chairmanDetails">
+                        <p class="facultyName">Prof. Dr. A. B. Koteshwara Rao</p>
+                            <p class="facultyQualification">M. Tech. (NIT-Warangal), Ph. D. (IIT-Delhi)</p>
+                            <div class="facultyRole">
+                                <a href="mailto:abkr_gvp@gvpce.ac.in"><i class="fa-solid fa-envelope"></i></a>
+                                <p>Professor & Principal</p>
+                            </div>
+                    </div>
+                </div>
+                <div class="programmeOfficers">
+                    <p class="poHeading">Programme Officers</p>
+                    <div class="unit-1_PO">
+                        <p>Unit-1</p>
+                        <div class="PO_Image">
+                            <img src="images/homePage/teams/Unit_1-PO.png" alt="Unit-1 PO">
+                        </div>
+                        <div class="PO_Details">
+                            <p class="facultyName">Dr. Sateesh Virothu</p>
+                            <p class="facultyQualification">M. Tech. , Ph. D. </p>
+                            <div class="facultyRole">
+                                <a href="mailto:sateeshvirothu@gvpce.ac.in"><i class="fa-solid fa-envelope"></i></a>
+                                <p>Assistant Professor</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="unit-2_PO">
+                        <p>Unit-2</p>
+                        <div class="PO_Image">
+                            <img src="images/homePage/teams/Unit_2-PO.png" alt="Unit-2 PO">
+                        </div>
+                        <div class="PO_Details">
+                            <p class="facultyName">Dr. Tataverthi S. V. Krishna</p>
+                            <p class="facultyQualification">M. Tech. (GITAM Univ), Ph. D. (JNTUK)</p>
+                            <div class="facultyRole">
+                                <a href="mailto:vamsikrishna@gvpce.ac.in"><i class="fa-solid fa-envelope"></i></a>
+                                <p>Assistant Professor</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
             <section class="buttonSection">
-                <button id="themeToggler" onclick="toggleTheme()">Click Here! <br> to change theme</button>
+                <button id="themeToggle" onclick="toggleTheme()" >Click Here! <br> to change theme</button>
             </section>
         </main>
+        <footer>
+            <div class="footerTop">
+                <div class="footerBrand">
+                    <p>National Service Scheme</p>
+                    <p>GVPCE (Autonomous)</p>
+                </div>
+                <div class="footerLinks">
+                    <div class="footerLinksColumn">
+                        <p class="footerLinksHeading">Navigate</p>
+                        <a href="/">Home</a>
+                        <a href="/gallery.html">Gallery</a>
+                        <a href="/events.html">Events</a>
+                        <a href="/teams.html">Teams</a>
+                    </div>
+                    <div class="footerLinksColumn">
+                        <p class="footerLinksHeading">Resources</p>
+                        <a href="https://nss.gov.in/" target="_blank">NSS India</a>
+                        <a href="https://www.gvpce.ac.in/" target="_blank">GVPCE</a>
+                    </div>
+                    <div class="footerLinksColumn">
+                        <p class="footerLinksHeading">Social</p>
+                        <a href="#" target="_blank"><i class="fa-brands fa-instagram"></i> Instagram</a>
+                        <a href="mailto:nss@gvpce.ac.in"><i class="fa-solid fa-envelope"></i> Email</a>
+                    </div>
+                </div>
+            </div>
+            <div class="footerBottom">
+                <p>Madhurwada, Visakhapatnam, 530048 &nbsp;|&nbsp; Andhra Pradesh, India</p>
+                <div class="footerCopyright">
+                    <p>© <span id="footerYear"></span> NSS GVPCE (A).</p>
+                    <p>All rights reserved.</p>
+                </div>
+            </div>
+        </footer>
     </body>
     
     <script src="dependencies/PapaParse-5.0.2.js"></script>
     <script src="main.js"></script>
-    <script>
-        
-    </script>
+    <script src="index.js"></script>
 </html>

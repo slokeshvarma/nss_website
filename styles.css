@@ -5,7 +5,7 @@
 }
 :root.lightMode {
     --primaryColor: rgb(56, 70, 135);
-    --secondaryColor: rgb(255, 255, 255);
+    --secondaryColor: rgb(223, 229, 255);
     --accentColor: rgb(211, 52, 39);
     --text1Color: rgb(16, 21, 43);
     --text2Color: rgb(223, 229, 255);
@@ -39,6 +39,9 @@ div, section, article, aside, header, nav, main, footer, p {
     display: flex;
     flex-direction: column;
     position: relative;
+}
+span {
+    display: inline;
 }
 p {
     text-align: center;
@@ -242,7 +245,6 @@ header.sticked .navHamburgerLine {
 /* #endregion header section */
 
 main {
-    height: 100vh;
     background-color: var(--background1Color);
 }
 section {
@@ -631,8 +633,160 @@ section {
     color: var(--text1Color);
 }
 /* #endregion homeEvents */
+/* #region homeTeams */
+#homeTeams {
+    padding-top: clamp(1rem, 1rem + 2.25vh, 2.5rem);
+}
+.teamsHeading {
+    align-items: center;
+    font-size: clamp(0.75rem, 0.75rem + 2vw, 1.75rem);
+    font-weight: 600;
+}
+.teamsHeading h1 {font-size: inherit; margin-bottom: clamp(3px, 2px + 0.5vw, 10px); }
+.teamsHr {
+    background-color: var(--background2Color);
+    width: 7vw;
+    height: clamp(1px, 1px + 1vh, 3px);
+    border-radius: 1rem;
+    margin-bottom: clamp(3px, 2px + 1.5vw, 20px);
+}
+.chairman {
+    width: 100%;
+    align-items: center;
+    margin: 2vh 0;
+}
+.chairman p:first-child {
+    font-size: clamp(0.75rem, 0.75rem + 1.5vw, 1.75rem);
+    font-weight: 550;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+.chairmanImage, 
+.PO_Image {
+    width: 40%;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    border: 6px solid color-mix(in srgb, var(--background2Color), transparent);
+    border-radius: 100%;
+    margin: 0.5rem 0;
+}
+.chairmanDetails {
+    width: 75%;
+    color: var(--text2Color);
+    background-color: var(--background2Color);
+    padding: 0.5rem 0;
+    border-radius: 4rem;
+}
+.chairmanDetails p {
+    text-align: center;
+    font-size: clamp(0.75rem, 0.75rem + 0.5vw, 1.75rem);
+    margin: 0.15rem;
+}
+.facultyRole {
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5vw;
+}
+.chairmanImage img, 
+.PO_Image img {
+    width: 100%;
+    aspect-ratio: 1;
+}
+.programmeOfficers {
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 2rem;
+}
+.programmeOfficers p:first-child {
+    font-size: clamp(0.75rem, 0.75rem + 1.5vw, 1.75rem);
+    font-weight: 550;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+.unit-1_PO,
+.unit-2_PO {
+    width: 75%;
+    justify-content: center;
+    align-items: center;
+    margin: 1.5vh 0;
+}
+.PO_Image {
+    width: 40%;
+    border: 4px solid color-mix(in srgb, var(--background2Color), 75% transparent);
+}
+.PO_Details {
+    width: 75%;
+    color: var(--text2Color);
+    background-color: var(--background2Color);
+    padding: 0.5rem 5vw;
+    border-radius: 4rem;
+}
+.PO_Details p {
+    text-align: center;
+    font-size: clamp(0.75rem, 0.75rem + 0.5vw, 1.75rem);
+    margin: 0.15rem;
+}
+#homeTeams a {
+    cursor: pointer;
+}
+/* #endregion homeTeams */
+/* #region footer */
+footer {
+    color: var(--text2Color);
+    background-color: var(--primaryColor);
+}
+.footerTop {
+    align-items: center;
+}
+.footerBrand {
+    width: 100%;
+    padding: 1rem 0;    
+}
+.footerLinks {
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+}
+.footerLinksColumn {
+    flex: 1 1 33%;
+    align-items: center;
+    width: 100%;
+}
+.footerLinksColumn p {
+    margin-bottom: 2vh;
+} 
+footer a {
+    width: fit-content;
+    cursor: pointer;
+}
+.footerBottom {
+    margin-top: 1rem;
+}
+.footerBottom p:first-child {
+    margin-bottom: 0.125rem;
+}
+.footerCopyright {
+    width: 100%;
+    align-items: center;
+}
+.footerCopyright p {
+    flex-direction: row;
+    margin-bottom: 0;
+    margin: 0 1vw;
+}
+.footerBottom p span {
+    margin: 0 0.5vw;
+}
+/* #endregion footer */
 .buttonSection {
-    flex: 1 0 500px;
+    justify-content: center;
+    align-items: center;
+    padding: 10vh;
 }
 .buttonSection button {
     display: block;
@@ -641,7 +795,6 @@ section {
     width: fit-content;
     height: fit-content;
     text-align: center;
-    margin: 10vh 10vw; 
     padding: 0.35rem 6vw;
     border-radius: 2rem;
 }
@@ -873,6 +1026,42 @@ section {
         font-size: clamp(0.5rem, 0.5rem + 0.9vw, 1.75rem);
         padding: clamp(0.125rem, 0.075rem + 0.65vh, 0.75rem) 1vw;
     }
+    .chairmanImage {
+        width: 27%;
+    }
+    .PO_Image {
+        width: 35%;
+    }
+    .chairmanDetails {
+        width: 40%;
+    }
+    .chairmanDetails p:first-child,
+    .programmeOfficers p:first-child {
+        font-size: clamp(0.75rem, 0.75rem + 0.75vw, 1.75rem);
+        margin-bottom: 0.25rem;
+    }
+    .chairmanDetails p,
+    .PO_Details p {
+        font-size: clamp(0.5rem, 0.5rem + 0.5vw, 1.5rem);
+    }
+    .programmeOfficers {
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-top: 0rem;
+    }
+    .poHeading {
+        flex: 1 0 100%;
+        margin: 1.5rem 0;
+        margin-bottom: 2rem;
+    }
+    .PO_Details {
+        width: 65%;
+        padding: 0.5rem 2vw;
+    }
+    .unit-1_PO,
+    .unit-2_PO {
+        flex: 1 1 50%;
+    }
 }
 @media only screen and (min-width: 940px) {
     .landingSectionText {
@@ -924,6 +1113,18 @@ section {
     .eventDetailsLink {
         font-size: clamp(0.45rem, 0.5rem + 0.55vw, 1.75rem);
     }
+    .chairmanImage {
+        width: 25%;
+    }
+    .PO_Image {
+        width: 34%;
+    }
+    .chairmanDetails {
+        width: 35%;
+    }
+    .PO_Details {
+        width: 57%;
+    }
 }
 @media only screen and (min-width: 1240px) {
     .landingSectionTextTop {
@@ -938,6 +1139,18 @@ section {
     .eventDetailsLink {
         font-size: clamp(0.45rem, 0.5rem + 0.7vw, 1.75rem);
     }
+    .chairmanImage {
+        width: 23%;
+    }
+    .PO_Image {
+        width: 33%;
+    }
+    .chairmanDetails {
+        width: 30%;
+    }
+    .PO_Details {
+        width: 50%;
+    }
 }
 @media only screen and (min-width: 1440px) {
     .navLogo {
@@ -949,9 +1162,19 @@ section {
     .landingSectionTextTop {
         transform: scale(1.5);
     }
-    
+    .chairmanImage {
+        width: 23%;
+    }
+    .PO_Image {
+        width: 33%;
+    }
+    .chairmanDetails {
+        width: 30%;
+    }
+    .PO_Details {
+        width: 50%;
+    }
 }
-
 
 
 @keyframes fadeIn {
