@@ -225,6 +225,16 @@ function homeImageGallery(currentImage, direction) {
     }, 400);
 };
 
+function isElementInViewport(el) {
+  const rect = el.getBoundingClientRect();
+  return (
+    rect.top >= 0 &&
+    rect.left >= 0 &&
+    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
+    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
+  );
+};
+
 function homeEventsMetaInfo() {
     let numberOfCards;
     let screenWidth = window.innerWidth;
@@ -308,8 +318,8 @@ function adjustDisplayAndPlacement(currentCard, numberOfCards) {
         count++;
     });
     if (numberOfCards === 1) {
-        prevButton.style.paddingBottom = `${0.65 * eventDescriptionHeight}px`;
-        nextButton.style.paddingBottom = `${0.65 * eventDescriptionHeight}px`;
+        prevButton.style.paddingBottom = `${0.5 * eventDescriptionHeight}px`;
+        nextButton.style.paddingBottom = `${0.5 * eventDescriptionHeight}px`;
     } else {
         prevButton.style.paddingBottom = `${0.55 * eventDescriptionHeight}px`;
         nextButton.style.paddingBottom = `${0.55 * eventDescriptionHeight}px`;
@@ -337,7 +347,7 @@ function renderHomeEventCards(currentCard, dictObj, count, parentDiv) {
                 <p>Organised by ${dictObj.eventUnit}</p>
             </div>
             <div class="homeEventCardData">
-                <p style="white-space: pre-wrap; ">${dictObj.eventDescription}</p>
+                <p style="white-space: pre-wrap; ">&#9; ${dictObj.eventDescription}</p>
                 <a class="eventDetailsLink" href="${dictObj.eventDetailsLink}">Know More</a>
             </div>
     `;

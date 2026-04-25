@@ -43,6 +43,7 @@ document.getElementById("landingSectionImage").appendChild(imageTag);
 var currentImageNumber = 1;
 let mouseIsOverDiv = false;
 let homeGalleryInteraction = false;
+var isElementInView;
 
 const landingSection = document.getElementsByClassName("landingSection")[0];
 const aboutUs = document.getElementsByClassName("aboutUs")[0];
@@ -69,14 +70,15 @@ homeGalleryNextButton.children[0].addEventListener('click', () => {
 });
 homeGalleryImages.addEventListener("touchstart", () => {
     mouseIsOverDiv = false;
-})
+});
 homeGalleryImages.addEventListener("touchend", () => {
     mouseIsOverDiv = false;
-})
+});
 setInterval(() => {
     const pageScrollValue = window.scrollY || document.documentElement.scrollTop;
     const homeGalleryImagesOffsetTop = nav.offsetHeight + landingSection.offsetHeight + aboutUs.offsetHeight;
-    if (!mouseIsOverDiv && (pageScrollValue/homeGalleryImagesOffsetTop) > 0.8) {
+    isElementInView = isElementInViewport(homeGalleryImages);
+    if (!mouseIsOverDiv && !isElementInView && (pageScrollValue/homeGalleryImagesOffsetTop) > 0.8) {
         homeImageGallery(currentImageNumber + 1, 'next');
     }}, 4 * 1000);
 
@@ -90,6 +92,7 @@ window.addEventListener("resize", ()=> {
     renderHomeEvents(currentEventCard, homeEventsData);
     adjustDisplayAndPlacement(currentEventCard, numberOfEventCards);
 });
+
 
 document.getElementsByClassName("homeGalleryImages")[0].addEventListener("mouseenter", () => {
     mouseOverSection = "gallery";
