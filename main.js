@@ -405,14 +405,6 @@ window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e =
 
 let academicYear = academicYearCalculator();
 
-/* link to the images in header */
-let DOMContentLoaded = false;
-const GVPLogo = document.getElementById("collegeLabelGVPLogo");
-const NSSLogo = document.getElementById("collegeLabelNSSLogo");
-
-GVPLogo.addEventListener("click", () => openLink("https://www.gvpce.ac.in/"));
-NSSLogo.addEventListener("click", () => openLink("https://nss.gov.in/"));
-
 /* nav bar's total function integration */
 let clickedOnMain = false;
 let hamburgerMenuOpened = false;
@@ -426,8 +418,6 @@ main.addEventListener("click", () => {
         navMobileMenu();
     }
 });
-window.addEventListener('scroll', navSticky, { passive: true });
-window.addEventListener('touchmove', navSticky);
 hamburgerMenu.addEventListener("click", (e) => {
     e.stopPropagation();
     hamburgerMenuOpened = !hamburgerMenuOpened;

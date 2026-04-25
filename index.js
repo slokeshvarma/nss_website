@@ -32,6 +32,16 @@ loadCSV("dataTables/homePageData.csv").then(data => {
     });
 });
 
+/* link to the images in header */
+let DOMContentLoaded = false;
+const GVPLogo = document.getElementById("collegeLabelGVPLogo");
+const NSSLogo = document.getElementById("collegeLabelNSSLogo");
+
+GVPLogo.addEventListener("click", () => openLink("https://www.gvpce.ac.in/"));
+NSSLogo.addEventListener("click", () => openLink("https://nss.gov.in/"));
+
+window.addEventListener('scroll', navSticky, { passive: true });
+window.addEventListener('touchmove', navSticky);
 /* landing section integration */
 let landingSectionImageLink = "images/homePage/landingSectionImage.jpg";
 const imageTag = document.createElement("img");
