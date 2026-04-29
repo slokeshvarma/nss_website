@@ -98,6 +98,8 @@ function signIn() {
     if (!Object.keys(users).includes(userID)) {
         $("signInMessageText").innerHTML = `${userID} is not a valid User ID !!`;
         $("signInMessageText").style.color = "var(--accent1Color)";
+        $("userId").value = "";
+        $("password").value = "";
         return;
     } else {
         $("signInMessageText").style.color = "var(--accent2Color)";
