@@ -1,0 +1,135 @@
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: var(--background2Color);
+}
+#signIn {
+    justify-content: center;
+    align-items: center;
+    height: fit-content;
+    min-height: calc(100vh - var(--navHeight) - (var(--footerHeight)));
+    margin-top: var(--navHeight);
+    padding: 1rem 2vw;
+}
+.signInForm p,
+.formTitle {
+    color: var(--text1Color);
+    font-size: clamp(0.5rem, 0.5rem + 2vw, 1rem);
+    font-weight: 505;
+    text-align: center;
+}
+.signInForm {
+    color: var(--text1Color);
+    justify-content: center;
+    align-items: center;
+    gap: clamp(0.25rem, 0.25rem + 2.5vw, 1rem);
+    padding: clamp(0.35rem, 0.35rem + 2vh, 2rem) clamp(0.5rem,0.5rem + 5vw, 3rem);
+    border: 1px solid var(--background2Color);
+    background-color: var(--background1Color);
+    border-radius: 2rem;
+    backdrop-filter: blur(2px);
+}
+.signInForm label {
+    font-weight: 505;
+    z-index: 2;
+    width: fit-content;
+    color: var(--text1Color);
+    background-color: var(--background1Color);
+    font-size: clamp(0.5rem, 0.35rem + 2.5vw, 1.15rem);
+    margin-left:  clamp(0.5rem, 0.5rem + 2.5vw, 1rem);
+    margin-bottom: clamp(-0.5rem, -0.5rem - 5vw, -1rem);
+    padding: 0 clamp(0.15rem, 0.15rem + 0.5vw, 0.5rem);
+}
+.signInForm input {
+    z-index: 0;
+    width: 100%;
+    font-size: clamp(0.5rem, 0.35rem + 2vw, 1.15rem);
+    height: clamp(0.5rem, 0.5rem + 15vw, 3rem);
+    border: 1px solid var(--background2Color);
+    padding-left: 15px;
+    max-width: 95vw;
+}
+#passwordEye {
+    z-index: 2;
+    position: absolute;
+    color: var(--text1Color);
+    background-color: var(--background1Color);
+    font-size: clamp(0.35rem, 0.35rem + 5vw, 1.15rem);
+    right: clamp(0.25rem, 0.25rem + 2vw, 0.55rem);
+    bottom: var(--passwordEyeBottom);
+    text-align: right;
+    cursor: pointer;
+}
+.signInMessage_Button {
+    width: 100%;
+    gap: clamp(0.1rem, 0.1rem + 1.1vw, 0.35rem); 
+}
+#signInMessageText {
+    font-weight: 400;
+    text-align: left;
+}
+.signInSubmit {
+    text-align: center;
+    align-self: flex-end;
+    width: 50%;
+    font-weight: 505;
+    font-size: clamp(0.35rem, 0.35rem + 2.5vw, 1.15rem);
+    color: var(--text2Color);
+    background-color: var(--background2Color);
+}
+:root.lightMode footer {
+    color: var(--text1Color);
+    background-color: var(--background1Color);
+}
+:root.darkMode footer {
+    color: var(--text1Color);
+    background-color: var(--background1Color);
+}
+@media only screen and (max-width: 250px) {
+    .signInForm {
+        max-width: 90vw;
+    }
+    .signInForm input {
+        max-width: 80vw;
+    }
+}
+@media only screen and (min-width: 768px) {
+    #signIn {
+        min-height: unset;
+    }
+    .signInForm p,
+    .formTitle {
+        font-size: clamp(0.5rem, 0.35rem + 2vw, 1.25rem);
+    }
+    .signInForm {
+        gap: clamp(0.25rem, 0.25rem + 5vw, 1.75rem);
+        padding: clamp(0.35rem, 0.35rem + 2vh, 2rem) clamp(0.5rem,0.5rem + 5vw, 3rem);
+        border: 1.5px solid var(--background2Color);
+        border-radius: 3rem;
+        margin: clamp(0.5rem, 0.35rem + 2vw, 1.25rem) 0;
+    }
+    .signInForm label {
+        font-size: clamp(0.5rem, 0.35rem + 1.5vw, 1.15rem);
+        margin-left:  clamp(0.5rem, 0.5rem + 2.5vw, 1rem);
+        margin-bottom: clamp(-0.5rem, -0.5rem - 5vw, -1rem);
+        padding: 0 clamp(0.15rem, 0.15rem + 0.5vw, 0.5rem);
+    }
+    .signInForm input {
+        font-size: clamp(0.5rem, 0.35rem + 1.5vw, 1.15rem);
+        height: clamp(0.5rem,0.5rem + 7vw, 3rem);
+        border: 1.5px solid var(--background2Color);
+    }
+    .signInMessage_Button {
+        display: flex;
+        flex-direction: column;
+        margin-top: clamp(-0.75rem, -0.25rem - 2vw, -0.25rem);
+        gap: clamp(0.1rem, 0.1rem + 1.5vw, 0.4rem);
+        padding-bottom: clamp(0.25rem, 0.25rem + 1vw, 1rem);
+    }
+    #signInMessageText {        
+        font-size: clamp(0.5rem, 0.35rem + 1.5vw, 1.15rem);
+    }
+    .signInSubmit {
+        margin: 0;
+    }
+}

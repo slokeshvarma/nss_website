@@ -25,37 +25,6 @@ function toggleTheme() {
     }
 };
 
-function resetTheme() {
-    localStorage.removeItem("theme");
-    initTheme();
-};
-
-function themeChanger() {
-    const root = document.documentElement;
-    const currentTime = new Date();
-    const currentTimeInMinutes = (60 * currentTime.getHours()) + currentTime.getMinutes();
-    if (currentTimeInMinutes > 360 && currentTimeInMinutes < 1080) {
-        root.classList.remove('darkMode');
-        root.classList.add('lightMode');
-    } else {
-        root.classList.remove('lightMode');
-        root.classList.add('darkMode');
-    }
-};
-
-function initTheme() {
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-        document.documentElement.classList.add(savedTheme);
-    } else if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
-        document.documentElement.classList.add("darkMode");
-    } else if (window.matchMedia("(prefers-color-scheme: light)").matches) {
-        document.documentElement.classList.add("lightMode");
-    } else {
-        themeChanger();
-    }
-};
-
 function openLink(link) {
   window.open(link, "_blank");
 };
@@ -383,14 +352,8 @@ function homeEventCardSwipe(moveRight, numberOfCards) {
 
 }
 /* execution of functions */
-initTheme();
 setInterval(() => {
-    const savedTheme = localStorage.getItem("theme");
-    const hasSystemPref = window.matchMedia("(prefers-color-scheme: dark)").matches ||
-                          window.matchMedia("(prefers-color-scheme: light)").matches;
-    if (!savedTheme && !hasSystemPref) {
-        themeChanger();
-    }
+    toggleTheme();
 }, 30 * 1000);
 
 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {

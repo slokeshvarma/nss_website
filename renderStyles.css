@@ -1,0 +1,4 @@
+main {
+    height: 80vh;
+    padding: clamp(1rem, 1rem + 1.5vh, 2rem) clamp(0.25rem, 0.25rem + 1.5vw, 0.75rem);
+}

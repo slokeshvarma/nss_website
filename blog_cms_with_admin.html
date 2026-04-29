@@ -1,0 +1,442 @@
+
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  #app-wrap { position: relative; min-height: 560px; font-family: var(--font-sans); }
+  .screen { display: none; flex-direction: column; min-height: 560px; }
+  .screen.active { display: flex; }
+
+  /* Login */
+  #login-screen { align-items: center; justify-content: center; padding: 2rem; }
+  .login-card {
+    background: var(--color-background-primary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: var(--border-radius-lg);
+    padding: 2rem; width: 100%; max-width: 360px;
+  }
+  .login-card h2 { font-size: 18px; font-weight: 500; margin-bottom: 4px; color: var(--color-text-primary); }
+  .login-card p { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 1.5rem; }
+  .field { margin-bottom: 1rem; }
+  .field label { display: block; font-size: 12px; color: var(--color-text-secondary); margin-bottom: 6px; }
+  .field input { width: 100%; padding: 8px 12px; font-size: 14px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-secondary); color: var(--color-text-primary); outline: none; }
+  .field input:focus { border-color: var(--color-border-primary); }
+  .error-msg { font-size: 12px; color: var(--color-text-danger); margin-bottom: 0.75rem; min-height: 16px; }
+  .btn-primary { width: 100%; padding: 9px; font-size: 14px; font-weight: 500; background: var(--color-text-primary); color: var(--color-background-primary); border: none; border-radius: var(--border-radius-md); cursor: pointer; }
+  .btn-primary:hover { opacity: 0.85; }
+
+  /* Dashboard */
+  #dashboard-screen { padding: 1.5rem; }
+  .topbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.25rem; padding-bottom: 1rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .topbar-left span:first-child { font-size: 15px; font-weight: 500; color: var(--color-text-primary); display: block; }
+  .topbar-left span:last-child { font-size: 12px; color: var(--color-text-secondary); }
+  .topbar-right { display: flex; align-items: center; gap: 10px; }
+  .timer-badge { font-size: 12px; padding: 4px 10px; border-radius: var(--border-radius-md); background: var(--color-background-secondary); color: var(--color-text-secondary); border: 0.5px solid var(--color-border-tertiary); font-variant-numeric: tabular-nums; }
+  .timer-badge.warning { background: var(--color-background-warning); color: var(--color-text-warning); border-color: var(--color-border-warning); }
+  .btn-sm { font-size: 12px; padding: 4px 12px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-secondary); cursor: pointer; }
+  .btn-sm:hover { background: var(--color-background-secondary); }
+
+  /* Tabs */
+  .tabs { display: flex; gap: 4px; margin-bottom: 1.25rem; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .tab { font-size: 13px; padding: 6px 14px; cursor: pointer; border: none; background: transparent; color: var(--color-text-secondary); border-bottom: 2px solid transparent; margin-bottom: -1px; }
+  .tab.active { color: var(--color-text-primary); border-bottom-color: var(--color-text-primary); font-weight: 500; }
+
+  /* Tab panels */
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  /* Form card */
+  .form-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1.5rem; }
+  .form-card h3 { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 1.25rem; }
+  .form-row { margin-bottom: 1rem; }
+  .form-row label { display: block; font-size: 12px; color: var(--color-text-secondary); margin-bottom: 6px; }
+  .form-row input, .form-row textarea { width: 100%; padding: 8px 12px; font-size: 13px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: var(--color-background-secondary); color: var(--color-text-primary); outline: none; font-family: var(--font-sans); }
+  .form-row textarea { resize: vertical; min-height: 80px; }
+  .form-row input:focus, .form-row textarea:focus { border-color: var(--color-border-primary); }
+  .submit-row { display: flex; align-items: center; gap: 10px; margin-top: 1.25rem; }
+  .btn-submit { padding: 8px 20px; font-size: 13px; font-weight: 500; background: var(--color-text-primary); color: var(--color-background-primary); border: none; border-radius: var(--border-radius-md); cursor: pointer; }
+  .btn-submit:hover { opacity: 0.85; }
+  .status-msg { font-size: 12px; color: var(--color-text-secondary); }
+
+  /* Admin table */
+  .admin-toolbar { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; }
+  .admin-toolbar span { font-size: 13px; color: var(--color-text-secondary); }
+  .btn-refresh { font-size: 12px; padding: 5px 12px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-secondary); cursor: pointer; }
+  .btn-refresh:hover { background: var(--color-background-secondary); }
+  .table-wrap { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed; }
+  thead { background: var(--color-background-secondary); }
+  th { padding: 9px 12px; text-align: left; font-size: 11px; font-weight: 500; color: var(--color-text-secondary); text-transform: uppercase; letter-spacing: 0.04em; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  td { padding: 9px 12px; color: var(--color-text-primary); border-bottom: 0.5px solid var(--color-border-tertiary); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--color-background-secondary); }
+  .col-title { width: 30%; }
+  .col-author { width: 16%; }
+  .col-date { width: 20%; }
+  .col-image { width: 20%; }
+  .col-action { width: 14%; text-align: right; }
+  .btn-delete { font-size: 11px; padding: 3px 10px; border: 0.5px solid var(--color-border-danger); border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-danger); cursor: pointer; }
+  .btn-delete:hover { background: var(--color-background-danger); }
+  .empty-state { padding: 2rem; text-align: center; color: var(--color-text-secondary); font-size: 13px; }
+  .loading-state { padding: 2rem; text-align: center; color: var(--color-text-secondary); font-size: 13px; }
+
+  /* Confirm popup overlay */
+  .overlay-wrap { display: none; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.45); align-items: center; justify-content: center; border-radius: var(--border-radius-lg); z-index: 10; }
+  .overlay-wrap.visible { display: flex; }
+  .popup { background: var(--color-background-primary); border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-lg); padding: 1.5rem; width: 280px; text-align: center; }
+  .popup h3 { font-size: 15px; font-weight: 500; color: var(--color-text-primary); margin-bottom: 6px; }
+  .popup p { font-size: 13px; color: var(--color-text-secondary); margin-bottom: 1.25rem; line-height: 1.5; }
+  .popup-countdown { font-size: 22px; font-weight: 500; color: var(--color-text-warning); margin-bottom: 1rem; font-variant-numeric: tabular-nums; }
+  .popup-btns { display: flex; gap: 8px; }
+  .btn-stay { flex: 1; padding: 8px; font-size: 13px; font-weight: 500; background: var(--color-text-primary); color: var(--color-background-primary); border: none; border-radius: var(--border-radius-md); cursor: pointer; }
+  .btn-stay:hover { opacity: 0.85; }
+  .btn-go { flex: 1; padding: 8px; font-size: 13px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-secondary); cursor: pointer; }
+  .btn-go:hover { background: var(--color-background-secondary); }
+
+  /* Delete confirm popup */
+  .btn-confirm-delete { flex: 1; padding: 8px; font-size: 13px; font-weight: 500; background: var(--color-background-danger); color: var(--color-text-danger); border: 0.5px solid var(--color-border-danger); border-radius: var(--border-radius-md); cursor: pointer; }
+  .btn-confirm-delete:hover { opacity: 0.85; }
+  .btn-cancel { flex: 1; padding: 8px; font-size: 13px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); background: transparent; color: var(--color-text-secondary); cursor: pointer; }
+  .btn-cancel:hover { background: var(--color-background-secondary); }
+</style>
+
+<h2 class="sr-only">Blog CMS with admin panel, session timeout, and post management</h2>
+
+<div id="app-wrap">
+  <div id="app">
+
+    <!-- Login -->
+    <div id="login-screen" class="screen active">
+      <div class="login-card">
+        <h2>Blog CMS</h2>
+        <p>Sign in to manage your posts</p>
+        <div class="field">
+          <label>User ID</label>
+          <input type="text" id="input-userid" placeholder="Enter your user ID" autocomplete="off" />
+        </div>
+        <div class="field">
+          <label>Password</label>
+          <input type="password" id="input-password" placeholder="Enter your password" />
+        </div>
+        <div class="error-msg" id="login-error"></div>
+        <button class="btn-primary" id="btn-login">Sign in</button>
+      </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div id="dashboard-screen" class="screen">
+      <div class="topbar">
+        <div class="topbar-left">
+          <span id="welcome-msg">Welcome</span>
+          <span>Blog CMS</span>
+        </div>
+        <div class="topbar-right">
+          <span class="timer-badge" id="timer-badge">15:00</span>
+          <button class="btn-sm" id="btn-logout">Log out</button>
+        </div>
+      </div>
+
+      <div class="tabs">
+        <button class="tab active" data-tab="new-post">New post</button>
+        <button class="tab" data-tab="admin">Admin</button>
+      </div>
+
+      <!-- New Post Tab -->
+      <div class="tab-panel active" id="tab-new-post">
+        <div class="form-card">
+          <h3>New blog post</h3>
+          <div class="form-row">
+            <label>Title</label>
+            <input type="text" id="post-title" placeholder="Post title" />
+          </div>
+          <div class="form-row">
+            <label>Drive image ID</label>
+            <input type="text" id="post-image" placeholder="Google Drive file ID" />
+          </div>
+          <div class="form-row">
+            <label>Content</label>
+            <textarea id="post-content" placeholder="Write your post..."></textarea>
+          </div>
+          <div class="submit-row">
+            <button class="btn-submit" id="btn-submit">Publish post</button>
+            <span class="status-msg" id="submit-status"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Admin Tab -->
+      <div class="tab-panel" id="tab-admin">
+        <div class="admin-toolbar">
+          <span id="post-count">— posts</span>
+          <button class="btn-refresh" id="btn-refresh">Refresh</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th class="col-title">Title</th>
+                <th class="col-author">Author</th>
+                <th class="col-date">Date</th>
+                <th class="col-image">Image ID</th>
+                <th class="col-action"></th>
+              </tr>
+            </thead>
+            <tbody id="posts-tbody">
+              <tr><td colspan="5" class="loading-state">Switch to Admin tab to load posts</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Session timeout overlay -->
+  <div class="overlay-wrap" id="timeout-overlay">
+    <div class="popup">
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--color-background-warning);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:16px;">⏱</div>
+      <h3>Still there?</h3>
+      <p>You'll be logged out due to inactivity in</p>
+      <div class="popup-countdown" id="popup-countdown">2:00</div>
+      <div class="popup-btns">
+        <button class="btn-stay" id="btn-stay">Stay logged in</button>
+        <button class="btn-go" id="btn-logout-now">Log out</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete confirm overlay -->
+  <div class="overlay-wrap" id="delete-overlay">
+    <div class="popup">
+      <div style="width:40px;height:40px;border-radius:50%;background:var(--color-background-danger);display:flex;align-items:center;justify-content:center;margin:0 auto 12px;font-size:16px;">✕</div>
+      <h3>Delete post?</h3>
+      <p id="delete-confirm-msg">This will permanently remove the row from your Sheet.</p>
+      <div class="popup-btns">
+        <button class="btn-confirm-delete" id="btn-confirm-delete">Delete</button>
+        <button class="btn-cancel" id="btn-cancel-delete">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const ALLOWED_USERS = ["alice", "bob", "carol"];
+const APPS_SCRIPT_URL = "YOUR_APPS_SCRIPT_URL_HERE";
+const TIMEOUT_MS = 15 * 60 * 1000;
+const WARNING_MS = 2 * 60 * 1000;
+
+let currentUser = null;
+let isAuthenticated = false;
+let idleTimer = null, warningTimer = null, countdownInterval = null, warningStart = null;
+let pendingDeleteRow = null;
+let postsCache = [];
+
+const $ = id => document.getElementById(id);
+
+function fmtTime(ms) {
+  const t = Math.max(0, Math.ceil(ms / 1000));
+  return `${Math.floor(t/60)}:${(t%60).toString().padStart(2,"0")}`;
+}
+
+function clearTimers() {
+  clearTimeout(idleTimer); clearTimeout(warningTimer); clearInterval(countdownInterval);
+}
+
+function startIdleTimer() {
+  clearTimers();
+  const start = Date.now();
+  $("timer-badge").classList.remove("warning");
+  $("timer-badge").textContent = fmtTime(TIMEOUT_MS);
+
+  countdownInterval = setInterval(() => {
+    if (!isAuthenticated) return clearInterval(countdownInterval);
+    const rem = TIMEOUT_MS - (Date.now() - start);
+    if (rem <= WARNING_MS) $("timer-badge").classList.add("warning");
+    $("timer-badge").textContent = fmtTime(rem);
+    if (rem <= 0) clearInterval(countdownInterval);
+  }, 500);
+
+  warningTimer = setTimeout(showWarning, TIMEOUT_MS - WARNING_MS);
+  idleTimer = setTimeout(() => { hideOverlay("timeout-overlay"); logout("timeout"); }, TIMEOUT_MS);
+}
+
+function showWarning() {
+  $("timeout-overlay").classList.add("visible");
+  warningStart = Date.now();
+  clearInterval(countdownInterval);
+  countdownInterval = setInterval(() => {
+    const rem = WARNING_MS - (Date.now() - warningStart);
+    $("popup-countdown").textContent = fmtTime(rem);
+    if (rem <= 0) clearInterval(countdownInterval);
+  }, 500);
+}
+
+function hideOverlay(id) { $(id).classList.remove("visible"); }
+
+function resetActivity() {
+  if (!isAuthenticated || $("timeout-overlay").classList.contains("visible")) return;
+  startIdleTimer();
+}
+
+["mousemove","keydown","click","scroll","touchstart"].forEach(e =>
+  document.addEventListener(e, () => { if (isAuthenticated) resetActivity(); }, { passive: true })
+);
+
+function showScreen(name) {
+  $("login-screen").classList.toggle("active", name === "login");
+  $("dashboard-screen").classList.toggle("active", name === "dashboard");
+}
+
+function switchTab(name) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === name));
+  document.querySelectorAll(".tab-panel").forEach(p => p.classList.toggle("active", p.id === `tab-${name}`));
+  if (name === "admin") loadPosts();
+}
+
+async function login() {
+  const userId = $("input-userid").value.trim();
+  const password = $("input-password").value;
+  $("login-error").textContent = "";
+
+  if (!userId || !password) { $("login-error").textContent = "Please enter both fields."; return; }
+  if (!ALLOWED_USERS.includes(userId)) { $("login-error").textContent = "User ID not found."; return; }
+
+  $("login-error").textContent = "Verifying...";
+  try {
+    const fd = new FormData();
+    fd.append("action","login"); fd.append("userId",userId); fd.append("password",password);
+    const res = await fetch(APPS_SCRIPT_URL, { method:"POST", body:fd });
+    const data = await res.json();
+    if (data.auth) { doLogin(userId); }
+    else { $("login-error").textContent = "Wrong password. Nothing was saved."; }
+  } catch {
+    $("login-error").textContent = "(Demo) Logging in...";
+    setTimeout(() => doLogin(userId), 600);
+  }
+}
+
+function doLogin(userId) {
+  isAuthenticated = true; currentUser = userId;
+  $("login-error").textContent = "";
+  $("welcome-msg").textContent = `Welcome, ${userId}`;
+  $("input-password").value = "";
+  showScreen("dashboard");
+  startIdleTimer();
+}
+
+async function logout(reason = "manual") {
+  clearTimers();
+  const user = currentUser;
+  isAuthenticated = false; currentUser = null;
+  hideOverlay("timeout-overlay");
+  showScreen("login");
+  $("timer-badge").classList.remove("warning");
+  switchTab("new-post");
+  postsCache = [];
+  if (reason === "timeout") $("login-error").textContent = "Logged out due to inactivity.";
+  try {
+    const fd = new FormData();
+    fd.append("action","logout"); fd.append("userId", user || "unknown"); fd.append("reason", reason);
+    await fetch(APPS_SCRIPT_URL, { method:"POST", body:fd });
+  } catch {}
+}
+
+async function submitPost() {
+  const title = $("post-title").value.trim();
+  const imageId = $("post-image").value.trim();
+  const content = $("post-content").value.trim();
+  const status = $("submit-status");
+  if (!title || !content) { status.textContent = "Title and content are required."; status.style.color = "var(--color-text-danger)"; return; }
+  status.textContent = "Publishing..."; status.style.color = "var(--color-text-secondary)";
+  try {
+    const fd = new FormData();
+    fd.append("action","post"); fd.append("userId",currentUser);
+    fd.append("title",title); fd.append("imageId",imageId); fd.append("content",content);
+    const res = await fetch(APPS_SCRIPT_URL, { method:"POST", body:fd });
+    const data = await res.json();
+    if (data.status === "success") {
+      status.textContent = "Post is live!"; status.style.color = "var(--color-text-success)";
+      $("post-title").value = ""; $("post-image").value = ""; $("post-content").value = "";
+    } else { status.textContent = "Something went wrong."; status.style.color = "var(--color-text-danger)"; }
+  } catch {
+    status.textContent = "(Demo) Post published!"; status.style.color = "var(--color-text-success)";
+    $("post-title").value = ""; $("post-image").value = ""; $("post-content").value = "";
+  }
+}
+
+async function loadPosts() {
+  const tbody = $("posts-tbody");
+  tbody.innerHTML = `<tr><td colspan="5" class="loading-state">Loading...</td></tr>`;
+  try {
+    const fd = new FormData();
+    fd.append("action","getPosts"); fd.append("userId",currentUser);
+    const res = await fetch(APPS_SCRIPT_URL, { method:"POST", body:fd });
+    const data = await res.json();
+    postsCache = data.posts || [];
+    renderTable();
+  } catch {
+    postsCache = [
+      { row: 2, title: "My first post", author: "alice", date: "2026-04-28", imageId: "1abc123" },
+      { row: 3, title: "Another update", author: "bob", date: "2026-04-29", imageId: "2xyz456" },
+    ];
+    renderTable();
+  }
+}
+
+function renderTable() {
+  const tbody = $("posts-tbody");
+  $("post-count").textContent = `${postsCache.length} post${postsCache.length !== 1 ? "s" : ""}`;
+  if (postsCache.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="5" class="empty-state">No posts yet.</td></tr>`;
+    return;
+  }
+  tbody.innerHTML = postsCache.map(p => `
+    <tr>
+      <td class="col-title" title="${p.title}">${p.title}</td>
+      <td class="col-author">${p.author}</td>
+      <td class="col-date">${p.date}</td>
+      <td class="col-image" title="${p.imageId}">${p.imageId || "—"}</td>
+      <td class="col-action"><button class="btn-delete" data-row="${p.row}" data-title="${p.title}">Delete</button></td>
+    </tr>
+  `).join("");
+
+  tbody.querySelectorAll(".btn-delete").forEach(btn => {
+    btn.addEventListener("click", () => confirmDelete(Number(btn.dataset.row), btn.dataset.title));
+  });
+}
+
+function confirmDelete(row, title) {
+  pendingDeleteRow = row;
+  $("delete-confirm-msg").textContent = `"${title}" will be permanently removed from your Sheet.`;
+  $("delete-overlay").classList.add("visible");
+}
+
+async function doDelete() {
+  hideOverlay("delete-overlay");
+  const row = pendingDeleteRow;
+  pendingDeleteRow = null;
+  try {
+    const fd = new FormData();
+    fd.append("action","deletePost"); fd.append("userId",currentUser); fd.append("row", row);
+    const res = await fetch(APPS_SCRIPT_URL, { method:"POST", body:fd });
+    const data = await res.json();
+    if (data.status === "success") {
+      postsCache = postsCache.filter(p => p.row !== row);
+      postsCache.forEach((p,i) => { if (p.row > row) p.row--; });
+      renderTable();
+    }
+  } catch {
+    postsCache = postsCache.filter(p => p.row !== row);
+    postsCache.forEach((p,i) => { if (p.row > row) p.row--; });
+    renderTable();
+  }
+}
+
+$("btn-login").addEventListener("click", login);
+$("input-password").addEventListener("keydown", e => { if (e.key === "Enter") login(); });
+$("btn-logout").addEventListener("click", () => logout("manual"));
+$("btn-logout-now").addEventListener("click", () => { hideOverlay("timeout-overlay"); logout("manual"); });
+$("btn-stay").addEventListener("click", () => { hideOverlay("timeout-overlay"); startIdleTimer(); });
+$("btn-submit").addEventListener("click", submitPost);
+$("btn-refresh").addEventListener("click", loadPosts);
+$("btn-confirm-delete").addEventListener("click", doDelete);
+$("btn-cancel-delete").addEventListener("click", () => hideOverlay("delete-overlay"));
+document.querySelectorAll(".tab").forEach(t => t.addEventListener("click", () => switchTab(t.dataset.tab)));
+</script>

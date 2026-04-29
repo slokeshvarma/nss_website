@@ -85,10 +85,8 @@ homeGalleryImages.addEventListener("touchend", () => {
     mouseIsOverDiv = false;
 });
 setInterval(() => {
-    const pageScrollValue = window.scrollY || document.documentElement.scrollTop;
-    const homeGalleryImagesOffsetTop = nav.offsetHeight + landingSection.offsetHeight + aboutUs.offsetHeight;
     isElementInView = isElementInViewport(homeGalleryImages);
-    if (!mouseIsOverDiv && !isElementInView && (pageScrollValue/homeGalleryImagesOffsetTop) > 0.8) {
+    if (!mouseIsOverDiv && isElementInView) {
         homeImageGallery(currentImageNumber + 1, 'next');
     }}, 4 * 1000);
 
