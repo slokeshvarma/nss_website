@@ -22,7 +22,10 @@ function pageRender() {
 
         userIdField.appendChild(userIdLabel);
         userIdField.appendChild(userIdInput);
-        
+        userIdInput.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") passwordInput.focus();
+        });
+
        const passwordField = document.createElement("div");
         passwordField.className = "formField";
         const passwordLabel = document.createElement("label");
@@ -57,7 +60,10 @@ function pageRender() {
         passwordField.appendChild(passwordInput);
 
         passwordInput.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") signIn();
+            if (e.key === "Enter") {
+                passwordInput.blur();
+                signIn();
+            }
         });
         
         const message_button_container = document.createElement("div");
