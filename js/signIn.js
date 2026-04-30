@@ -129,7 +129,7 @@ async function signIn() {
         const sessionID = Math.random().toString(36).substring(2, 7).toUpperCase();
         const GAppScript = "https://script.google.com/macros/s/AKfycbzm4VyifKFbeF33cbfa2xomnfu4_XWjFkegSeLtbSUfcdgnjgIzDnN46yjPZfhdPdg8/exec";
         const formData = new FormData();
-        formData.append("action", "login"); formData.append("SessionID", sessionID); formData.append("userID", userId); formData.append("password", password);
+        formData.append("action", "logIn"); formData.append("SessionID", sessionID); formData.append("userID", userID); formData.append("password", password);
         const response = await fetch(GAppScript, { method:"POST", body:formData });
         const data = await response.json();
         console.log(formData);
