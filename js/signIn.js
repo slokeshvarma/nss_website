@@ -127,10 +127,18 @@ async function signIn() {
         }, 400);
 
         const sessionID = Math.random().toString(36).substring(2, 7).toUpperCase();
-        const GAppScript = "https://script.google.com/macros/s/AKfycbzm4VyifKFbeF33cbfa2xomnfu4_XWjFkegSeLtbSUfcdgnjgIzDnN46yjPZfhdPdg8/exec";
-        const formData = new FormData();
-        formData.append("action", "logIn"); formData.append("SessionID", sessionID); formData.append("userID", userID); formData.append("password", password);
-        const response = await fetch(GAppScript, { method:"POST", body:formData });
+        const GAppScript = "https://script.google.com/macros/s/AKfycbxq0HyYtHM4e5nee7B51U3cgPElWGHbvyvDRRshJnJwnt2dgbrmA8RL6A3GRSIvA3ud/exec";
+        const loginData = {
+            action: "logIn",
+            sessionID: sessionID,
+            userId: userID,
+            password: password
+        };
+        const response = await fetch(GAppScript, {
+            method: "POST",
+            body: JSON.stringify(loginData),  
+            headers: { "Content-Type": "text/plain" }
+        });
         const data = await response.json();
         console.log(formData);
         console.log(data);
