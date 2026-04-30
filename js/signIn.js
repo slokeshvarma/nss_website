@@ -132,6 +132,8 @@ async function signIn() {
         formData.append("action", "login"); formData.append("SessionID", sessionID); formData.append("userID", userId); formData.append("password", password);
         const response = await fetch(GAppScript, { method:"POST", body:formData });
         const data = await response.json();
+        console.log(formData);
+        console.log(data);
         clearInterval(verifyingInterval);
         if (data.auth) { 
             $("signInMessageText").innerHTML = "Login Successful!";
@@ -141,9 +143,6 @@ async function signIn() {
             $("signInMessageText").innerHTML = "Wrong password! Try Again";
             $("signInMessageText").style.color = "var(--accent1Color)";
         }
-
-        console.log(userID, password);
-        console.log(users);
     }
 }
 
