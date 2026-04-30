@@ -353,7 +353,6 @@ function homeEventCardSwipe(moveRight, numberOfCards) {
 }
 /* execution of functions */
 setInterval(() => {
-    toggleTheme();
 }, 30 * 1000);
 
 window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {

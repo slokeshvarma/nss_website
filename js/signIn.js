@@ -88,11 +88,15 @@ function pageRender() {
         signInForm.appendChild(passwordField);
         signInForm.appendChild(message_button_container)
         signInMain.appendChild(signInForm);
-    } else {
 
+    } else {
+        while (signInMain.lastElementChild) {
+            signInMain.removeChild(signInMain.lastElementChild);
+        };
+        signInMain.innerHTML = "You Have Logged In !!!"
     }
 }
-function signIn() {
+async function signIn() {
     const userID = $("userId").value.toLowerCase().trim();
     const password = $("password").value;
     $("signInMessageText").innerHTML = ``
@@ -110,32 +114,60 @@ function signIn() {
     } else {
         $("signInMessageText").style.color = "var(--accent2Color)";
         let count = 0;
-        setInterval(()=> {
+        const verifyingInterval = setInterval(() => {
             if (count === 0) {
-                $("signInMessageText").innerHTML = "Verfiying.";
+                $("signInMessageText").innerHTML = "Verifying.";
             } else if (count === 1) {
-                $("signInMessageText").innerHTML = "Verfiying..";
+                $("signInMessageText").innerHTML = "Verifying..";
             } else {
-                $("signInMessageText").innerHTML = "Verfiying...";
+                $("signInMessageText").innerHTML = "Verifying...";
                 count = -1;
             }
             count++;
         }, 400);
+
+        const GAppScript = "https://script.google.com/macros/s/AKfycbxgNjmtucX7gD-c6BIQTWzAsnucLuIdrZya6qc6ySOVsBP62z3Acx-tmOgUNmljStu4/exec"
+        const sessionID = Math.random().toString(36).substring(2, 7).toUpperCase();
+        const params = new URLSearchParams({
+            action: "logIn",
+            sessionID: sessionID,
+            userId: userID,
+            password: password
+        });
+
+    const response = await fetch(`${GAppScript}?${params}`);
+    const data = await response.json();
+        clearInterval(verifyingInterval);
+        if (data.auth) { 
+            $("signInMessageText").innerHTML = "Login Successful!";
+            $("signInMessageText").style.color = "var(--accent2Color)";
+            setTimeout(() => doLogin(userID), 600);
+        } else { 
+            $("signInMessageText").innerHTML = "Wrong password! Try Again";
+            $("signInMessageText").style.color = "var(--accent1Color)";
+        }
 
         console.log(userID, password);
         console.log(users);
     }
 }
 
+function doLogin() {
+    userLoggedIn = true;
+    pageRender();
+}
+
 let userLoggedIn = false;
 const $ = id => document.getElementById(id);
 const users = {
     chairman: "Dr. A. B. Koteshwara Rao Sir",
-    unit_1PO: "Dr. Sateesh Virothu Sir",
-    unit_2PO: "Dr. T. S. Vamsi Krishna Sir",
-    unit_1President: "Unit-1 Student President",
-    unit_2President: "Unit-2 Student President",
+    po_unit_1: "Dr. Sateesh Virothu Sir",
+    po_unit_2: "Dr. T. S. Vamsi Krishna Sir",
+    president_unit_1: "Unit-1 Student President",
+    president_unit_2: "Unit-2 Student President",
     nsswebhandler: "Webhandler",
+    webhandler_unit_1: "Unit-1 Student President",
+    webhandler_unit_1: "Unit-2 Student President",
     author: "Lokesh Anand Varma"
 }
 
