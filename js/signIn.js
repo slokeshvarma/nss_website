@@ -1,6 +1,9 @@
 function pageRender() {
     const signInMain = document.getElementById("signIn");
     if (!userLoggedIn) {
+        while (signInMain.lastElementChild) {
+            signInMain.removeChild(signInMain.lastElementChild);
+        };
         const signInForm = document.createElement("div");
         signInForm.id = "signInForm";
         signInForm.className = "signInForm";
@@ -46,11 +49,9 @@ function pageRender() {
             if (passwordInputElement.type === "password") {
                 passwordEyeElement.classList.replace("fa-eye", "fa-eye-slash");
                 passwordInputElement.type = "text";
-                console.log(passwordEyeElement, "password");
             } else {
                 passwordEyeElement.classList.replace("fa-eye-slash", "fa-eye");
                 passwordInputElement.type = "password";
-                console.log(passwordEyeElement, "text");
                 
             }
         })
@@ -93,13 +94,24 @@ function pageRender() {
         while (signInMain.lastElementChild) {
             signInMain.removeChild(signInMain.lastElementChild);
         };
-        signInMain.innerHTML = "You Have Logged In !!!"
+        const signInP = document.createElement("p");
+        signInP.className = "signInP";
+        signInP.innerHTML = `Hello, ${users[userId]} <br> user: ${user}, userID: ${userId}, sessionID: ${sessionId}`;
+        const logOut = document.createElement("button");
+        logOut.id = "signOut";
+        logOut.className = "signOutButton";
+        logOut.innerHTML = "Sign Out";
+        logOut.addEventListener("click", ()=> {
+            signOut("manual");
+        });
+        signInMain.appendChild(signInP);
+        signInMain.appendChild(logOut);
     }
 }
 async function signIn() {
     const userID = $("userId").value.toLowerCase().trim();
     const password = $("password").value;
-    $("signInMessageText").innerHTML = ``
+    $("signInMessageText").innerHTML = ``;
     if (!userID || !password) {
         $("signInMessageText").innerHTML = `Please enter both fields !!`;
         $("signInMessageText").style.color = "var(--accent1Color)";
@@ -127,22 +139,29 @@ async function signIn() {
         }, 400);
 
         const sessionID = Math.random().toString(36).substring(2, 7).toUpperCase();
-        const GAppScript = "https://script.google.com/macros/s/AKfycbxgNjmtucX7gD-c6BIQTWzAsnucLuIdrZya6qc6ySOVsBP62z3Acx-tmOgUNmljStu4/exec";
-        const formParams = new URLSearchParams({
+        const loginData = {
             action: "logIn",
             sessionID: sessionID,
             userId: userID,
             password: password
+        };
+        const response = await fetch(logInOut_Proxy_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain" },
+            body: JSON.stringify(loginData)
         });
-        const response = await fetch(`${GAppScript}?${formParams}`);
         const data = await response.json();
-        console.log(formParams);
-        console.log(data);
         clearInterval(verifyingInterval);
         if (data.auth) { 
             $("signInMessageText").innerHTML = "Login Successful!";
             $("signInMessageText").style.color = "var(--accent2Color)";
-            setTimeout(() => doLogin(userID), 600);
+            userId = userID;
+            user = users[userID];
+            sessionId = sessionID;
+            setTimeout(() => {
+                userLoggedIn = true;
+                pageRender();
+            }, 1000);
         } else { 
             $("signInMessageText").innerHTML = "Wrong password! Try Again";
             $("signInMessageText").style.color = "var(--accent1Color)";
@@ -150,9 +169,23 @@ async function signIn() {
     }
 }
 
-function doLogin() {
-    userLoggedIn = true;
-    pageRender();
+async function signOut(Status) {
+    const userData = {
+        action: "logOut",
+        sessionID: sessionId,
+        userID: userId,
+        status: Status
+    };
+    const response = await fetch(logInOut_Proxy_URL, {
+        method: "POST",
+        headers: { "Content-Type": "text/plain" },
+        body: JSON.stringify(userData)
+    });
+    const res = await response.json();
+    if (res.logOut) {
+        userLoggedIn = false;
+        pageRender();
+    }
 }
 
 let userLoggedIn = false;
@@ -168,6 +201,8 @@ const users = {
     webhandler_unit_1: "Unit-2 Student President",
     author: "Lokesh Anand Varma"
 }
+let userId, user, sessionId;
+const logInOut_Proxy_URL = "https://gappscript-proxy.nss-gvpce-a.workers.dev/";
 
 window.addEventListener("DOMContentLoaded", ()=> {
     const footerHeight = document.querySelector("footer").clientHeight;

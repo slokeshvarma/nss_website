@@ -3,12 +3,19 @@ body {
     flex-direction: column;
     background-color: var(--background2Color);
 }
+main {
+    margin-top: var(--navHeight);
+}
+.signInP {
+    color: var(--text2Color);
+    background-color: var(--background2Color);
+    min-height: 10vh;
+}
 #signIn {
     justify-content: center;
     align-items: center;
     height: fit-content;
     min-height: calc(100vh - var(--navHeight) - (var(--footerHeight)));
-    margin-top: var(--navHeight);
     padding: 1rem 2vw;
 }
 .signInForm p,
@@ -68,7 +75,8 @@ body {
     font-weight: 400;
     text-align: left;
 }
-.signInSubmit {
+.signInSubmit,
+.signOutButton {
     text-align: center;
     align-self: flex-end;
     width: 50%;
