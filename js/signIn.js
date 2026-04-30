@@ -134,7 +134,7 @@ async function signIn() {
             userId: userID,
             password: password
         });
-        const response = await fetch(`${GAppScript}?${params}`);
+        const response = await fetch(`${GAppScript}?${formParams}`);
         const data = await response.json();
         console.log(formParams);
         console.log(data);
