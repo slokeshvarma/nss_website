@@ -37,7 +37,6 @@ function pageRender() {
         passwordInput.placeholder = "Enter your Password";
         passwordInput.autocomplete = 'off';
 
-        // ✅ keydown on userIDInput defined AFTER passwordInput exists
         userIDInput.addEventListener("keydown", (e) => {
             if (e.key === "Enter") passwordInput.focus();
         });
@@ -134,7 +133,6 @@ async function signIn() {
         return;
     }
 
-    // ✅ moved outside else block — cleaner
     $("signInMessageText").style.color = "var(--accent2Color)";
     let count = 0;
     const verifyingInterval = setInterval(() => {
@@ -164,33 +162,39 @@ async function signIn() {
             body: JSON.stringify(logInData)
         });
 
-        const rawText = await response.text(); // ✅ read as text first for safe debugging
+        const rawText = await response.text();
         console.log("Raw response:", rawText);
         const data = JSON.parse(rawText);
 
         clearInterval(verifyingInterval);
 
         if (data.auth) {
-            $("signInMessageText").innerHTML = "Login Successful!";
-            $("signInMessageText").style.color = "var(--accent2Color)";
+            if (!data.activeSession) {
+                $("signInMessageText").innerHTML = "Login Successful!";
+                $("signInMessageText").style.color = "var(--accent2Color)";
 
-            // ✅ set sessionStorage BEFORE setTimeout so refresh during delay still works
-            sessionStorage.setItem("sessionID", generatedSessionID);
-            sessionStorage.setItem("userID", inputUserID);
-            sessionStorage.setItem("userLoggedIn", "true");
+                sessionStorage.setItem("sessionID", generatedSessionID);
+                sessionStorage.setItem("userID", inputUserID);
+                sessionStorage.setItem("userLoggedIn", "true");
 
-            setTimeout(() => {
-                userLoggedIn = true;
-                sessionID = generatedSessionID;
-                userID = inputUserID;
-                user = users[inputUserID];
-                pageRender();
-            }, 1000);
-
+                setTimeout(() => {
+                    userLoggedIn = true;
+                    sessionID = generatedSessionID;
+                    userID = inputUserID;
+                    user = users[inputUserID];
+                    pageRender();
+                    startHeartbeat();
+                }, 1000);
+            } else {
+                $("signInMessageText").innerHTML = "An Active session exits! <br> Try after 10:00 min";
+                $("signInMessageText").style.color = "var(--accent1Color)";
+                $("userID").value = "";
+                $("password").value = "";
+            }
         } else {
             $("signInMessageText").innerHTML = "Wrong password! Try Again";
             $("signInMessageText").style.color = "var(--accent1Color)";
-            $("password").value = ""; // ✅ clear password on wrong attempt
+            $("password").value = "";
         }
     } catch (err) {
         clearInterval(verifyingInterval);
@@ -201,6 +205,7 @@ async function signIn() {
 }
 
 async function signOut(inputStatus) {
+    stopHeartbeat();
     const userData = {
         action: "logOut",
         sessionID: sessionStorage.getItem("sessionID"),
@@ -220,19 +225,41 @@ async function signOut(inputStatus) {
         console.error("SignOut error:", err);
     }
 
-    // ✅ always log out locally regardless of server response
     userLoggedIn = false;
     userID = undefined;
     user = undefined;
     sessionID = undefined;
     clearSession();
-    pageRender(); // ✅ moved after clearSession
+    pageRender();
 }
+
+function startHeartbeat() {
+    sendHeartbeat();
+    heartBeatInterval = setInterval(sendHeartbeat, 5 * 60 * 1000);
+}
+
+function sendHeartbeat() {
+    navigator.sendBeacon(logInOut_Proxy_URL, JSON.stringify({
+        action: "heartBeat",
+        sessionID: sessionID,
+        userID: userID
+    }));
+}
+
+function stopHeartbeat() {
+    clearInterval(heartBeatInterval);
+}
+
+document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "visible" && userLoggedIn) {
+        sendHeartbeat();
+    }
+});
 
 function updateEyeLocation() {
     const passwordInput = document.getElementById("password");
     const passwordEye = document.getElementById("passwordEye");
-    if (!passwordInput || !passwordEye) return; // ✅ guard if elements don't exist
+    if (!passwordInput || !passwordEye) return;
     const appearanceAdjustment = 2;
     document.documentElement.style.setProperty(
         "--passwordEyeBottom",
@@ -260,6 +287,7 @@ const users = {
     author: "Lokesh Anand Varma"
 };
 let userID, user, sessionID;
+let heartBeatInterval;
 const logInOut_Proxy_URL = "https://gappscript-proxy.nss-gvpce-a.workers.dev/";
 
 window.addEventListener("DOMContentLoaded", () => {
@@ -267,7 +295,6 @@ window.addEventListener("DOMContentLoaded", () => {
     document.documentElement.style.setProperty("--footerHeight", `${footerHeight}px`);
 
     const savedSession = sessionStorage.getItem("userLoggedIn");
-    console.log(savedSession);
     if (savedSession === "true") {
         sessionID = sessionStorage.getItem("sessionID");
         userID = sessionStorage.getItem("userID");
@@ -277,19 +304,6 @@ window.addEventListener("DOMContentLoaded", () => {
     pageRender();
 });
 
-window.addEventListener("resize", () => { // ✅ window not document for resize
+window.addEventListener("resize", () => {
     updateEyeLocation();
-});
-
-window.addEventListener("beforeunload", () => {
-    if (userLoggedIn) {
-        const data = JSON.stringify({
-            action: "logOut",
-            sessionID: sessionID,           // ✅ outer let, not generatedSessionID
-            userID: userID,
-            status: "abrupt_close"
-        });
-        navigator.sendBeacon(logInOut_Proxy_URL, data); // ✅ correct URL var
-        clearSession();
-    }
 });
