@@ -127,20 +127,16 @@ async function signIn() {
         }, 400);
 
         const sessionID = Math.random().toString(36).substring(2, 7).toUpperCase();
-        const GAppScript = "https://script.google.com/macros/s/AKfycbxq0HyYtHM4e5nee7B51U3cgPElWGHbvyvDRRshJnJwnt2dgbrmA8RL6A3GRSIvA3ud/exec";
-        const loginData = {
+        const GAppScript = "https://script.google.com/macros/s/AKfycbxgNjmtucX7gD-c6BIQTWzAsnucLuIdrZya6qc6ySOVsBP62z3Acx-tmOgUNmljStu4/exec";
+        const formParams = new URLSearchParams({
             action: "logIn",
             sessionID: sessionID,
             userId: userID,
             password: password
-        };
-        const response = await fetch(GAppScript, {
-            method: "POST",
-            body: JSON.stringify(loginData),  
-            headers: { "Content-Type": "text/plain" }
         });
+        const response = await fetch(`${GAppScript}?${params}`);
         const data = await response.json();
-        console.log(formData);
+        console.log(formParams);
         console.log(data);
         clearInterval(verifyingInterval);
         if (data.auth) { 
