@@ -246,8 +246,8 @@ document.addEventListener("visibilitychange", () => {
 
 let inactivityTimer;
 let warningTimer;
-const timeOutMinutes = 0.5;
-const warningMinutes = 0.25;
+const timeOutMinutes = 15;
+const warningMinutes = 3;
 
 function resetInactivityTimer() {
     if (!userLoggedIn) return;

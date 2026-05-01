@@ -41,9 +41,9 @@ body {
     z-index: 5;
     color: var(--text1Color);
     background-color: var(--background1Color);
-    height: 50dvh;
-    width: 50dvh;
-    border: 1px solid var(--background2Color);
+    height: fit-content;
+    width: fit-content;
+    padding: 5dvh 8dvw;
     border-radius: 4rem;
     font-size: clamp(0.5rem, 0.5rem + 2vw, 1rem);
     font-weight: 505;
