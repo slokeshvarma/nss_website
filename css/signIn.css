@@ -3,7 +3,14 @@ body {
     flex-direction: column;
     background-color: var(--background2Color);
 }
-#alertAutoSignOut.alerting {
+#timeDivDiv {
+    display: flex;
+    flex-direction: row;
+    padding: 2vh 2vw;
+    justify-content: center;
+    align-items: center;
+}
+#alertSignOut.alerting {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -17,7 +24,7 @@ body {
     backdrop-filter: blur(6px);
     background-color: none;
 }
-#alertAutoSignOutDiv {
+#alertSignOutDiv {
     z-index: 5;
     color: var(--text1Color);
     background-color: var(--background1Color);
@@ -25,7 +32,23 @@ body {
     border: 1px solid var(--background2Color);
     border-radius: 2rem;
 }
-#alertAutoSignOutDiv div:last-child {
+#alertSigningOutDiv,
+#alertSignedOutDiv {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    z-index: 5;
+    color: var(--text1Color);
+    background-color: var(--background1Color);
+    height: 50dvh;
+    width: 50dvh;
+    border: 1px solid var(--background2Color);
+    border-radius: 4rem;
+    font-size: clamp(0.5rem, 0.5rem + 2vw, 1rem);
+    font-weight: 505;
+}
+#alertSignOutDiv div:last-child {
     display: flex;
     flex-direction: row;
     justify-content: center;

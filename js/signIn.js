@@ -1,15 +1,10 @@
-/* ============================================================
-   signIn.js — complete & fully corrected
-   ============================================================ */
-
-/* ── Page Render ─────────────────────────────────────── */
 function pageRender() {
+    clearAlertBox();
     const signInMain = document.getElementById("signIn");
     if (!userLoggedIn) {
         while (signInMain.lastElementChild) {
             signInMain.removeChild(signInMain.lastElementChild);
         }
-        clearAlertBox();
 
         const signInForm = document.createElement("div");
         signInForm.id = "signInForm";
@@ -111,7 +106,6 @@ function pageRender() {
     }
 }
 
-/* ── Sign In ─────────────────────────────────────────── */
 async function signIn() {
     const inputUserID   = $("userID").value.toLowerCase().trim();
     const inputPassword = $("password").value;
@@ -174,6 +168,7 @@ async function signIn() {
                     pageRender();
                     startHeartbeat();
                     resetInactivityTimer();
+                    displayTime();
                 }, 1000);
             } else {
                 setMsg("signInMessageText", "An active session exists!<br>Try after 5 min", "accent1");
@@ -191,12 +186,11 @@ async function signIn() {
     }
 }
 
-/* ── Sign Out ────────────────────────────────────────── */
 async function signOut(inputStatus) {
     stopHeartbeat();
-    stopInactivityTimer(); // clears timer AND alert box
+    stopInactivityTimer();
 
-    showAlertMessage("Signing out...", "accent2");
+    alertSigingOut("signingOut");
 
     const userData = {
         action: "logOut",
@@ -212,9 +206,7 @@ async function signOut(inputStatus) {
             body: JSON.stringify(userData)
         });
         const res = await response.json();
-        console.log("SignOut response:", res);
     } catch (err) {
-        console.error("SignOut error:", err);
     }
 
     userLoggedIn = false;
@@ -222,15 +214,13 @@ async function signOut(inputStatus) {
     user         = undefined;
     sessionID    = undefined;
     clearSession();
-
-    showAlertMessage("Sign Out Successful ✓", "accent2");
+    alertSigingOut("signedOut");
     setTimeout(() => {
         clearAlertBox();
         pageRender();
     }, 1500);
 }
 
-/* ── Heartbeat ───────────────────────────────────────── */
 let heartBeatInterval;
 
 function startHeartbeat() {
@@ -255,18 +245,15 @@ document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible" && userLoggedIn) sendHeartbeat();
 });
 
-/* ── Inactivity Timer ────────────────────────────────── */
 let inactivityTimer;
 let warningTimer;
-let inactivityPaused = false; // ✅ freeze timer while alert popup is visible
-const timeOutMinutes = 3;
-const warningMinutes = 1;
+const timeOutMinutes = 0.5;
+const warningMinutes = 0.25;
 
 function resetInactivityTimer() {
     if (!userLoggedIn) return;
     clearTimeout(inactivityTimer);
     clearTimeout(warningTimer);
-    clearAlertBox(); // hides warning + sets inactivityPaused = false
 
     warningTimer = setTimeout(() => {
         autoLogOutAlert();
@@ -275,33 +262,31 @@ function resetInactivityTimer() {
     inactivityTimer = setTimeout(() => {
         signOut("timeOut_logOut");
     }, timeOutMinutes * 60 * 1000);
+
 }
 
 function stopInactivityTimer() {
     clearTimeout(inactivityTimer);
     clearTimeout(warningTimer);
-    clearAlertBox();
 }
 
-// ✅ inactivityPaused check — won't reset timer while popup is showing
-["mousemove", "keypress", "touchmove", "keyup", "touchend", "click"].forEach(evt => {
-    document.addEventListener(evt, () => {
-        if (userLoggedIn && !inactivityPaused) resetInactivityTimer();
+["mousemove", "keypress", "touchmove", "keyup", "touchend", "click", "scroll"].forEach(event => {
+    document.addEventListener(event, () => {
+        startTime = new Date();
+        displayTime();
+        if (userLoggedIn) resetInactivityTimer();
     }, { passive: true });
 });
 
-/* ── Auto Logout Alert ───────────────────────────────── */
 function autoLogOutAlert() {
-    const alertBox = $("alertAutoSignOut");
+    clearAlertBox();
+    const alertBox = $("alertSignOut");
     if (!alertBox) return;
 
-    inactivityPaused = true; // ✅ freeze — moving mouse won't reset timer now
-
-    clearAlertBox();
     alertBox.className = "alerting";
 
     const div = document.createElement("div");
-    div.id = "alertAutoSignOutDiv";
+    div.id = "alertSignOutDiv";
     div.innerHTML = `
         <div>
             <p>Due to inactivity,<br>
@@ -316,7 +301,9 @@ function autoLogOutAlert() {
     alertBox.appendChild(div);
 
     $("autoSignOutCancel").addEventListener("click", () => {
-        resetInactivityTimer(); // also calls clearAlertBox → inactivityPaused = false
+        clearAlertBox();
+        displayTime();
+        resetInactivityTimer();
     }, { once: true });
 
     $("autoSignOutContinue").addEventListener("click", () => {
@@ -324,27 +311,6 @@ function autoLogOutAlert() {
     }, { once: true });
 }
 
-/* ── Alert Box Helpers ───────────────────────────────── */
-function clearAlertBox() {
-    inactivityPaused = false; // ✅ always unfreeze when alert is cleared
-    const alertBox = $("alertAutoSignOut");
-    if (!alertBox) return;
-    alertBox.className = "";
-    while (alertBox.lastElementChild) alertBox.removeChild(alertBox.lastElementChild);
-}
-
-function showAlertMessage(msg, colorVar) {
-    const alertBox = $("alertAutoSignOut");
-    if (!alertBox) return;
-    clearAlertBox();
-    alertBox.className = "alerting";
-    const p = document.createElement("p");
-    p.style.color = `var(--${colorVar}Color)`;
-    p.innerHTML = msg;
-    alertBox.appendChild(p);
-}
-
-/* ── Misc Helpers ────────────────────────────────────── */
 function setMsg(id, html, colorVar) {
     const el = $(id);
     if (!el) return;
@@ -369,7 +335,46 @@ function clearSession() {
     sessionStorage.removeItem("userLoggedIn");
 }
 
-/* ── State & Constants ───────────────────────────────── */
+let signingOutInterval; 
+function alertSigingOut(event) {
+    clearAlertBox();
+    clearInterval(signingOutInterval);
+    const alertSignOut = $("alertSignOut");
+    alertSignOut.className = "alerting";
+
+    if (event === "signingOut") {
+        const div = document.createElement("div");
+        div.id = "alertSigningOutDiv";
+        const p = document.createElement("p");
+        p.id = "alertSigningOutP";
+        div.appendChild(p);
+        alertSignOut.appendChild(div);
+        let count = 0;
+        signingOutInterval = setInterval(() => {
+            const dots = ["Signing Out.", "Signing Out..", "Signing Out..."];
+            setMsg("alertSigningOutP", dots[count % 3], "accent2");
+            count++;
+        }, 400);
+    } else {
+        clearInterval(signingOutInterval);
+        const div = document.createElement("div");
+        div.id = "alertSignedOutDiv";
+        const p = document.createElement("p");
+        p.id = "alertSignedOutP";
+        div.appendChild(p);
+        alertSignOut.appendChild(div);
+        setMsg("alertSignedOutP", "Sign Out Successful !", "accent2");
+    }
+}
+
+function clearAlertBox() {
+    const alertSignOut = $("alertSignOut");
+    alertSignOut.className = "";
+    while (alertSignOut.lastElementChild) {
+            alertSignOut.removeChild(alertSignOut.lastElementChild);
+        }
+}
+
 let userLoggedIn = false;
 const $ = id => document.getElementById(id);
 const users = {
@@ -379,20 +384,17 @@ const users = {
     president_unit_1:  "Unit-1 Student President",
     president_unit_2:  "Unit-2 Student President",
     nsswebhandler:     "Webhandler",
-    webhandler_unit_1: "Unit-1 Student President",
-    webhandler_unit_2: "Unit-2 Student President",
-    author:            "Lokesh Anand Varma"
+    webhandler_unit_1: "Unit-1 Web Handler",
+    webhandler_unit_2: "Unit-2 Web Handler",
+    org_author:        "Lokesh Anand Varma"
 };
 let userID, user, sessionID;
 const logInOut_Proxy_URL = "https://gappscript-proxy.nss-gvpce-a.workers.dev/";
-
-/* ── Init ────────────────────────────────────────────── */
+let startTime;
 window.addEventListener("DOMContentLoaded", () => {
+    startTime = new Date();
     const footerHeight = document.querySelector("footer").clientHeight;
     document.documentElement.style.setProperty("--footerHeight", `${footerHeight}px`);
-
-    const isRefreshing = sessionStorage.getItem("isRefreshing");
-    sessionStorage.removeItem("isRefreshing");
 
     const savedSession = sessionStorage.getItem("userLoggedIn");
     if (savedSession === "true") {
@@ -400,22 +402,10 @@ window.addEventListener("DOMContentLoaded", () => {
         userID       = sessionStorage.getItem("userID");
         user         = users[userID];
         userLoggedIn = true;
-        if (isRefreshing === "true") sendHeartbeat();
+        sendHeartbeat();
         setTimeout(resetInactivityTimer, 500);
     }
     pageRender();
 });
 
 window.addEventListener("resize", () => updateEyeLocation());
-
-window.addEventListener("beforeunload", () => {
-    if (userLoggedIn) {
-        sessionStorage.setItem("isRefreshing", "true");
-        navigator.sendBeacon(logInOut_Proxy_URL, JSON.stringify({
-            action: "logOut",
-            sessionID: sessionID,
-            userID: userID,
-            status: "abrupt_close"
-        }));
-    }
-});
