@@ -3,6 +3,34 @@ body {
     flex-direction: column;
     background-color: var(--background2Color);
 }
+#alertAutoSignOut.alerting {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 4;
+    width: 100dvw;
+    height: 100dvh;
+    backdrop-filter: blur(6px);
+    background-color: none;
+}
+#alertAutoSignOutDiv {
+    z-index: 5;
+    color: var(--text1Color);
+    background-color: var(--background1Color);
+    padding: clamp(0.35rem, 0.35rem + 2vh, 2rem) clamp(0.5rem,0.5rem + 5vw, 3rem);
+    border: 1px solid var(--background2Color);
+    border-radius: 2rem;
+}
+#alertAutoSignOutDiv div:last-child {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+}
 main {
     margin-top: var(--navHeight);
 }
@@ -76,7 +104,8 @@ main {
     text-align: left;
 }
 .signInSubmit,
-.signOutButton {
+.signOutButton,
+#autoSignOutContinue {
     text-align: center;
     align-self: flex-end;
     width: 50%;
