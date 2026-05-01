@@ -1,14 +1,15 @@
 /* ============================================================
-   signIn.js — fully corrected
+   signIn.js — complete & fully corrected
    ============================================================ */
 
+/* ── Page Render ─────────────────────────────────────── */
 function pageRender() {
     const signInMain = document.getElementById("signIn");
     if (!userLoggedIn) {
         while (signInMain.lastElementChild) {
             signInMain.removeChild(signInMain.lastElementChild);
         }
-        clearAlertBox(); // ✅ clear alert on logout/render
+        clearAlertBox();
 
         const signInForm = document.createElement("div");
         signInForm.id = "signInForm";
@@ -193,7 +194,7 @@ async function signIn() {
 /* ── Sign Out ────────────────────────────────────────── */
 async function signOut(inputStatus) {
     stopHeartbeat();
-    stopInactivityTimer(); // ✅ clears timer AND alert box immediately
+    stopInactivityTimer(); // clears timer AND alert box
 
     showAlertMessage("Signing out...", "accent2");
 
@@ -225,7 +226,7 @@ async function signOut(inputStatus) {
     showAlertMessage("Sign Out Successful ✓", "accent2");
     setTimeout(() => {
         clearAlertBox();
-        pageRender(); // ✅ re-render AFTER showing success message
+        pageRender();
     }, 1500);
 }
 
@@ -238,7 +239,7 @@ function startHeartbeat() {
 }
 
 function sendHeartbeat() {
-    if (!sessionID || !userID) return; // ✅ guard undefined
+    if (!sessionID || !userID) return;
     navigator.sendBeacon(logInOut_Proxy_URL, JSON.stringify({
         action: "heartBeat",
         sessionID: sessionID,
@@ -257,14 +258,15 @@ document.addEventListener("visibilitychange", () => {
 /* ── Inactivity Timer ────────────────────────────────── */
 let inactivityTimer;
 let warningTimer;
+let inactivityPaused = false; // ✅ freeze timer while alert popup is visible
 const timeOutMinutes = 3;
-const warningMinutes = 1; // show warning this many minutes before logout
+const warningMinutes = 1;
 
 function resetInactivityTimer() {
     if (!userLoggedIn) return;
     clearTimeout(inactivityTimer);
     clearTimeout(warningTimer);
-    clearAlertBox(); // ✅ hide warning when user becomes active
+    clearAlertBox(); // hides warning + sets inactivityPaused = false
 
     warningTimer = setTimeout(() => {
         autoLogOutAlert();
@@ -278,12 +280,13 @@ function resetInactivityTimer() {
 function stopInactivityTimer() {
     clearTimeout(inactivityTimer);
     clearTimeout(warningTimer);
-    clearAlertBox(); // ✅ always clear alert when stopping
+    clearAlertBox();
 }
 
+// ✅ inactivityPaused check — won't reset timer while popup is showing
 ["mousemove", "keypress", "touchmove", "keyup", "touchend", "click"].forEach(evt => {
     document.addEventListener(evt, () => {
-        if (userLoggedIn) resetInactivityTimer();
+        if (userLoggedIn && !inactivityPaused) resetInactivityTimer();
     }, { passive: true });
 });
 
@@ -291,6 +294,8 @@ function stopInactivityTimer() {
 function autoLogOutAlert() {
     const alertBox = $("alertAutoSignOut");
     if (!alertBox) return;
+
+    inactivityPaused = true; // ✅ freeze — moving mouse won't reset timer now
 
     clearAlertBox();
     alertBox.className = "alerting";
@@ -300,7 +305,8 @@ function autoLogOutAlert() {
     div.innerHTML = `
         <div>
             <p>Due to inactivity,<br>
-            you will be signed out in <strong>${warningMinutes} minute${warningMinutes > 1 ? "s" : ""}</strong>.</p>
+            you will be signed out in
+            <strong>${warningMinutes} minute${warningMinutes > 1 ? "s" : ""}</strong>.</p>
         </div>
         <div>
             <button id="autoSignOutCancel">Stay Signed In</button>
@@ -309,9 +315,8 @@ function autoLogOutAlert() {
     `;
     alertBox.appendChild(div);
 
-    // ✅ use once:true so listeners don't stack on repeated warnings
     $("autoSignOutCancel").addEventListener("click", () => {
-        resetInactivityTimer(); // also clears alert box
+        resetInactivityTimer(); // also calls clearAlertBox → inactivityPaused = false
     }, { once: true });
 
     $("autoSignOutContinue").addEventListener("click", () => {
@@ -321,6 +326,7 @@ function autoLogOutAlert() {
 
 /* ── Alert Box Helpers ───────────────────────────────── */
 function clearAlertBox() {
+    inactivityPaused = false; // ✅ always unfreeze when alert is cleared
     const alertBox = $("alertAutoSignOut");
     if (!alertBox) return;
     alertBox.className = "";
@@ -394,7 +400,7 @@ window.addEventListener("DOMContentLoaded", () => {
         userID       = sessionStorage.getItem("userID");
         user         = users[userID];
         userLoggedIn = true;
-        if (isRefreshing === "true") sendHeartbeat(); // re-ping on refresh
+        if (isRefreshing === "true") sendHeartbeat();
         setTimeout(resetInactivityTimer, 500);
     }
     pageRender();
