@@ -131,6 +131,12 @@ async function signIn() {
         $("userID").value = "";
         $("password").value = "";
         return;
+    } else {
+        if ($("password").value === "") {
+            $("signInMessageText").innerHTML = `Please enter the Password !!`;
+            $("signInMessageText").style.color = "var(--accent1Color)";
+            return;
+        }
     }
 
     $("signInMessageText").style.color = "var(--accent2Color)";
@@ -307,3 +313,45 @@ window.addEventListener("DOMContentLoaded", () => {
 window.addEventListener("resize", () => {
     updateEyeLocation();
 });
+
+let mouseTimer, movingViaTouch, mouseIsMoving, keyboardIsClicked;
+document.addEventListener("keypress", ()=> {
+    keyboardIsClicked = true;
+    autoLogOut();
+});
+document.addEventListener("mousemove", ()=> {
+    clearInterval(mouseTimer);
+    mouseIsMoving = true;
+    autoLogOut();
+    mouseTimer = setTimeout(() => {
+        mouseIsMoving = false;
+        autoLogOut();
+    }, 1000)
+})
+document.addEventListener("touchmove", ()=> {
+    movingViaTouch = true;
+    autoLogOut();
+})
+document.addEventListener("keyup", ()=> {
+    keyboardIsClicked = false;
+    autoLogOut();
+});
+document.addEventListener("touchend", ()=> {
+    movingViaTouch = false;
+    autoLogOut();
+})
+
+function autoLogOut() {
+    if (!movingViaTouch && !keyboardIsClicked && !mouseIsMoving) {
+        let countMinutes = 0;
+        const timeOutMin = 5;
+        setInterval(()=>{
+            if (countMinutes === timeOutMin - 2) {
+                autoLogOutAlert();
+            } else if (countMinutes === timeOutMin) {
+                signOut("auto_logout");
+            }
+            countMinutes++
+        }, 60*1000);
+    }
+}
