@@ -168,7 +168,6 @@ async function signIn() {
                     pageRender();
                     startHeartbeat();
                     resetInactivityTimer();
-                    displayTime();
                 }, 1000);
             } else {
                 setMsg("signInMessageText", "An active session exists!<br>Try after 5 min", "accent1");
@@ -272,8 +271,6 @@ function stopInactivityTimer() {
 
 ["mousemove", "keypress", "touchmove", "keyup", "touchend", "click", "scroll"].forEach(event => {
     document.addEventListener(event, () => {
-        startTime = new Date();
-        displayTime();
         if (userLoggedIn) resetInactivityTimer();
     }, { passive: true });
 });
@@ -302,7 +299,6 @@ function autoLogOutAlert() {
 
     $("autoSignOutCancel").addEventListener("click", () => {
         clearAlertBox();
-        displayTime();
         resetInactivityTimer();
     }, { once: true });
 
