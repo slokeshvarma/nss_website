@@ -285,7 +285,8 @@ footer * {
 }
 .footerLinksColumn {
     width: 30%;
-    align-items: center;
+    padding-left: 2vw;
+    align-items: flex-start;
 }
 .footerLinksColumn p {
     font-size: clamp(0.75rem, 0.75rem + 0.5vw, 1.75rem);

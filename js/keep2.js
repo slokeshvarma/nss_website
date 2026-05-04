@@ -1,18 +1,19 @@
 function pageRender() {
+    console.log("pageRenderInIt", `userLoggedIn: ${userLoggedIn}`);
     clearAlertBox();
-    const signInMain = document.getElementById("signIn");
+    const logInMain = document.getElementById("logIn");
     if (!userLoggedIn) {
-        while (signInMain.lastElementChild) {
-            signInMain.removeChild(signInMain.lastElementChild);
+        while (logInMain.lastElementChild) {
+            logInMain.removeChild(logInMain.lastElementChild);
         }
 
-        const signInForm = document.createElement("div");
-        signInForm.id = "signInForm";
-        signInForm.className = "signInForm";
-        signInForm.innerHTML = `
+        const logInForm = document.createElement("div");
+        logInForm.id = "logInForm";
+        logInForm.className = "logInForm";
+        logInForm.innerHTML = `
         <div>
             <h2 class="formTitle">CMS of Events</h2>
-            <p>Sign In to update events</p>
+            <p>Log In to update events</p>
         </div>`;
 
         const userIDField = document.createElement("div");
@@ -62,62 +63,66 @@ function pageRender() {
         passwordField.appendChild(passwordInput);
 
         passwordInput.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") { passwordInput.blur(); signIn(); }
+            if (e.key === "Enter") { passwordInput.blur(); logIn(); }
         });
 
         const message_button_container = document.createElement("div");
-        message_button_container.className = "signInMessage_Button";
+        message_button_container.className = "logInMessage_Button";
 
         const messageText = document.createElement("p");
-        messageText.id = "signInMessageText";
+        messageText.id = "logInMessageText";
         messageText.innerHTML = "&nbsp;";
 
         const submit = document.createElement("button");
-        submit.id = "signInSubmit";
-        submit.className = "signInSubmit";
+        submit.id = "logInSubmit";
+        submit.className = "logInSubmit";
         submit.innerHTML = "Submit";
-        submit.addEventListener("click", () => signIn());
+        submit.addEventListener("click", () => logIn());
 
         message_button_container.appendChild(messageText);
         message_button_container.appendChild(submit);
 
-        signInForm.appendChild(userIDField);
-        signInForm.appendChild(passwordField);
-        signInForm.appendChild(message_button_container);
-        signInMain.appendChild(signInForm);
+        logInForm.appendChild(userIDField);
+        logInForm.appendChild(passwordField);
+        logInForm.appendChild(message_button_container);
+        logInMain.appendChild(logInForm);
         updateEyeLocation();
 
     } else {
-        while (signInMain.lastElementChild) {
-            signInMain.removeChild(signInMain.lastElementChild);
+        while (logInMain.lastElementChild) {
+            logInMain.removeChild(logInMain.lastElementChild);
         }
-        const signInP = document.createElement("p");
-        signInP.className = "signInP";
-        signInP.innerHTML = `Hello, ${users[userID]}<br>userID: ${userID} &nbsp;|&nbsp; session: ${sessionID}`;
+        const logInP = document.createElement("p");
+        logInP.className = "logInP";
+        logInP.innerHTML = `Hello, ${users[userID]}<br>userID: ${userID} &nbsp;|&nbsp; session: ${sessionID}`;
 
         const logOut = document.createElement("button");
-        logOut.id = "signOut";
-        logOut.className = "signOutButton";
-        logOut.innerHTML = "Sign Out";
-        logOut.addEventListener("click", () => signOut("manual"));
+        logOut.id = "logOut";
+        logOut.className = "logOutButton";
+        logOut.innerHTML = "Log Out";
+        logOut.addEventListener("click", () => logOutAlert("logOut?"));
 
-        signInMain.appendChild(signInP);
-        signInMain.appendChild(logOut);
+        logInMain.appendChild(logInP);
+        logInMain.appendChild(logOut);
     }
+
+    
+    console.log("pageRenderEnd", `userLoggedIn: ${userLoggedIn}`);
 }
 
-async function signIn() {
+async function logIn() {
+    console.log("LogInInIt", `userLoggedIn: ${userLoggedIn}`);
     const inputUserID   = $("userID").value.toLowerCase().trim();
     const inputPassword = $("password").value;
 
-    $("signInMessageText").innerHTML = "";
+    $("logInMessageText").innerHTML = "";
 
     if (!inputUserID || !inputPassword) {
-        setMsg("signInMessageText", "Please enter both fields !!", "accent1");
+        setMsg("logInMessageText", "Please enter both fields !!", "accent1");
         return;
     }
     if (!Object.keys(users).includes(inputUserID)) {
-        setMsg("signInMessageText",
+        setMsg("logInMessageText",
             inputUserID.length < 8
                 ? `"${inputUserID}" is not a Valid User ID !!`
                 : `"${inputUserID}"<br>is not a User ID !!`,
@@ -131,7 +136,7 @@ async function signIn() {
     let count = 0;
     const verifyingInterval = setInterval(() => {
         const dots = ["Verifying.", "Verifying..", "Verifying..."];
-        setMsg("signInMessageText", dots[count % 3], "accent2");
+        setMsg("logInMessageText", dots[count % 3], "accent2");
         count++;
     }, 400);
 
@@ -156,40 +161,47 @@ async function signIn() {
 
         if (data.auth) {
             if (!data.activeSession) {
-                setMsg("signInMessageText", "Login Successful!", "accent2");
+                setMsg("logInMessageText", "Login Successful!", "accent2");
+
+                // FIX: Set session vars immediately so heartbeat and timers work correctly
+                userLoggedIn = true;
+                sessionID    = generatedSessionID;
+                userID       = inputUserID;
+                user         = users[inputUserID];
+
                 sessionStorage.setItem("sessionID", generatedSessionID);
                 sessionStorage.setItem("userID", inputUserID);
                 sessionStorage.setItem("userLoggedIn", "true");
+
                 setTimeout(() => {
-                    userLoggedIn = true;
-                    sessionID    = generatedSessionID;
-                    userID       = inputUserID;
-                    user         = users[inputUserID];
                     pageRender();
                     startHeartbeat();
                     resetInactivityTimer();
                 }, 1000);
             } else {
-                setMsg("signInMessageText", "An active session exists!<br>Try after 5 min", "accent1");
+                setMsg("logInMessageText", "An active session exists!<br>Try after 5 min", "accent1");
                 $("userID").value = "";
                 $("password").value = "";
             }
         } else {
-            setMsg("signInMessageText", "Wrong password! Try Again", "accent1");
+            setMsg("logInMessageText", "Wrong password! Try Again", "accent1");
             $("password").value = "";
         }
     } catch (err) {
         clearInterval(verifyingInterval);
         console.error("Fetch error:", err);
-        setMsg("signInMessageText", "Connection error. Try again.", "accent1");
+        setMsg("logInMessageText", "Connection error. Try again.", "accent1");
     }
+    
+    console.log("LogInEnd", `userLoggedIn: ${userLoggedIn}`);
 }
 
-async function signOut(inputStatus) {
+async function logOut(inputStatus) {
+    console.log("LogOutInIt", `userLoggedIn: ${userLoggedIn}`);
     stopHeartbeat();
     stopInactivityTimer();
 
-    alertSigingOut("signingOut");
+    alertLoggingOut("loggingOut");
 
     const userData = {
         action: "logOut",
@@ -213,11 +225,14 @@ async function signOut(inputStatus) {
     user         = undefined;
     sessionID    = undefined;
     clearSession();
-    alertSigingOut("signedOut");
+    alertLoggingOut("loggedOut");
     setTimeout(() => {
         clearAlertBox();
         pageRender();
     }, 1500);
+    userLoggedIn = false;
+    
+    console.log("LogOutEnd", `userLoggedIn: ${userLoggedIn}`);
 }
 
 let heartBeatInterval;
@@ -246,22 +261,28 @@ document.addEventListener("visibilitychange", () => {
 
 let inactivityTimer;
 let warningTimer;
-const timeOutMinutes = 15;
-const warningMinutes = 3;
+const timeOutMinutes = 0.5;
+const warningMinutes = 0.25;
 
 function resetInactivityTimer() {
+    console.log("resetInactivityTimerInIt", `userLoggedIn: ${userLoggedIn}`);
+
     if (!userLoggedIn) return;
+    
+    console.log("resetInactivityTimerInIt(return Check)", `userLoggedIn: ${userLoggedIn}`);
     clearTimeout(inactivityTimer);
     clearTimeout(warningTimer);
 
     warningTimer = setTimeout(() => {
-        autoLogOutAlert();
+        logOutAlert("autologOut");
     }, (timeOutMinutes - warningMinutes) * 60 * 1000);
 
     inactivityTimer = setTimeout(() => {
-        signOut("timeOut_logOut");
+        logOut("timeOut_logOut");
     }, timeOutMinutes * 60 * 1000);
 
+    
+    console.log("resetInactivityTimerEnd", `userLoggedIn: ${userLoggedIn}`);
 }
 
 function stopInactivityTimer() {
@@ -275,36 +296,53 @@ function stopInactivityTimer() {
     }, { passive: true });
 });
 
-function autoLogOutAlert() {
+function logOutAlert(event) {
+    console.log("LogOutAlertInIt", `userLoggedIn: ${userLoggedIn}`);
     clearAlertBox();
-    const alertBox = $("alertSignOut");
+    const alertBox = $("alertLogOut");
     if (!alertBox) return;
 
     alertBox.className = "alerting";
 
+    let alertText;
+    if (event === "logOut?") {
+        alertText = "<p>Are you sure,<br> you want to Log Out?</p>";
+    } else {
+        // When the warning fires, stop BOTH timers immediately so the hard
+        // inactivityTimer can't fire logOut() (or this alert again) while
+        // the dialog is open. resetInactivityTimer() on "Stay Logged In"
+        // will restart fresh timers if the user chooses to stay.
+        stopInactivityTimer();
+        alertText = `<p>Due to inactivity,<br>
+                                you will be logged out in
+                            <strong>${warningMinutes} minute${warningMinutes > 1 ? "s" : ""}</strong></p>`;
+    }
+
     const div = document.createElement("div");
-    div.id = "alertSignOutDiv";
+    div.id = "alertLogOutDiv";
     div.innerHTML = `
         <div>
-            <p>Due to inactivity,<br>
-            you will be signed out in
-            <strong>${warningMinutes} minute${warningMinutes > 1 ? "s" : ""}</strong>.</p>
+            ${alertText}
         </div>
-        <div>
-            <button id="autoSignOutCancel">Stay Signed In</button>
-            <button id="autoSignOutContinue">Sign Out Now</button>
+        <div id="alertButtons">
+            <button id="logOutCancel">Stay Logged In</button>
+            <button id="logOutContinue">Log Out Now</button>
         </div>
     `;
     alertBox.appendChild(div);
 
-    $("autoSignOutCancel").addEventListener("click", () => {
+    $("logOutCancel").addEventListener("click", () => {
         clearAlertBox();
         resetInactivityTimer();
     }, { once: true });
 
-    $("autoSignOutContinue").addEventListener("click", () => {
-        signOut("timeOut_manual_logOut");
+    $("logOutContinue").addEventListener("click", () => {
+        clearAlertBox();
+        logOut("manual");
+        stopInactivityTimer();
     }, { once: true });
+    
+    console.log("LogOutAlertEnd", `userLoggedIn: ${userLoggedIn}`);
 }
 
 function setMsg(id, html, colorVar) {
@@ -331,44 +369,52 @@ function clearSession() {
     sessionStorage.removeItem("userLoggedIn");
 }
 
-let signingOutInterval; 
-function alertSigingOut(event) {
+// FIX: Renamed from alertSigingOut → alertLoggingOut (typo fix)
+let loggingOutInterval;
+function alertLoggingOut(event) {
     clearAlertBox();
-    clearInterval(signingOutInterval);
-    const alertSignOut = $("alertSignOut");
-    alertSignOut.className = "alerting";
+    clearInterval(loggingOutInterval);
+    const alertLogOut = $("alertLogOut");
+    // FIX: Null guard to prevent crash if element is missing
+    if (!alertLogOut) return;
+    alertLogOut.className = "alerting";
 
-    if (event === "signingOut") {
+    if (event === "loggingOut") {
         const div = document.createElement("div");
-        div.id = "alertSigningOutDiv";
+        div.id = "alertLoggingOutDiv";
         const p = document.createElement("p");
-        p.id = "alertSigningOutP";
+        p.id = "alertLoggingOutP";
         div.appendChild(p);
-        alertSignOut.appendChild(div);
+        alertLogOut.appendChild(div);
         let count = 0;
-        signingOutInterval = setInterval(() => {
-            const dots = ["Signing Out.", "Signing Out..", "Signing Out..."];
-            setMsg("alertSigningOutP", dots[count % 3], "accent2");
+        loggingOutInterval = setInterval(() => {
+            const dots = ["Logging Out.", "Logging Out..", "Logging Out..."];
+            setMsg("alertLoggingOutP", dots[count % 3], "accent2");
             count++;
         }, 400);
     } else {
-        clearInterval(signingOutInterval);
+        clearInterval(loggingOutInterval);
         const div = document.createElement("div");
-        div.id = "alertSignedOutDiv";
+        div.id = "alertLoggedOutDiv";
         const p = document.createElement("p");
-        p.id = "alertSignedOutP";
+        p.id = "alertLoggedOutP";
         div.appendChild(p);
-        alertSignOut.appendChild(div);
-        setMsg("alertSignedOutP", "Sign Out Successful !", "accent2");
+        alertLogOut.appendChild(div);
+        // FIX: Typo "Loged" → "Logged"
+        setMsg("alertLoggedOutP", "Log Out Successful !", "accent2");
     }
+    // FIX: Removed erroneous resetInactivityTimer() call here —
+    // timers must NOT be restarted during a logout sequence
 }
 
 function clearAlertBox() {
-    const alertSignOut = $("alertSignOut");
-    alertSignOut.className = "";
-    while (alertSignOut.lastElementChild) {
-            alertSignOut.removeChild(alertSignOut.lastElementChild);
-        }
+    const alertLogOut = $("alertLogOut");
+    // FIX: Null guard to prevent crash if element is missing
+    if (!alertLogOut) return;
+    alertLogOut.className = "";
+    while (alertLogOut.lastElementChild) {
+        alertLogOut.removeChild(alertLogOut.lastElementChild);
+    }
 }
 
 let userLoggedIn = false;

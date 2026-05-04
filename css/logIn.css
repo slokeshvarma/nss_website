@@ -10,7 +10,7 @@ body {
     justify-content: center;
     align-items: center;
 }
-#alertSignOut.alerting {
+#alertLogOut.alerting {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -24,16 +24,16 @@ body {
     backdrop-filter: blur(6px);
     background-color: none;
 }
-#alertSignOutDiv {
+#alertLogOutDiv {
     z-index: 5;
     color: var(--text1Color);
     background-color: var(--background1Color);
-    padding: clamp(0.35rem, 0.35rem + 2vh, 2rem) clamp(0.5rem,0.5rem + 5vw, 3rem);
-    border: 1px solid var(--background2Color);
+    padding: clamp(0.35rem, 0.35rem + 2vh, 2rem) clamp(0.5rem, 0.5rem + 1vw, 2rem);
+    box-shadow: -1vw 0.2vh 10px var(--background2Color);
     border-radius: 2rem;
 }
-#alertSigningOutDiv,
-#alertSignedOutDiv {
+#alertLoggingOutDiv,
+#alertLoggedOutDiv {
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -43,40 +43,57 @@ body {
     background-color: var(--background1Color);
     height: fit-content;
     width: fit-content;
-    padding: 5dvh 8dvw;
-    border-radius: 4rem;
+    padding: clamp(0.35rem, 0.35rem + 2vh, 2rem) clamp(0.75rem, 0.75rem + 1vw, 3rem);
+    border-radius: 2rem;
     font-size: clamp(0.5rem, 0.5rem + 2vw, 1rem);
     font-weight: 505;
+    box-shadow: 10px 10px 10px 10px var(--background2Color);
 }
-#alertSignOutDiv div:last-child {
+#alertButtons {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
+    padding-top: clamp(0.5rem, 0.5rem + 2vh, 2rem);
+    padding-bottom: clamp(0.5rem, 0.5rem + 0.5vh, 2rem);
+    gap: 0.5rem;
+}
+#logOutCancel,
+#logOutContinue {
+    padding: clamp(0.2rem, 0.2rem + 1vh, 1rem) clamp(0.15rem, 0.15rem + 2vw, 1.5rem);
+    border-radius: 2rem;
+}
+:root.darkMode #logOutContinue {
+    color: var(--text1Color);
+    background-color: var(--accent1Color);
+}
+:root.lightMode #logOutContinue {
+    color: var(--text2Color);
+    background-color: var(--accent1Color);
 }
 main {
     margin-top: var(--navHeight);
 }
-.signInP {
+.logInP {
     color: var(--text2Color);
     background-color: var(--background2Color);
     min-height: 10vh;
 }
-#signIn {
+#logIn {
     justify-content: center;
     align-items: center;
     height: fit-content;
     min-height: calc(100vh - var(--navHeight) - (var(--footerHeight)));
     padding: 1rem 2vw;
 }
-.signInForm p,
+.logInForm p,
 .formTitle {
     color: var(--text1Color);
     font-size: clamp(0.5rem, 0.5rem + 2vw, 1rem);
     font-weight: 505;
     text-align: center;
 }
-.signInForm {
+.logInForm {
     color: var(--text1Color);
     justify-content: center;
     align-items: center;
@@ -87,7 +104,7 @@ main {
     border-radius: 2rem;
     backdrop-filter: blur(2px);
 }
-.signInForm label {
+.logInForm label {
     font-weight: 505;
     z-index: 2;
     width: fit-content;
@@ -98,7 +115,7 @@ main {
     margin-bottom: clamp(-0.5rem, -0.5rem - 5vw, -1rem);
     padding: 0 clamp(0.15rem, 0.15rem + 0.5vw, 0.5rem);
 }
-.signInForm input {
+.logInForm input {
     z-index: 0;
     width: 100%;
     font-size: clamp(0.5rem, 0.35rem + 2vw, 1.15rem);
@@ -118,17 +135,17 @@ main {
     text-align: right;
     cursor: pointer;
 }
-.signInMessage_Button {
+.logInMessage_Button {
     width: 100%;
     gap: clamp(0.1rem, 0.1rem + 1.1vw, 0.35rem); 
 }
-#signInMessageText {
+#logInMessageText {
     font-weight: 400;
     text-align: left;
 }
-.signInSubmit,
-.signOutButton,
-#autoSignOutContinue {
+.logInSubmit,
+.logOutButton,
+#autoLogOutContinue {
     text-align: center;
     align-self: flex-end;
     width: 50%;
@@ -146,50 +163,53 @@ main {
     background-color: var(--background1Color);
 }
 @media only screen and (max-width: 250px) {
-    .signInForm {
+    .logInForm {
         max-width: 90vw;
     }
-    .signInForm input {
+    .logInForm input {
         max-width: 80vw;
     }
 }
 @media only screen and (min-width: 768px) {
-    #signIn {
+    #logIn {
         min-height: unset;
     }
-    .signInForm p,
+    .logInForm p,
     .formTitle {
         font-size: clamp(0.5rem, 0.35rem + 2vw, 1.25rem);
     }
-    .signInForm {
+    .logInForm {
         gap: clamp(0.25rem, 0.25rem + 5vw, 1.75rem);
         padding: clamp(0.35rem, 0.35rem + 2vh, 2rem) clamp(0.5rem,0.5rem + 5vw, 3rem);
         border: 1.5px solid var(--background2Color);
         border-radius: 3rem;
         margin: clamp(0.5rem, 0.35rem + 2vw, 1.25rem) 0;
     }
-    .signInForm label {
+    .logInForm label {
         font-size: clamp(0.5rem, 0.35rem + 1.5vw, 1.15rem);
         margin-left:  clamp(0.5rem, 0.5rem + 2.5vw, 1rem);
         margin-bottom: clamp(-0.5rem, -0.5rem - 5vw, -1rem);
         padding: 0 clamp(0.15rem, 0.15rem + 0.5vw, 0.5rem);
     }
-    .signInForm input {
+    .logInForm input {
         font-size: clamp(0.5rem, 0.35rem + 1.5vw, 1.15rem);
         height: clamp(0.5rem,0.5rem + 7vw, 3rem);
         border: 1.5px solid var(--background2Color);
     }
-    .signInMessage_Button {
+    .logInMessage_Button {
         display: flex;
         flex-direction: column;
         margin-top: clamp(-0.75rem, -0.25rem - 2vw, -0.25rem);
         gap: clamp(0.1rem, 0.1rem + 1.5vw, 0.4rem);
         padding-bottom: clamp(0.25rem, 0.25rem + 1vw, 1rem);
     }
-    #signInMessageText {        
+    #logInMessageText {        
         font-size: clamp(0.5rem, 0.35rem + 1.5vw, 1.15rem);
     }
-    .signInSubmit {
+    .logInSubmit {
         margin: 0;
+    }
+    #alertButtons {
+        flex-direction: row;
     }
 }
