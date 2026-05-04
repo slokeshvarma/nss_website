@@ -138,7 +138,7 @@ function cmsUpdatingFormRender(logInMain) {
 
     inputEventDetails.forEach(formField => {
         const formFieldDiv = document.createElement("div");
-        formFieldDiv.className = "formField";
+        formFieldDiv.className = "eventFormField";
         const formFieldLabel = document.createElement("label");
         formFieldLabel.innerHTML = `${formField}`;
         const formFieldInput = document.createElement("input");
@@ -151,6 +151,10 @@ function cmsUpdatingFormRender(logInMain) {
         eventDataForm.appendChild(formFieldDiv);
     })
     
+    logInMain.appendChild(eventDataForm);
+}
+
+function keyboardShortcutsOfEventsForm() {
     for (let index = 0; index < inputEventDetails.length; index++) {
         if (index < inputEventDetails.length) {
             $(inputEventDetails[index]).addEventListener("keydown", (e) => {
@@ -162,12 +166,7 @@ function cmsUpdatingFormRender(logInMain) {
                 if (e.key === "Enter" && e.key ==="Shift") $(inputEventDetails[index -1]).focus();
             });
         }
-    }
-
-    userIDInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") passwordInput.focus();
-    });
-
+    }    
 }
 
 const logInAppScriptLink = "https://script.google.com/macros/s/AKfycbxLtDMInrMaQl2K5llhsqD0Ll--Y4J1QBeC-s8prCsrpNf6ykZiEBJjja_dzdPCQ8WV/exec";
@@ -241,6 +240,7 @@ async function logIn() {
                     startHeartbeat();
                     resetInactivityTimer();
                 }, 1000);
+                keyboardShortcutsOfEventsForm();
             } else {
                 setMsg("logInMessageText", "An active session exists!<br>Try after 5 min", "accent1");
                 $("userID").value = "";
