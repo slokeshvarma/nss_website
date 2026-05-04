@@ -127,6 +127,46 @@ function cmsUpdatingRender(logInMain) {
 }
 
 function cmsUpdatingFormRender(logInMain) {
+    const eventDataForm = document.createElement("div");
+    eventDataForm.id = "eventDataForm";
+    eventDataForm.className = "eventDataForm";
+    eventDataForm.innerHTML = `
+    <div class="eventDataFormTitle">
+        <h2 class="formTitle">CMS of Events</h2>
+        <p>Fill form to update events</p>
+    </div>`;
+
+    inputEventDetails.forEach(formField => {
+        const formFieldDiv = document.createElement("div");
+        formFieldDiv.className = "formField";
+        const formFieldLabel = document.createElement("label");
+        formFieldLabel.innerHTML = `${formField}`;
+        const formFieldInput = document.createElement("input");
+        formFieldInput.type = "text";
+        formFieldInput.id = `${formField}`;
+        formFieldInput.placeholder = `Enter the ${formField}`;
+        formFieldInput.autocomplete = "off";
+        formFieldDiv.appendChild(formFieldLabel);
+        formFieldDiv.appendChild(formFieldInput);
+        eventDataForm.appendChild(formFieldDiv);
+    })
+    
+    for (let index = 0; index < inputEventDetails.length; index++) {
+        if (index < inputEventDetails.length) {
+            $(inputEventDetails[index]).addEventListener("keydown", (e) => {
+                if (e.key === "Enter") $(inputEventDetails[index + 1]).focus();
+            });
+        }
+        if (index > 0) {
+            $(inputEventDetails[index]).addEventListener("keydown", (e) => {
+                if (e.key === "Enter" && e.key ==="Shift") $(inputEventDetails[index -1]).focus();
+            });
+        }
+    }
+
+    userIDInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") passwordInput.focus();
+    });
 
 }
 
@@ -469,25 +509,40 @@ function enterBloodDonation() {
 "Rotract", "Like every year, a collabration between nss and rotract lead to a sucessful blood donation", "Like every year, a collabration between nss and rotract lead to a sucessful blood donation \n Like every year, a collabration between nss and rotract lead to a sucessful blood donation \n Like every year, a collabration between nss and rotract lead to a sucessful blood donation")
 }
 
-async function eventDataEntry(newEventDate, newEventName, newEventUnit,
-                        newEventCoOrganizer, newEventDescription_oneLine, newEventDescription_multipleLine) {
+const inputEventDetails = [ "eventDate",
+                            "eventName",
+                            "eventUnit",
+                            "eventCoOrganizer",
+                            "eventDescription_oneLine",
+                            "eventDescription_multipleLine",
+                            "eventPosterGoogleID",
+                            "eventGroupPhoto_1GoogleID",
+                            "eventGroupPhoto_2GoogleID",
+                            "eventGroupPhoto_3GoogleID",
+                            "eventPhoto_1GoogleID",
+                            "eventPhoto_2GoogleID",
+                            "eventPhoto_3GoogleID",
+]
+
+async function eventDataEntry() {
     if (!userLoggedIn) {
         return;
     }
-    const newEventID = eventIdGenerator(newEventDate, newEventName, newEventUnit);
-    console.log(newEventID);
+
+    const inputEventID = eventIdGenerator(inputEventDate, inputEventName, inputEventUnit);
+    console.log(inputEventID);
     const eventData = {
         googleAppScriptLink: eventDataUpdateAppScriptLink,
         action: "addEvent",
         sessionID: sessionStorage.getItem("sessionID"),
         userID: sessionStorage.getItem("userID"),
-        eventID: newEventID,
-        eventDate: newEventDate, 
-        eventName: newEventName,
-        eventUnit: newEventUnit,
-        eventCoOrganizer: newEventCoOrganizer,
-        eventDescription_oneLine: newEventDescription_oneLine,
-        eventDescription_multipleLine: newEventDescription_multipleLine
+        eventID: inputEventID,
+        eventDate: inputEventDate, 
+        eventName: inputEventName,
+        eventUnit: inputEventUnit,
+        eventCoOrganizer: inputEventCoOrganizer,
+        eventDescription_oneLine: inputEventDescription_oneLine,
+        eventDescription_multipleLine: inputEventDescription_multipleLine
     };
 
     try {
