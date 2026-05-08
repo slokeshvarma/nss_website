@@ -11,15 +11,23 @@ function setURL(pageTitle, pushingURL) {
 
 function pageRender() {
     const logInMain = document.getElementById("logIn");
+    const eventMain = document.getElementById("eventMain");
     while (logInMain.lastElementChild) {
             logInMain.removeChild(logInMain.lastElementChild);
     }
+    while (eventMain.lastElementChild) {
+            eventMain.removeChild(eventMain.lastElementChild);
+    }
     if (!userLoggedIn) {
+        logInMain.style.display = "flex";
+        eventMain.style.display = "none";
         logInPageRender(logInMain);
     } else {
-        setURL("CMS Event Updater", "EventUpdaterCMS");
-        cmsEventPageRender(logInMain);
+        logInMain.style.display = "none";
+        eventMain.style.display = "flex";
+        cmsEventPageRender(eventMain);
     }
+    mainFinder();
 }
 
 
@@ -106,27 +114,33 @@ function logInPageRender(logInMain) {
     updateEyeLocation();
 }
 
-function cmsEventPageRender(logInMain) {
-    cmsUpdatingRender(logInMain)
-    cmsUpdatingFormRender(logInMain)
+function cmsEventPageRender(eventMain) {
+    cmsUpdatingRender(eventMain);
+    cmsUpdatingFormRender(eventMain);
+    $("logOut").addEventListener("click", () => logOutAlert("logOut?"));
 }
 
-function cmsUpdatingRender(logInMain) {
-    const logInP = document.createElement("p");
-    logInP.className = "logInP";
-    logInP.innerHTML = `Hello, ${users[userID]}<br>userID: ${userID} &nbsp;|&nbsp; session: ${sessionID}`;
+function cmsUpdatingRender(eventMain) {
+    const logDetails = document.createElement("div");
+    logDetails.className = "logDetails";
+
+    const loggedInP = document.createElement("p");
+    loggedInP.className = "loggedInP";
+    loggedInP.innerHTML = `Welcome, ${users[userID]}<br>userId: ${userID} &nbsp;|&nbsp; session: ${sessionID}`;
     
-    const logOut = document.createElement("button");
-    logOut.id = "logOut";
-    logOut.className = "logOutButton";
-    logOut.innerHTML = "Log Out";
-    logOut.addEventListener("click", () => logOutAlert("logOut?"));
+    const logOutDiv = document.createElement("div");
+    logOutDiv.className = "logOutDiv";
+    logOutDiv.innerHTML = `
+                <p id="logOutTimer">15:00</p>
+                <button id="logOut" class="logOutButton">Log Out</button>
+    `;
 
-    logInMain.appendChild(logInP);
-    logInMain.appendChild(logOut);
+    logDetails.appendChild(loggedInP);
+    eventMain.appendChild(logDetails);    
+    eventMain.appendChild(logOutDiv);
 }
 
-function cmsUpdatingFormRender(logInMain) {
+function cmsUpdatingFormRender(eventMain) {
     const eventDataForm = document.createElement("div");
     eventDataForm.id = "eventDataForm";
     eventDataForm.className = "eventDataForm";
@@ -146,12 +160,16 @@ function cmsUpdatingFormRender(logInMain) {
         formFieldInput.id = `${formField}`;
         formFieldInput.placeholder = `Enter the ${formField}`;
         formFieldInput.autocomplete = "off";
+        const formFieldMSG = document.createElement("p");
+        formFieldInputMSG = "&nbsp";
+        formFieldInputMSG.id = `${formField}MSG`;
         formFieldDiv.appendChild(formFieldLabel);
         formFieldDiv.appendChild(formFieldInput);
+        formFieldDiv.appendChild(formFieldMSG);
         eventDataForm.appendChild(formFieldDiv);
     })
     
-    logInMain.appendChild(eventDataForm);
+    eventMain.appendChild(eventDataForm);
 }
 
 function keyboardShortcutsOfEventsForm() {
@@ -168,6 +186,7 @@ function keyboardShortcutsOfEventsForm() {
         }
     }    
 }
+
 
 const logInAppScriptLink = "https://script.google.com/macros/s/AKfycbxLtDMInrMaQl2K5llhsqD0Ll--Y4J1QBeC-s8prCsrpNf6ykZiEBJjja_dzdPCQ8WV/exec";
 const eventDataUpdateAppScriptLink = "https://script.google.com/macros/s/AKfycbzil5IzzZI4rQiI4ht0ibRhJ_7XXvhQ7VgqZXHFIS4a3Z5sKJ4jedplhA2vYYuYX_bAIw/exec";
@@ -258,13 +277,8 @@ async function logIn() {
 }
 
 async function logOut(inputStatus) {
-    window.history.pushState({ page: 1 }, "Logging Out", "/LogOut");
     stopHeartbeat();
-    stopInactivityTimer();
-    clearTimeout(autoLogoutTimer);
     autoLogoutTimer = null;
-
-    alertSigningOut("loggingOut");
 
     const userData = {
         googleAppScriptLink: logInAppScriptLink,
@@ -288,10 +302,8 @@ async function logOut(inputStatus) {
     userID       = undefined;
     user         = undefined;
     sessionID    = undefined;
-    clearSession();
-    alertSigningOut("loggedOut");
+    clearSession();    
     setTimeout(() => {
-        clearAlertBox();
         pageRender();
     }, 1500);
 }
@@ -321,92 +333,43 @@ document.addEventListener("visibilitychange", () => {
     if (document.visibilityState === "visible" && userLoggedIn) sendHeartbeat();
 });
 
-let inactivityTimer;
-let warningTimer;
+let idleTimerDisplay;
 let autoLogoutTimer = null;
 const timeOutMinutes = 15;
 const warningMinutes = 3;
 
 function resetInactivityTimer() {
     if (!userLoggedIn) return;
-    clearTimeout(inactivityTimer);
-    clearTimeout(warningTimer);
+    clearInterval(idleTimerDisplay);
+    $("logOutTimer").innerHTML = `15:00`;
 
-    warningTimer = setTimeout(() => {
-        logOutAlert("autologOut");
-    }, (timeOutMinutes - warningMinutes) * 60 * 1000);
+    var currentMinute = 14;
+    var currentSecond = 59;
 
-    inactivityTimer = setTimeout(() => {
-        logOut("timeOut_logOut");
-    }, timeOutMinutes * 60 * 1000);
+    idleTimerDisplay = setInterval(()=> {
+        if (currentSecond < 0) {
+            if (currentMinute <= 0) {
+                return logOut("timeOut_logOut");
+            }
+            else {
+                currentMinute--;
+                currentSecond = 59;
+            }
+        } else if (currentMinute === warningMinutes) {
+            logOutAlert("autologOut");
+        }
+        $("logOutTimer").innerHTML = `${currentMinute.toString().padStart(2,"0")}:${currentSecond.toString().padStart(2,"0")}`;
+        currentSecond--;
+    }, 1000);
 }
 
-function stopInactivityTimer() {
-    clearTimeout(inactivityTimer);
-    clearTimeout(warningTimer);
-}
 
 ["mousemove", "keypress", "touchmove", "keyup", "touchend", "click", "scroll"].forEach(event => {
     document.addEventListener(event, () => {
         if (userLoggedIn) resetInactivityTimer();
-    }, { passive: true });
+        }, { passive: true });
 });
 
-function logOutAlert(event) {
-    if (!userLoggedIn) return;
-    clearAlertBox();
-    const alertBox = $("alertLogOut");
-    if (!alertBox) return;
-
-    alertBox.className = "alerting";
-
-    let alertText;
-    if (event === "logOut?") {
-        alertText = "<p>Are you sure,<br> you want to Log Out?</p>";
-    } else {
-        // Stop both timers — we take over the countdown manually below
-        stopInactivityTimer();
-        alertText = `<p>Due to inactivity,<br>
-                                you will be logged out in
-                            <strong>${warningMinutes} minute${warningMinutes > 1 ? "s" : ""}</strong></p>`;
-    }
-
-    const div = document.createElement("div");
-    div.id = "alertLogOutDiv";
-    div.innerHTML = `
-        <div>
-            ${alertText}
-        </div>
-        <div id="alertButtons">
-            <button id="logOutCancel">Stay Logged In</button>
-            <button id="logOutContinue">Log Out Now</button>
-        </div>
-    `;
-    alertBox.appendChild(div);
-
-    // For the inactivity warning: if the user ignores the dialog,
-    // auto-logout after the warning period elapses
-    clearTimeout(autoLogoutTimer);
-    autoLogoutTimer = null;
-    if (event !== "logOut?") {
-        autoLogoutTimer = setTimeout(() => {
-            clearAlertBox();
-            logOut("timeOut_logOut");
-        }, warningMinutes * 60 * 1000);
-    }
-
-    $("logOutCancel").addEventListener("click", () => {
-        clearTimeout(autoLogoutTimer);
-        clearAlertBox();
-        resetInactivityTimer();
-    }, { once: true });
-
-    $("logOutContinue").addEventListener("click", () => {
-        clearTimeout(autoLogoutTimer);
-        clearAlertBox();
-        logOut("manual_logOut");
-    }, { once: true });
-}
 
 function setMsg(id, html, colorVar) {
     const el = $(id);
@@ -432,52 +395,28 @@ function clearSession() {
     sessionStorage.removeItem("userLoggedIn");
 }
 
-let loggingOutInterval;
-function alertSigningOut(event) {
-    clearAlertBox();
-    clearInterval(loggingOutInterval);
-    const alertLogOut = $("alertLogOut");
-    // FIX: Null guard to prevent crash if element is missing
-    if (!alertLogOut) return;
-    alertLogOut.className = "alerting";
-
-    if (event === "loggingOut") {
-        const div = document.createElement("div");
-        div.id = "alertLoggingOutDiv";
-        const p = document.createElement("p");
-        p.id = "alertLoggingOutP";
-        div.appendChild(p);
-        alertLogOut.appendChild(div);
-        let count = 0;
-        loggingOutInterval = setInterval(() => {
-            const dots = ["Logging Out.", "Logging Out..", "Logging Out..."];
-            setMsg("alertLoggingOutP", dots[count % 3], "accent2");
-            count++;
-        }, 400);
+function academicYearCalculator(date) {
+    // As Date.getMonth() returns index from 0-11 respectively for Jan-Dec. So, index is directly used for logic comparisions
+    let academicYear;
+    let currentDate;
+    if (!date) {
+        currentDate = new Date();
+        console.log(currentDate);
     } else {
-        clearInterval(loggingOutInterval);
-        const div = document.createElement("div");
-        div.id = "alertLoggedOutDiv";
-        const p = document.createElement("p");
-        p.id = "alertLoggedOutP";
-        div.appendChild(p);
-        alertLogOut.appendChild(div);
-        // FIX: Typo "Loged" → "Logged"
-        setMsg("alertLoggedOutP", "Log Out Successful !", "accent2");
+        const [day, month, year] = date.split("-");
+        console.log(year, month, day);
+        currentDate = new Date(`${year}-${month}-${day}`);
+        console.log(currentDate);
     }
-    // FIX: Removed erroneous resetInactivityTimer() call here —
-    // timers must NOT be restarted during a logout sequence
-}
-
-function clearAlertBox() {
-    const alertLogOut = $("alertLogOut");
-    // FIX: Null guard to prevent crash if element is missing
-    if (!alertLogOut) return;
-    alertLogOut.className = "";
-    while (alertLogOut.lastElementChild) {
-        alertLogOut.removeChild(alertLogOut.lastElementChild);
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+    if (currentMonth > 2) {
+        academicYear = `${currentYear}-` + `${currentYear + 1}`.slice(2, 4);
+    } else {
+        academicYear = `${currentYear - 1}-` + `${currentYear}`.slice(2, 4);
     }
-}
+    return academicYear
+};
 
 function eventIdGenerator(eventDate, eventName, eventUnit) {
     const dates = {
@@ -509,33 +448,20 @@ function enterBloodDonation() {
 "Rotract", "Like every year, a collabration between nss and rotract lead to a sucessful blood donation", "Like every year, a collabration between nss and rotract lead to a sucessful blood donation \n Like every year, a collabration between nss and rotract lead to a sucessful blood donation \n Like every year, a collabration between nss and rotract lead to a sucessful blood donation")
 }
 
-const inputEventDetails = [ "eventDate",
-                            "eventName",
-                            "eventUnit",
-                            "eventCoOrganizer",
-                            "eventDescription_oneLine",
-                            "eventDescription_multipleLine",
-                            "eventPosterGoogleID",
-                            "eventGroupPhoto_1GoogleID",
-                            "eventGroupPhoto_2GoogleID",
-                            "eventGroupPhoto_3GoogleID",
-                            "eventPhoto_1GoogleID",
-                            "eventPhoto_2GoogleID",
-                            "eventPhoto_3GoogleID",
-]
-
 async function eventDataEntry() {
     if (!userLoggedIn) {
         return;
     }
 
     const inputEventID = eventIdGenerator(inputEventDate, inputEventName, inputEventUnit);
+    const academicYearCalculated = academicYearCalculator(eventDate);
     console.log(inputEventID);
     const eventData = {
         googleAppScriptLink: eventDataUpdateAppScriptLink,
         action: "addEvent",
         sessionID: sessionStorage.getItem("sessionID"),
         userID: sessionStorage.getItem("userID"),
+        academicYear: academicYearCalculated,
         eventID: inputEventID,
         eventDate: inputEventDate, 
         eventName: inputEventName,
@@ -571,6 +497,20 @@ const users = {
     webhandler_unit_2: "Unit-2 Web Handler",
     org_author:        "Lokesh Anand Varma"
 };
+const inputEventDetails = [ "eventDate",
+                            "eventName",
+                            "eventUnit",
+                            "eventCoOrganizer",
+                            "eventDescription_oneLine",
+                            "eventDescription_multipleLine",
+                            "eventPosterGoogleID",
+                            "eventGroupPhoto_1GoogleID",
+                            "eventGroupPhoto_2GoogleID",
+                            "eventGroupPhoto_3GoogleID",
+                            "eventPhoto_1GoogleID",
+                            "eventPhoto_2GoogleID",
+                            "eventPhoto_3GoogleID",
+];
 let userID, user, sessionID;
 const logInOut_Proxy_URL = "https://gappscript-proxy.nss-gvpce-a.workers.dev/";
 let startTime;

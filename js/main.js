@@ -370,16 +370,29 @@ let academicYear = academicYearCalculator();
 /* nav bar's total function integration */
 let clickedOnMain = false;
 let hamburgerMenuOpened = false;
-const main = document.getElementsByTagName("main")[0];
+let main;
 const nav = document.getElementsByTagName("nav")[0];
 const hamburgerMenu = document.getElementById("navHamburgerClickable");
 
-main.addEventListener("click", () => {
-    if (hamburgerMenuOpened) {
-        hamburgerMenuOpened = false;
-        navMobileMenu();
-    }
-});
+function mainFinder() {
+    const mains = document.getElementsByTagName("main");
+    Array.from(mains).forEach(visibleMain => {
+        if (window.getComputedStyle(visibleMain).display === "flex") {
+            main = visibleMain;
+            main.addEventListener("click", () => {
+                if (hamburgerMenuOpened) {
+                hamburgerMenuOpened = false;
+                navMobileMenu();
+                }
+            });
+        }
+    })
+}
+document.addEventListener("DOMContentLoaded", ()=> {
+    mainFinder();
+})
+
+
 hamburgerMenu.addEventListener("click", (e) => {
     e.stopPropagation();
     hamburgerMenuOpened = !hamburgerMenuOpened;
