@@ -23,7 +23,7 @@
     --background1Color: rgb(16, 21, 43);
     --background2Color: rgb(223, 229, 255);
 }
-* {
+html, body, div, section, article, aside, header, nav, main, footer, p, button, select, textarea {
     all: unset;
     margin: 0;
     padding: 0;
@@ -55,16 +55,17 @@ a {
 a:hover {
     text-decoration: underline;
 }
-button, input, select, textarea {
-    font: inherit;
-    background: none;
-    border: none;
-    outline: none;
-    padding: 0.5rem;
-    border-radius: 1rem;
-}
 button {
+    border: none;
     cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 2rem;
+}
+input:not([type="radio"]):not([type="checkbox"]) {
+    all: unset;
+    box-sizing: border-box;
+    background-color: var(--background1Color);
+    border: 1px solid var(--background2Color);
 }
 ul, ol {
     list-style: none;
