@@ -30,7 +30,6 @@ function pageRender() {
     mainFinder();
 }
 
-
 function logInPageRender(logInMain) {
     const logInForm = document.createElement("div");
     logInForm.id = "logInForm";
@@ -118,6 +117,9 @@ function cmsEventPageRender(eventMain) {
     cmsUpdatingRender(eventMain);
     cmsUpdatingFormRender(eventMain);
     $("logOut").addEventListener("click", () => logOutAlert("logOut?"));
+    setTimeout(()=> {
+        keyboardShortcutsOfEventsForm();
+    }, 3.5 * 1000)
 }
 
 function cmsUpdatingRender(eventMain) {
@@ -153,15 +155,54 @@ function cmsUpdatingFormRender(eventMain) {
     inputEventDetails.forEach(formField => {
         const formFieldDiv = document.createElement("div");
         formFieldDiv.className = "eventFormField";
+        formFieldDiv.id = `eventFormField-${formField}`;
         const formFieldLabel = document.createElement("label");
+        formFieldLabel.className = "eventFormLabel";
         formFieldLabel.innerHTML = `${formField}`;
-        const formFieldInput = document.createElement("input");
-        formFieldInput.type = "text";
-        formFieldInput.id = `${formField}`;
-        formFieldInput.placeholder = `Enter the ${formField}`;
-        formFieldInput.autocomplete = "off";
+        let formFieldInput;
+        if (formField === "eventUnit") {
+            formFieldInput = document.createElement("div");
+            formFieldInput.className = "eventFormInput";
+            formFieldInput.id = `${formField}`;
+            
+            ["1", "2", "Both"].forEach(unit => {
+                const formFieldOption = document.createElement("div");
+                formFieldOption.className = "subFormFieldOption";
+                const subFormFieldLabel = document.createElement("label");
+                subFormFieldLabel.className = "subFormLabel";
+                subFormFieldLabel.innerHTML =  unit;
+                subFormFieldLabel.for =  unit;
+                const subFormFieldInput = document.createElement("input");
+                subFormFieldInput.type = "radio";
+                subFormFieldInput.id = unit;
+                subFormFieldInput.className = "subFormFieldInputRadio";
+                subFormFieldInput.value = `${unit}`.substring(0, 1);
+                formFieldOption.appendChild(subFormFieldInput);
+                formFieldOption.appendChild(subFormFieldLabel);
+                formFieldInput.appendChild(formFieldOption);
+            })
+            const formFieldInput1 = document.createElement("input");
+            formFieldInput1.type = "radio";
+            formFieldInput1.id = "1";
+            formFieldInput1.value = "1";
+            const formFieldInput2 = document.createElement("input");
+            formFieldInput2.type = "radio";
+            formFieldInput2.id = "2";
+            formFieldInput2.value = "2";
+            const formFieldInput3 = document.createElement("input");
+            formFieldInput3.type = "radio";
+            formFieldInput3.id = "B";
+            formFieldInput3.value = "B";
+        } else {
+            formFieldInput = document.createElement("input");
+            formFieldInput.className = "eventFormInput";
+            formFieldInput.type = "text";
+            formFieldInput.id = `${formField}`;
+            formFieldInput.placeholder = `Enter the ${formField}`;
+            formFieldInput.autocomplete = "off";
+        }
         const formFieldMSG = document.createElement("p");
-        formFieldInputMSG = "&nbsp";
+        formFieldInputMSG = "hekko";
         formFieldInputMSG.id = `${formField}MSG`;
         formFieldDiv.appendChild(formFieldLabel);
         formFieldDiv.appendChild(formFieldInput);
@@ -173,15 +214,18 @@ function cmsUpdatingFormRender(eventMain) {
 }
 
 function keyboardShortcutsOfEventsForm() {
-    for (let index = 0; index < inputEventDetails.length; index++) {
-        if (index < inputEventDetails.length) {
-            $(inputEventDetails[index]).addEventListener("keydown", (e) => {
-                if (e.key === "Enter") $(inputEventDetails[index + 1]).focus();
+    const inputFields = Array.from(document.querySelectorAll("input"));
+    for (let index = 0; index < inputFields.length; index++) {
+        if (index < inputFields.length - 1) {
+            inputFields[index].addEventListener("keydown", (e) => {
+                if (e.key === "Enter") inputFields[index + 1].focus();
+                e.preventDefault();
             });
         }
         if (index > 0) {
-            $(inputEventDetails[index]).addEventListener("keydown", (e) => {
-                if (e.key === "Enter" && e.key ==="Shift") $(inputEventDetails[index -1]).focus();
+            inputFields[index].addEventListener("keydown", (e) => {
+                if (e.key === "Enter" && e.shiftKey) inputFields[index -1].focus();
+                e.preventDefault();
             });
         }
     }    
@@ -259,7 +303,6 @@ async function logIn() {
                     startHeartbeat();
                     resetInactivityTimer();
                 }, 1000);
-                keyboardShortcutsOfEventsForm();
             } else {
                 setMsg("logInMessageText", "An active session exists!<br>Try after 5 min", "accent1");
                 $("userID").value = "";
@@ -348,15 +391,15 @@ function resetInactivityTimer() {
 
     idleTimerDisplay = setInterval(()=> {
         if (currentSecond < 0) {
+            return // logOut("timeOut_logOut");
             if (currentMinute <= 0) {
-                return logOut("timeOut_logOut");
             }
             else {
                 currentMinute--;
                 currentSecond = 59;
             }
         } else if (currentMinute === warningMinutes) {
-            logOutAlert("autologOut");
+            // logOutAlert("autologOut");
         }
         $("logOutTimer").innerHTML = `${currentMinute.toString().padStart(2,"0")}:${currentSecond.toString().padStart(2,"0")}`;
         currentSecond--;
