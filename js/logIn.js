@@ -50,6 +50,7 @@ function logInPageRender(logInMain) {
     userIDInput.className = "logInFormInput";
     userIDInput.placeholder = "Enter your user ID";
     userIDInput.autocomplete = "off";
+    userIDInput.tabIndex = "1";
     userIDField.appendChild(userIDLabel);
     userIDField.appendChild(userIDInput);
 
@@ -64,6 +65,7 @@ function logInPageRender(logInMain) {
     passwordInput.className = "logInFormInput";
     passwordInput.placeholder = "Enter your Password";
     passwordInput.autocomplete = "off";
+    passwordInput.tabIndex = "1";
 
     userIDInput.addEventListener("keydown", (e) => {
         if (e.key === "Enter") passwordInput.focus();
@@ -72,6 +74,7 @@ function logInPageRender(logInMain) {
     const passwordEye = document.createElement("i");
     passwordEye.id = "passwordEye";
     passwordEye.className = "fa-solid fa-eye";
+    passwordEye.tabIndex = "2";
     passwordEye.addEventListener("click", () => {
         const el  = document.getElementById("password");
         const eye = document.getElementById("passwordEye");
@@ -83,13 +86,34 @@ function logInPageRender(logInMain) {
              el.type = "password";
         }
     });
+    passwordEye.addEventListener("keydown", (e) => {
+        if (e.key = "Enter") {
+            const el  = document.getElementById("password");
+            const eye = document.getElementById("passwordEye");
+            if (el.type === "password") {
+                eye.classList.replace("fa-eye", "fa-eye-slash");
+                el.type = "text";
+            } else {
+                eye.classList.replace("fa-eye-slash", "fa-eye");
+                el.type = "password";
+            }
+        }
+    });
 
     passwordField.appendChild(passwordEye);
     passwordField.appendChild(passwordLabel);
     passwordField.appendChild(passwordInput);
 
     passwordInput.addEventListener("keydown", (e) => {
-        if (e.key === "Enter") { passwordInput.blur(); logIn(); }
+        if (e.key === "Enter") { 
+            if (e.shiftKey) {
+                userIDInput.focus();
+                return;
+            } else {
+                passwordInput.blur(); 
+                logIn(); 
+            }       
+        }
     });
 
     const message_button_container = document.createElement("div");
@@ -154,6 +178,7 @@ function cmsUpdatingFormRender(eventMain) {
     for (let index = 0; index < Object.keys(inputEventDetails).length; index++) {
         const formField = inputEventDetails[index][0];
         const formFieldTitle = inputEventDetails[index][1];
+        const formFieldPlaceholder = inputEventDetails[index][2];
 
         const formFieldDiv = document.createElement("div");
         formFieldDiv.className = "eventFormField";
@@ -163,77 +188,161 @@ function cmsUpdatingFormRender(eventMain) {
         formFieldLabel.innerHTML = `${formFieldTitle}`;
         formFieldDiv.appendChild(formFieldLabel);
         
-        eventFormFieldInputRender(formField, formFieldTitle, formFieldDiv);
+        eventFormFieldInputRender(formField, formFieldTitle, formFieldPlaceholder, formFieldDiv);
         
         const formFieldMSG = document.createElement("p");
-        formFieldMSG.innerHTML = "hekko";
+        formFieldMSG.innerHTML = "";
         formFieldMSG.id = `${formField}MSG`;
         formFieldMSG.className = `formFieldMessage`;
         formFieldDiv.appendChild(formFieldMSG);
         eventDataForm.appendChild(formFieldDiv);
     }
     eventMain.appendChild(eventDataForm);
+
 }
-
-function eventFormFieldInputRender(formField, formFieldTitle, formFieldDiv) {
-    
+let groupPhotosCount, photosCount;
+function eventFormFieldInputRender(formField, formFieldTitle, formFieldPlaceholder, formFieldDiv, value = false) {
     let formFieldInput;
-    if (formField === "eventUnit") {
-            formFieldInput = document.createElement("div");
-            formFieldInput.className = "eventFormInput";
-            formFieldInput.id = `${formField}`;
+    if (formField === "eventDate") {
+        formFieldInput = document.createElement("input");
+        formFieldInput.className = "eventFormInput";
+        formFieldInput.type = "text";
+        formFieldInput.id = `${formField}`;
+        formFieldInput.placeholder = `${formFieldPlaceholder}`;
+        formFieldInput.autocomplete = "off";
+        formFieldInput.maxLength = 10;
+        
+        formFieldInput.addEventListener("input", function (e) {
+            let value = e.target.value.replace(/\D/g, "");
+            if (value.length >= 3 && value.length <= 4) {
+                value = value.slice(0, 2) + "/" + value.slice(2);
+            } else if (value.length >= 5) {
+                value = value.slice(0, 2) + "/" + value.slice(2, 4) + "/" + value.slice(4, 8);
+            }
+            e.target.value = value;
+        });
+
+    } else if (formField === "eventUnit") {
+        formFieldInput = document.createElement("div");
+        formFieldInput.className = "eventFormInput";
+        formFieldInput.id = `${formField}`;
             
-            ["1", "2", "Both"].forEach(unit => {
-                const formFieldOption = document.createElement("div");
-                formFieldOption.className = "subFormFieldOption";
+        ["1", "2", "Both"].forEach(unit => {
+            const formFieldOption = document.createElement("div");
+            formFieldOption.className = "subFormFieldOption";
 
-                const subFormFieldInput = document.createElement("input");
-                subFormFieldInput.type = "radio";
-                subFormFieldInput.name = "eventUnit";
-                subFormFieldInput.id = `unit_${unit}`;
-                subFormFieldInput.className = "subFormFieldInputRadio";
-                subFormFieldInput.value = unit === "Both" ? "B" : unit;
-                subFormFieldInput.tabIndex = "0";
+            const subFormFieldInput = document.createElement("input");
+            subFormFieldInput.type = "radio";
+            subFormFieldInput.name = "eventUnit";
+            subFormFieldInput.id = `unit_${unit}`;
+            subFormFieldInput.className = "subFormFieldInputRadio";
+            subFormFieldInput.value = unit === "Both" ? "B" : unit;
 
-                const subFormFieldLabel = document.createElement("label");
-                subFormFieldLabel.className = "subFormLabel";
-                subFormFieldLabel.innerHTML =  unit;
-                subFormFieldLabel.htmlFor = `unit_${unit}`;
-
-                formFieldOption.appendChild(subFormFieldInput);
-                formFieldOption.appendChild(subFormFieldLabel);
-                formFieldInput.appendChild(formFieldOption);
-            })
-        } else if (formField === "eventDescription_oneLine" || formField === "eventDescription_multipleLine") {
-            formFieldInput = document.createElement("textarea");
-            formFieldInput.className = "eventFormInput";
-            formFieldInput.id = `${formField}`;
-            formFieldInput.placeholder = `Enter ${formFieldTitle.toLowerCase()}`;
-            formFieldInput.autocomplete = "off";
-            formFieldInput.rows = 1;
-            formFieldInput.addEventListener("input", function() {
-                this.style.height = "auto";
-                this.style.height = this.scrollHeight + "px";
-                this.style.overflowY = this.scrollHeight > 180 ? "auto" : "hidden";
+            const subFormFieldLabel = document.createElement("label");
+            subFormFieldLabel.className = "subFormLabel";
+            subFormFieldLabel.innerHTML =  unit;
+            subFormFieldLabel.htmlFor = `unit_${unit}`;
+            formFieldOption.appendChild(subFormFieldInput);
+            formFieldOption.appendChild(subFormFieldLabel);
+            formFieldInput.appendChild(formFieldOption);
+        })
+    } else if (formField === "eventDescription_oneLine" || formField === "eventDescription_multipleLine") {
+        formFieldInput = document.createElement("textarea");
+        formFieldInput.className = "eventFormInput";
+        formFieldInput.id = `${formField}`;
+        formFieldInput.placeholder = `Enter ${formFieldPlaceholder}`;
+        formFieldInput.autocomplete = "off";
+        formFieldInput.rows = 1;
+        formFieldInput.addEventListener("input", function() {
+            this.style.height = "auto";
+            this.style.height = this.scrollHeight + "px";
+            this.style.overflowY = this.scrollHeight > 180 ? "auto" : "hidden";
+        });
+        setTimeout(() => {
+            document.querySelectorAll("textarea.eventFormInput").forEach(el => {
+            el.style.height = "auto";
+            el.style.height = el.scrollHeight + "px";
             });
-            setTimeout(() => {
-                document.querySelectorAll("textarea.eventFormInput").forEach(el => {
-                el.style.height = "auto";
-                el.style.height = el.scrollHeight + "px";
-                });
-            }, 100);
+        }, 100);
+    } else if (formField === "eventGroupPhotos" || formField === "eventPhotos") {
+        formFieldInput = document.createElement("input");
+        formFieldInput.className = "eventFormInput";
+        formFieldInput.type = "number";
+        formFieldInput.id = `${formField}`;
+        formFieldInput.placeholder = `Enter ${formFieldPlaceholder}`;
+        formFieldInput.autocomplete = "off";
+
+        let inputInterval;
+        formFieldInput.addEventListener("input", function() {
+            let value = formFieldInput.value.replace(/\D/g, "");
+            imageCount = Number(value);
+            const formFieldInputID = this.id
+            if (imageCount < 1) this.value = 1;
+            if (formFieldInputID === "eventGroupPhotos" && imageCount > 4) imageCount = 4;    
+            if (formFieldInputID === "eventPhotos" && imageCount > 8) imageCount = 8;
+            formFieldInput.value = imageCount;
+
+            clearInterval(inputInterval);
+            inputInterval = setTimeout(()=> {
+                const formField = this.id.replace("s", "");
+                const eventDataForm = $("eventDataForm");
+                const eventFormFields = Array.from(eventDataForm.children);
+                eventFormFields.forEach(formFieldDiv => {
+                    if (formFieldDiv.classList.contains("addedThroughInput") && formFieldDiv.id.includes(formField)) {
+                        eventDataForm.removeChild(formFieldDiv);
+                    }
+                })
+                let formFieldTitle, formFieldPlaceholder;  
+                for (let index = 1; index < imageCount + 1; index++) {
+                    if (formField.includes("Group")) {
+                        formFieldTitle = `Event Group Photo-${index}`;
+                        formFieldPlaceholder = `group photo-${index} gdrive ID`;
+                    } else {
+                        formFieldTitle = `Event Photo-${index}`;
+                        formFieldPlaceholder = `photo-${index} gdrive ID`;
+                    }
+
+                    const formFieldDiv = document.createElement("div");
+                    formFieldDiv.className = "eventFormField";
+                    formFieldDiv.classList.add("addedThroughInput");
+                    formFieldDiv.id = `eventFormField-${formField}`;
+                    const formFieldLabel = document.createElement("label");
+                    formFieldLabel.className = "eventFormLabel";
+                    formFieldLabel.innerHTML = `${formFieldTitle}`;
+                    formFieldDiv.appendChild(formFieldLabel);
+            
+                    eventFormFieldInputRender(formField, formFieldTitle, formFieldPlaceholder, formFieldDiv, index);
+            
+                    const formFieldMSG = document.createElement("p");
+                    formFieldMSG.innerHTML = "";
+                    formFieldMSG.id = `${formField}MSG`;
+                    formFieldMSG.className = `formFieldMessage`;
+                    formFieldDiv.appendChild(formFieldMSG);
+                    eventDataForm.appendChild(formFieldDiv);
+                }
+                if (formFieldInputID === "eventGroupPhotos") groupPhotosCount = imageCount;    
+                if (formFieldInputID === "eventPhotos") photosCount = imageCount;
+            }, 500);
+        })
+    } else {
+        if (value) {
+            formFieldInput = document.createElement("input");
+            formFieldInput.className = "eventFormInput";
+            formFieldInput.type = "text";
+            formFieldInput.id = `${formField}_${value}`;
+            formFieldInput.placeholder = `Enter ${formFieldPlaceholder}`;
+            formFieldInput.autocomplete = "off";
         } else {
             formFieldInput = document.createElement("input");
             formFieldInput.className = "eventFormInput";
             formFieldInput.type = "text";
             formFieldInput.id = `${formField}`;
-            formFieldInput.placeholder = `Enter ${formFieldTitle.toLowerCase()}`;
+            formFieldInput.placeholder = `Enter ${formFieldPlaceholder}`;
             formFieldInput.autocomplete = "off";
         }
-    
+    }
     formFieldDiv.appendChild(formFieldInput);
 }
-
 
 const logInAppScriptLink = "https://script.google.com/macros/s/AKfycbxLtDMInrMaQl2K5llhsqD0Ll--Y4J1QBeC-s8prCsrpNf6ykZiEBJjja_dzdPCQ8WV/exec";
 const eventDataUpdateAppScriptLink = "https://script.google.com/macros/s/AKfycbzil5IzzZI4rQiI4ht0ibRhJ_7XXvhQ7VgqZXHFIS4a3Z5sKJ4jedplhA2vYYuYX_bAIw/exec";
@@ -394,7 +503,7 @@ function resetInactivityTimer() {
 
     idleTimerDisplay = setInterval(()=> {
         if (currentSecond < 0) {
-            return // logOut("timeOut_logOut");
+            return ;
             if (currentMinute <= 0) {
             }
             else {
@@ -541,15 +650,16 @@ const users = {
     webhandler_unit_2: "Unit-2 Web Handler",
     org_author:        "Lokesh Anand Varma"
 };
-const inputEventDetails = { 0: ["eventDate", "Event Date"],
-                            1: ["eventName", "Event Name"],
-                            2: ["eventUnit", "Event Unit"],
-                            3: ["eventCoOrganizer", "Event Co-Organizer"],
-                            4: ["eventPosterGoogleID", "Event Poster Google ID"],
-                            5: ["eventGroupPhotos", "Event Group Photos Count"],
-                            6: ["eventPhotos", "Event Photos Count"],
-                            7: ["eventDescription_oneLine", "Event Description One Line"],
-                            8: ["eventDescription_multipleLine", "Event Description Multiple Line"]
+const inputEventDetails = { 0: ["eventDate", "Event Date", "dd/mm/yyyy"],
+                            1: ["eventName", "Event Name", "event name"],
+                            2: ["eventUnit", "Event Unit", ""],
+                            3: ["eventCoOrganizer", "Event Co-Organizer", "event co-organizer"],
+                            4: ["eventDescription_oneLine", "Event Description (One Line)", "a one line description"],
+                            5: ["eventDescription_multipleLine", "Event Description (Multiple Line)", "multiple line description"],
+                            6: ["eventPosterGoogleID", "Event Poster ID", "poster google drive ID"],
+                            7: ["eventGroupPhotos", "Event Group Photos Count", "group photos count"],
+                            8: ["eventPhotos", "Event Photos Count", "photos count"]
+                            
 };
 let userID, user, sessionID;
 const logInOut_Proxy_URL = "https://gappscript-proxy.nss-gvpce-a.workers.dev/";
