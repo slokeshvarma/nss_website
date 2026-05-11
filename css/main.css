@@ -59,7 +59,7 @@ button {
     border: none;
     cursor: pointer;
     padding: 0.5rem;
-    border-radius: 2rem;
+    /*border-radius: 2rem;*/
 }
 input:not([type="radio"]):not([type="checkbox"]) {
     all: unset;

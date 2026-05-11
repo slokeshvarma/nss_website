@@ -123,7 +123,7 @@ main {
     align-self: flex-start;
     margin: 0 0 1.414vh 13vw;
 }
-.aboutUsNSS p{
+.aboutUsNSS p {
     text-align: justify;
     line-height: 1.2;
     margin-bottom: clamp(7px, 5px + 0.75vw, 15px);
@@ -134,6 +134,7 @@ main {
     color: var(--secondaryColor);
     background-color: var(--accent1Color);
     padding: clamp(0.3rem, 0.25rem + 1vh, 1rem) clamp(0.75rem, 0.5rem + 1vw, 1rem);
+    border-radius: 2rem;
 }
 .aboutUsDuties {
     flex-direction: row;

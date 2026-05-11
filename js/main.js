@@ -1,19 +1,4 @@
 /* functions */
-function academicYearCalculator() {
-    // As Date.getMonth() returns index from 0-11 respectively for Jan-Dec. So, index is directly used for logic comparisions
-    
-    let academicYear;
-    const currentDate = new Date();
-    const currentMonth = currentDate.getMonth();
-    const currentYear = currentDate.getFullYear();
-    if (currentMonth > 2) {
-        academicYear = `${currentYear}-` + `${currentYear + 1}`.slice(2, 4);
-    } else {
-        academicYear = `${currentYear - 1}-` + `${currentYear}`.slice(2, 4);
-    }
-    return academicYear
-};
-
 function toggleTheme() {
     const root = document.documentElement;
     if (root.classList.contains("darkMode")) {
@@ -194,6 +179,45 @@ function homeImageGallery(currentImage, direction) {
     }, 400);
 };
 
+let autoSlideInterval = null;
+
+function startAutoSlide() {
+    if (autoSlideInterval) return;
+    autoSlideInterval = setInterval(() => {
+        currentImageNumber = currentImageWraper(homeGalleryData.length, currentImageNumber + 1);
+        homeImageGallery(currentImageNumber, 'next');
+    }, 3000);
+};
+
+function stopAutoSlide() {
+    if (autoSlideInterval) {
+        clearInterval(autoSlideInterval);
+        autoSlideInterval = null;
+    }
+};
+
+function initGalleryObserver() {
+    const gallerySection = document.getElementById("homeGallery");
+    if (!gallerySection) return;
+
+    const observer = new IntersectionObserver(
+        (entries) => {
+            entries.forEach(entry => {
+                const visibleHeight = entry.intersectionRect.height;
+                const viewportHeight = window.innerHeight;
+                if (visibleHeight >= viewportHeight * 0.8) {
+                    startAutoSlide();
+                } else {
+                    stopAutoSlide();
+                }
+            });
+        },
+        { threshold: Array.from({ length: 101 }, (_, i) => i / 100) }
+    );
+
+    observer.observe(gallerySection);
+};
+
 function isElementInViewport(el) {
   const rect = el.getBoundingClientRect();
   return (
@@ -269,30 +293,28 @@ function adjustDisplayAndPlacement(currentCard, numberOfCards) {
     const eventCards = homeEvents.children[2];
     const nextButton = homeEvents.children[3];
 
-    let eventDescriptionHeight;
     let count = 1;
     Array.from(eventCards.children).forEach(eventCard => {
-        eventCard.style.display = "none";
-            eventCard.classList.remove('visible');
-        if (count >= currentCard && count < currentCard + numberOfCards) {
-            eventCard.style.display = "flex";
-            eventCard.classList.add('visible');
-        }
-        const eventDetails = eventCard.children[1];
-        if (window.getComputedStyle(eventCard).display === "flex") {
-            eventDescriptionHeight = eventDetails.clientHeight;
-        };
-        eventDetails.style.marginTop = `-${eventDescriptionHeight}px`;
-
+        const visible = count >= currentCard && count < currentCard + numberOfCards;
+        eventCard.style.display = visible ? "flex" : "none";
+        eventCard.classList.toggle('visible', visible);
         count++;
     });
-    if (numberOfCards === 1) {
-        prevButton.style.paddingBottom = `${0.5 * eventDescriptionHeight}px`;
-        nextButton.style.paddingBottom = `${0.5 * eventDescriptionHeight}px`;
-    } else {
-        prevButton.style.paddingBottom = `${0.55 * eventDescriptionHeight}px`;
-        nextButton.style.paddingBottom = `${0.55 * eventDescriptionHeight}px`;
-    }
+
+    let eventDescriptionHeight = 0;
+    Array.from(eventCards.children).forEach(eventCard => {
+        if (window.getComputedStyle(eventCard).display === "flex") {
+            eventDescriptionHeight = eventCard.children[1].clientHeight;
+        }
+    });
+
+    Array.from(eventCards.children).forEach(eventCard => {
+        eventCard.children[1].style.marginTop = `-${eventDescriptionHeight}px`;
+    });
+
+    const padding = `${(numberOfCards === 1 ? 0.5 : 0.55) * eventDescriptionHeight}px`;
+    prevButton.style.paddingBottom = padding;
+    nextButton.style.paddingBottom = padding;
 };
 
 function renderHomeEventCards(currentCard, dictObj, count, parentDiv) {
@@ -325,7 +347,8 @@ function renderHomeEventCards(currentCard, dictObj, count, parentDiv) {
     parentDiv.appendChild(homeEventCard);
 };
 
-function homeEventCardSwipe(moveRight, numberOfCards) {    
+function homeEventCardSwipe(moveRight, numberOfCards) { 
+    console.log("outside Ran");
     const eventCardsLength = document.getElementsByClassName("homeEventCards")[0].children.length;
     const homeEventsPrev = document.getElementById("homeEventsPrev");
     const homeEventsNext = document.getElementById("homeEventsNext");
@@ -348,9 +371,56 @@ function homeEventCardSwipe(moveRight, numberOfCards) {
         homeEventsPrev.className = "end";
         homeEventsNext.className = "end";
     }
-    adjustDisplayAndPlacement(currentEventCard, numberOfEventCards);
 
+    adjustDisplayAndPlacement(currentEventCard, numberOfEventCards);
 }
+
+function academicYearCalculator(date) {
+    // As Date.getMonth() returns index from 0-11 respectively for Jan-Dec. So, index is directly used for logic comparisions
+    let academicYear;
+    let currentDate;
+    if (!date) {
+        currentDate = new Date();
+    } else {
+        const [day, month, year] = date.split("/");
+        currentDate = new Date(`${year}-${month}-${day}`);
+    }
+    const currentMonth = currentDate.getMonth();
+    const currentYear = currentDate.getFullYear();
+    if (currentMonth > 2) {
+        academicYear = `${currentYear}-` + `${currentYear + 1}`.slice(2, 4);
+    } else {
+        academicYear = `${currentYear - 1}-` + `${currentYear}`.slice(2, 4);
+    }
+    return String(academicYear);
+};
+
+function eventIdGenerator(eventDate, eventName, eventUnit) {
+    const dates = {
+         1: "A",  2: "B",  3: "C",  4: "4",  5: "D",  6: "E",  7: "F",  8: "G",  9: "H", 10: "1",
+        11: "I", 12: "J", 13: "K", 14: "L", 15: "5", 16: "M", 17: "N", 18: "O", 19: "P", 20: "2",
+        21: "Q", 22: "R", 23: "S", 24: "T", 25: "U", 26: "V", 27: "W", 28: "X", 29: "Y", 30: "3",
+        31: "Z"
+    }
+    const months = {
+        0: "J", 1: "F", 2: "M", 3: "A", 4: "Y", 5: "U", 6: "L", 7: "G", 8: "S", 9: "O", 10: "N", 11: "D"
+    }
+
+    const [day, month, year] = eventDate.split("/");
+    const date = new Date(`${year}-${month}-${day}`);
+    const yearSuffix = `${date.getFullYear()}`.slice(-2);
+
+    eventUnit = String(eventUnit);
+    if (eventUnit.length > 2) {
+        eventUnit = "B";
+    }
+    const EventIdUniqueChar = Math.random().toString(36).substring(2, 3).toUpperCase();
+    const eventID = `${dates[date.getDate()]}${months[date.getMonth()]}${yearSuffix}${eventName.slice(0, 1)}${eventUnit}${EventIdUniqueChar}`;
+
+    return eventID;
+}
+
+
 /* execution of functions */
 setInterval(() => {
 }, 30 * 1000);
@@ -390,6 +460,7 @@ function mainFinder() {
 }
 document.addEventListener("DOMContentLoaded", ()=> {
     mainFinder();
+    initGalleryObserver();
 })
 
 
