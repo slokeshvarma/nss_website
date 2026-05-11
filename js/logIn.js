@@ -1,67 +1,6 @@
-let heartBeatInterval;
-
-function startHeartbeat() {
-    sendHeartbeat();
-    heartBeatInterval = setInterval(sendHeartbeat, 5 * 60 * 1000);
-}
-
-function sendHeartbeat() {
-    if (!sessionID || !userID) return;
-    navigator.sendBeacon(logInOut_Proxy_URL, JSON.stringify({
-        googleAppScriptLink: logInAppScriptLink,
-        action: "heartBeat",
-        sessionID: sessionID,
-        userID: userID
-    }));
-}
-
-function stopHeartbeat() {
-    clearInterval(heartBeatInterval);
-}
-
-document.addEventListener("visibilitychange", () => {
-    if (document.visibilityState === "visible" && userLoggedIn) sendHeartbeat();
-});
-
-let idleTimerDisplay;
-let autoLogoutTimer = null;
-const timeOutMinutes = 15;
-const warningMinutes = 3;
-
-function resetInactivityTimer() {
-    if (!userLoggedIn) return;
-    clearInterval(idleTimerDisplay);
-    $("logOutTimer").innerHTML = `15:00`;
-
-    var currentMinute = 14;
-    var currentSecond = 59;
-
-    idleTimerDisplay = setInterval(()=> {
-        if (currentSecond < 0) {
-            return ;
-            if (currentMinute <= 0) {
-            }
-            else {
-                currentMinute--;
-                currentSecond = 59;
-            }
-        } else if (currentMinute === warningMinutes) {
-            // logOutAlert("autologOut");
-        }
-        $("logOutTimer").innerHTML = `${currentMinute.toString().padStart(2,"0")}:${currentSecond.toString().padStart(2,"0")}`;
-        currentSecond--;
-    }, 1000);
-};
-
-["mousemove", "keypress", "touchmove", "keyup", "touchend", "click", "scroll"].forEach(event => {
-    document.addEventListener(event, () => {
-        if (userLoggedIn) resetInactivityTimer();
-        }, { passive: true });
-});
-
-
 let userLoggedIn = false;
-const $ = id => document.getElementById(id);
+const logInOut_Proxy_URL = "https://gappscript-proxy.nss-gvpce-a.workers.dev/";
+const logInAppScriptLink = "https://script.google.com/macros/s/AKfycbxLtDMInrMaQl2K5llhsqD0Ll--Y4J1QBeC-s8prCsrpNf6ykZiEBJjja_dzdPCQ8WV/exec";
 const users = {
     chairman:          "Dr. A. B. Koteshwara Rao Sir",
     po_unit_1:         "Dr. Sateesh Virothu Sir",
@@ -73,35 +12,165 @@ const users = {
     webhandler_unit_2: "Unit-2 Web Handler",
     org_author:        "Lokesh Anand Varma"
 };
-const inputEventDetails = { 0: ["eventDate", "Event Date", "dd/mm/yyyy"],
-                            1: ["eventName", "Event Name", "event name"],
-                            2: ["eventUnit", "Event Unit", ""],
-                            3: ["eventCoOrganizer", "Event Co-Organizer", "event co-organizer"],
-                            4: ["eventDescription_oneLine", "Event Description (One Line)", "a one line description"],
-                            5: ["eventDescription_multipleLine", "Event Description (Multiple Line)", "multiple line description"],
-                            6: ["eventPosterGoogleID", "Event Poster ID", "poster google drive ID"],
-                            7: ["eventGroupPhotos", "Event Group Photos Count", "group photos count"],
-                            8: ["eventPhotos", "Event Photos Count", "photos count"]
-                            
-};
 let userID, user, sessionID;
-const logInOut_Proxy_URL = "https://gappscript-proxy.nss-gvpce-a.workers.dev/";
-let startTime;
+const userIDInput   = $("userID");
+const passwordInput = $("password");
+const passwordEye   = $("passwordEye");
+
 window.addEventListener("DOMContentLoaded", () => {
-    startTime = new Date();
+    updateEyeLocation();
     const footerHeight = document.querySelector("footer").clientHeight;
     document.documentElement.style.setProperty("--footerHeight", `${footerHeight}px`);
 
     const savedSession = sessionStorage.getItem("userLoggedIn");
     if (savedSession === "true") {
-        sessionID    = sessionStorage.getItem("sessionID");
-        userID       = sessionStorage.getItem("userID");
-        user         = users[userID];
-        userLoggedIn = true;
-        sendHeartbeat();
-        setTimeout(resetInactivityTimer, 500);
+        pageReDirect("dashboard.html");
     }
-    pageRender();
 });
 
 window.addEventListener("resize", () => updateEyeLocation());
+
+userIDInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") passwordInput.focus();
+});
+
+passwordEye.addEventListener("click", () => {
+    const el  = document.getElementById("password");
+    const eye = document.getElementById("passwordEye");
+    if (el.type === "password") {
+        eye.classList.replace("fa-eye", "fa-eye-slash");
+        el.type = "text";
+    } else {
+        eye.classList.replace("fa-eye-slash", "fa-eye");
+        el.type = "password";
+    }
+});
+
+passwordEye.addEventListener("keydown", (e) => {
+    if (e.key = "Enter") {
+        const el  = document.getElementById("password");
+        const eye = document.getElementById("passwordEye");
+        if (el.type === "password") {
+            eye.classList.replace("fa-eye", "fa-eye-slash");
+            el.type = "text";
+        } else {
+            eye.classList.replace("fa-eye-slash", "fa-eye");
+            el.type = "password";
+        }
+    }
+});
+
+passwordInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { 
+        if (e.shiftKey) {
+            userIDInput.focus();
+            return;
+        } else {
+            passwordInput.blur(); 
+            logIn(); 
+        }       
+    }
+});
+
+$("logInSubmit").addEventListener("click", () => logIn());
+
+// setURL("Log In", "login");
+
+
+function updateEyeLocation() {
+    const passwordInput = document.getElementById("password");
+    const passwordEye   = document.getElementById("passwordEye");
+    if (!passwordInput || !passwordEye) return;
+    const appearanceAdjustment = 2;
+    document.documentElement.style.setProperty(
+        "--passwordEyeBottom",
+        `${passwordInput.clientHeight / 2 - passwordEye.clientHeight / 2 - appearanceAdjustment}px`
+    );
+};
+
+function setMsg(id, html, colorVar) {
+    const el = $(id);
+    if (!el) return;
+    el.innerHTML = html;
+    el.style.color = `var(--${colorVar}Color)`;
+};
+
+async function logIn() {
+    const inputUserID   = $("userID").value.toLowerCase().trim();
+    const inputPassword = $("password").value;
+
+    $("logInMessageText").innerHTML = "";
+
+    if (!inputUserID || !inputPassword) {
+        setMsg("logInMessageText", "Please enter both fields !!", "accent1");
+        return;
+    }
+    if (!Object.keys(users).includes(inputUserID)) {
+        setMsg("logInMessageText",
+            inputUserID.length < 8
+                ? `"${inputUserID}" is not a Valid User ID !!`
+                : `"${inputUserID}"<br>is not a User ID !!`,
+            "accent1"
+        );
+        $("userID").value = "";
+        $("password").value = "";
+        return;
+    }
+
+    let count = 0;
+    const verifyingInterval = setInterval(() => {
+        const dots = ["Verifying.", "Verifying..", "Verifying..."];
+        setMsg("logInMessageText", dots[count % 3], "accent2");
+        count++;
+    }, 400);
+
+    const generatedSessionID = Math.random().toString(36).substring(2, 7).toUpperCase();
+    const logInData = {
+        googleAppScriptLink: logInAppScriptLink,
+        action: "logIn",
+        sessionID: generatedSessionID,
+        userID: inputUserID,
+        password: inputPassword
+    };
+
+    try {
+        const response = await fetch(logInOut_Proxy_URL, {
+            method: "POST",
+            headers: { "Content-Type": "text/plain" },
+            body: JSON.stringify(logInData)
+        });
+        const rawText = await response.text();
+        console.log("Raw response:", rawText);
+        const data = JSON.parse(rawText);
+        clearInterval(verifyingInterval);
+
+        if (data.auth) {
+            if (!data.activeSession) {
+                setMsg("logInMessageText", "Login Successful!", "accent2");
+                userLoggedIn = true;
+                sessionID    = generatedSessionID;
+                userID       = inputUserID;
+                user         = users[inputUserID];
+
+                sessionStorage.setItem("sessionID", generatedSessionID);
+                sessionStorage.setItem("userID", inputUserID);
+                sessionStorage.setItem("userLoggedIn", "true");
+
+                setTimeout(() => {
+                    pageReDirect("dashboard.html");
+                }, 1000);
+            } else {
+                setMsg("logInMessageText", "An active session exists!<br>Try after 5 min", "accent1");
+                $("userID").value = "";
+                $("password").value = "";
+            }
+        } else {
+            setMsg("logInMessageText", "Wrong password! Try Again", "accent1");
+            $("password").value = "";
+        }
+    } catch (err) {
+        clearInterval(verifyingInterval);
+        console.error("Fetch error:", err);
+        setMsg("logInMessageText", "Connection error. Try again.", "accent1");
+    }
+};

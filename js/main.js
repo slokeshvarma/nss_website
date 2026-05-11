@@ -10,6 +10,23 @@ function toggleTheme() {
     }
 };
 
+const $ = id => document.getElementById(id);
+
+function setURL(pageTitle, pushingURL) {
+    const currentURL = window.location.href.split("/");
+    const lastTag = currentURL[currentURL.length - 1];
+
+    const newURL = lastTag
+        ? window.location.href.replace(lastTag, pushingURL)
+        : window.location.href + pushingURL;
+
+    window.history.pushState({ page: 1 }, pageTitle, newURL);
+};
+
+function pageReDirect(url) {
+    window.location.href = url;
+};
+
 function openLink(link) {
   window.open(link, "_blank");
 };
@@ -394,32 +411,6 @@ function academicYearCalculator(date) {
     }
     return String(academicYear);
 };
-
-function eventIdGenerator(eventDate, eventName, eventUnit) {
-    const dates = {
-         1: "A",  2: "B",  3: "C",  4: "4",  5: "D",  6: "E",  7: "F",  8: "G",  9: "H", 10: "1",
-        11: "I", 12: "J", 13: "K", 14: "L", 15: "5", 16: "M", 17: "N", 18: "O", 19: "P", 20: "2",
-        21: "Q", 22: "R", 23: "S", 24: "T", 25: "U", 26: "V", 27: "W", 28: "X", 29: "Y", 30: "3",
-        31: "Z"
-    }
-    const months = {
-        0: "J", 1: "F", 2: "M", 3: "A", 4: "Y", 5: "U", 6: "L", 7: "G", 8: "S", 9: "O", 10: "N", 11: "D"
-    }
-
-    const [day, month, year] = eventDate.split("/");
-    const date = new Date(`${year}-${month}-${day}`);
-    const yearSuffix = `${date.getFullYear()}`.slice(-2);
-
-    eventUnit = String(eventUnit);
-    if (eventUnit.length > 2) {
-        eventUnit = "B";
-    }
-    const EventIdUniqueChar = Math.random().toString(36).substring(2, 3).toUpperCase();
-    const eventID = `${dates[date.getDate()]}${months[date.getMonth()]}${yearSuffix}${eventName.slice(0, 1)}${eventUnit}${EventIdUniqueChar}`;
-
-    return eventID;
-}
-
 
 /* execution of functions */
 setInterval(() => {

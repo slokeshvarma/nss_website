@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" class="lightMode">
     <head style="display: none; ">
-        <title>NSS-GVPCE(A) Log In</title>
+        <title>Log In</title>
         <meta charset="UTF-8">
         <meta name="description" content="NSSGVPCE Events Website">
         <meta name="keywords" content="National, Service, Scheme, Gayatri Vidhya Parishad, NSS, GVP, NSSGVPCE">
@@ -13,8 +13,7 @@
         <link rel="icon" href="images/logo/favicon.ico" type="image/x-icon">
     </head>
     
-    <body>
-        
+    <body> 
         <header class="sticked">
             <nav>
                 <div class="navLogo">
@@ -40,9 +39,26 @@
             </nav>
         </header>
         <main id="logIn">
-
+            <div id="logInForm" class="logInForm">
+                <div>
+                    <h2 class="formTitle">CMS of Events</h2>
+                    <p>Log In to update events</p>
+                </div>
+                <div class="formField">
+                    <label>User ID</label>
+                    <input type="text" id="userID" class="logInFormInput" placeholder="Enter your user ID" autocomplete="off" tabindex="1">
+                </div>
+                <div class="formField">
+                    <i id="passwordEye" class="fa-solid fa-eye" tabindex="2"></i>
+                    <label id="passwordLabel">Password</label>
+                    <input type="password" id="password" class="logInFormInput" placeholder="Enter your Password" autocomplete="off" tabindex="1">
+                </div>
+                <div class="logInMessage_Button">
+                    <p id="logInMessageText"></p>
+                    <button id="logInSubmit" class="logInSubmit">Submit</button>
+                </div>
+            </div>
         </main>
-        <div id="alertLogOut"></div>
         <footer>
             <div class="footerTop">
                 <div class="footerBrand">
