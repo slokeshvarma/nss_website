@@ -26,7 +26,7 @@ const inputEventDetails = { 0: ["eventDate", "Event Date", "dd/mm/yyyy"],
 const logInOut_Proxy_URL = "https://gappscript-proxy.nss-gvpce-a.workers.dev/";
 let startTime;
 
-// setURL("CMS Dashboard", "dashboard");
+// setURL("CMS Admin", "admin");
 
 window.addEventListener("DOMContentLoaded", () => {
     const footerHeight = document.querySelector("footer").clientHeight;
@@ -43,26 +43,26 @@ window.addEventListener("DOMContentLoaded", () => {
 });
 
 function pageRender() {
-    const dashboardMain = $("dashboard");
-    while (dashboardMain.lastElementChild) {
-            dashboardMain.removeChild(dashboardMain.lastElementChild);
+    const adminMain = $("admin");
+    while (adminMain.lastElementChild) {
+            adminMain.removeChild(adminMain.lastElementChild);
     }
     if (!userLoggedIn) {
-        dashboardErrorPageRender(dashboardMain);
+        adminErrorPageRender(adminMain);
     } else {
-        cmsDashboardPageRender(dashboardMain);
+        cmsAdminPageRender(adminMain);
     }
 }
 
-function dashboardErrorPageRender(main) {
-    const dashboardAlertDiv = $("dashboardAlertDiv");
+function adminErrorPageRender(main) {
+    const adminAlertDiv = $("adminAlertDiv");
 
     setTimeout(()=> {
         pageReDirect("login.html")
     }, 2000);
 }
 
-function cmsDashboardPageRender(eventMain) {
+function cmsAdminPageRender(eventMain) {
     cmsUpdatingRender(eventMain);
     cmsUpdatingFormRender(eventMain);
     $("logOut").addEventListener("click", () => logOutAlert("logOut?"));

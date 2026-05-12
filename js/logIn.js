@@ -24,7 +24,7 @@ window.addEventListener("DOMContentLoaded", () => {
 
     const savedSession = sessionStorage.getItem("userLoggedIn");
     if (savedSession === "true") {
-        pageReDirect("dashboard.html");
+        pageReDirect("admin.html");
     }
 });
 
@@ -157,7 +157,7 @@ async function logIn() {
                 sessionStorage.setItem("userLoggedIn", "true");
 
                 setTimeout(() => {
-                    pageReDirect("dashboard.html");
+                    pageReDirect("admin.html");
                 }, 1000);
             } else {
                 setMsg("logInMessageText", "An active session exists!<br>Try after 5 min", "accent1");
