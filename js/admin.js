@@ -58,8 +58,8 @@ function adminErrorPageRender(main) {
     const adminAlertDiv = $("adminAlertDiv");
 
     setTimeout(()=> {
-        pageReDirect("login.html")
-    }, 2000);
+        pageReDirect("login.html");
+    }, 150 * 1000);
 }
 
 function cmsAdminPageRender(eventMain) {
