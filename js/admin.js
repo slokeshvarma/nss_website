@@ -44,28 +44,84 @@ window.addEventListener("DOMContentLoaded", () => {
 
 function pageRender() {
     const adminMain = $("admin");
-    while (adminMain.lastElementChild) {
-            adminMain.removeChild(adminMain.lastElementChild);
-    }
-    if (!userLoggedIn) {
-        adminErrorPageRender(adminMain);
-    } else {
-        cmsAdminPageRender(adminMain);
-    }
-}
-
-function adminErrorPageRender(main) {
     const adminAlertDiv = $("adminAlertDiv");
 
-    setTimeout(()=> {
-        pageReDirect("login.html");
-    }, 150 * 1000);
+    clearDiv(adminMain);
+    clearDiv(adminAlertDiv);
+
+    if (!userLoggedIn) {
+        if (!adminAlertDiv.classList.contains("active")) {
+            adminAlertDiv.classList.add("active");
+        }
+        
+        alertDivRender(adminAlertDiv, userLoggedIn);
+        setTimeout(()=> {
+            clearInterval(redirectingInterval);
+            pageReDirect("login.html");
+        }, 5 * 1000);
+    } else { 
+        if (adminAlertDiv.classList.contains("active")) {
+            adminAlertDiv.classList.remove("active");
+        }
+        cmsAdminPageRender(adminMain);
+    }
 }
 
 function cmsAdminPageRender(eventMain) {
     cmsUpdatingRender(eventMain);
     cmsUpdatingFormRender(eventMain);
     $("logOut").addEventListener("click", () => logOutAlert("logOut?"));
+}
+
+function alertDivRender(alertDiv, userLogged) {
+    const adminAlert = document.createElement("div");
+    adminAlert.className = "adminAlert";
+
+    let adminAlertText, adminAlertButtons;
+    adminAlertText = document.createElement("div");
+    adminAlertText.className = "adminAlertText";
+    alertMessage = document.createElement("p");
+    alertMessage.className = "alertMessage";
+    alertMessage.id = "alertMessage";
+
+    if (!userLogged) {
+        adminAlertText.style.height = "100%";
+        adminAlertText.appendChild(alertMessage)
+        noUserLoggedInAlert(adminAlertText);
+    } else {
+        adminAlertButtons = document.createElement("div");
+        adminAlertButtons.className = "adminAlertButtons";
+
+        adminAlert.appendChild(adminAlertButtons);
+    }
+
+    adminAlert.appendChild(adminAlertText);
+    alertDiv.appendChild(adminAlert);   
+}
+
+let redirectingInterval;
+
+function noUserLoggedInAlert(alertTextDiv) {
+    setMsg("alertMessage", "", "accent1");
+
+    redirectingMessage = document.createElement("p");
+    redirectingMessage.className = "alertMessage";
+    redirectingMessage.id = "redirectingMessage";
+
+    let count = 0;
+    redirectingInterval = setInterval(() => {
+        const dots = ["Redirecting.", "Redirecting..", "Redirecting..."];
+        setMsg("redirectingMessage", dots[count % 3], "background1");
+        count++;
+    }, 400);
+
+    alertTextDiv.appendChild(redirectingMessage);    
+}
+
+function clearDiv(div) {
+    while (div.lastElementChild) {
+        div.removeChild(div.lastElementChild);
+    }
 }
 
 function cmsUpdatingRender(eventMain) {
