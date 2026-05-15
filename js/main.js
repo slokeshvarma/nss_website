@@ -8,9 +8,12 @@ function toggleTheme() {
         root.classList.replace("lightMode", "darkMode");
         localStorage.setItem("theme", "darkMode");
     }
-};
+}
 
-const $ = id => document.getElementById(id);
+const es = new EventSource(`http://${location.host}/__reload`);
+es.onmessage = () => location.reload();
+
+const $ = (id) => document.getElementById(id);
 
 function setURL(pageTitle, pushingURL) {
     const currentURL = window.location.href.split("/");
@@ -21,15 +24,15 @@ function setURL(pageTitle, pushingURL) {
         : window.location.href + pushingURL;
 
     window.history.pushState({ page: 1 }, pageTitle, newURL);
-};
+}
 
 function pageReDirect(url) {
     window.location.href = url;
-};
+}
 
 function openLink(link) {
-  window.open(link, "_blank");
-};
+    window.open(link, "_blank");
+}
 
 function navMobileMenu() {
     const navHeight = document.querySelector("nav").clientHeight;
@@ -38,22 +41,27 @@ function navMobileMenu() {
 
     navLinks.classList.toggle("clicked", hamburgerMenuOpened);
 
-    navHamburgerLines.forEach(line => {
+    navHamburgerLines.forEach((line) => {
         line.classList.toggle("clicked", hamburgerMenuOpened);
     });
 
     navLinks.style.top = hamburgerMenuOpened ? `${navHeight - 2}px` : "";
-};
+}
 
 function navSticky() {
-    const pageScrollValue = window.scrollY || document.documentElement.scrollTop;
-    const collegeLabelHeight = document.getElementsByClassName("collegeLabel")[0].clientHeight;
+    const pageScrollValue =
+        window.scrollY || document.documentElement.scrollTop;
+    const collegeLabelHeight =
+        document.getElementsByClassName("collegeLabel")[0].clientHeight;
     const root = document.documentElement;
-    const pageScrolledTill = pageScrollValue/collegeLabelHeight;
+    const pageScrolledTill = pageScrollValue / collegeLabelHeight;
     let pageScrolledPassed = false;
     if (pageScrolledTill >= 1) {
         pageScrolledPassed = true;
-        root.style.setProperty("--pageScrolledTill", Math.round(pageScrolledTill * 100)/100);
+        root.style.setProperty(
+            "--pageScrolledTill",
+            Math.round(pageScrolledTill * 100) / 100,
+        );
         if (pageScrolledTill >= 1.5) {
             root.style.setProperty("--pageScrolledTill", 1.5);
         }
@@ -64,17 +72,21 @@ function navSticky() {
     header.classList.toggle("sticked", pageScrolledPassed);
     landingSection.classList.toggle("sticked", pageScrolledPassed);
     aboutUs.classList.toggle("sticked", pageScrolledPassed);
-
-};
+}
 
 function loadCSV(path) {
     return new Promise((resolve, reject) => {
-        Papa.parse(path, {download: true, header: true, complete: results => resolve(results.data), error: err => reject(err) });
+        Papa.parse(path, {
+            download: true,
+            header: true,
+            complete: (results) => resolve(results.data),
+            error: (err) => reject(err),
+        });
     });
-};
+}
 
 function preloadImages(imageLinks) {
-    const promises = imageLinks.map(src => {
+    const promises = imageLinks.map((src) => {
         return new Promise((resolve, reject) => {
             const img = new Image();
             img.onload = () => resolve(src);
@@ -84,44 +96,56 @@ function preloadImages(imageLinks) {
     });
 
     return Promise.all(promises);
-};
+}
 
 function currentImageDiv() {
     let imageDiv;
-    const homeGalleryImagesNonMobile = document.getElementById("homeGalleryImagesNonMobile");
-    const homeGalleryImagesMobile = document.getElementById("homeGalleryImagesMobile");
-        
-    if (window.getComputedStyle(homeGalleryImagesNonMobile).display === "none") {
+    const homeGalleryImagesNonMobile = document.getElementById(
+        "homeGalleryImagesNonMobile",
+    );
+    const homeGalleryImagesMobile = document.getElementById(
+        "homeGalleryImagesMobile",
+    );
+
+    if (
+        window.getComputedStyle(homeGalleryImagesNonMobile).display === "none"
+    ) {
         imageDiv = homeGalleryImagesMobile;
-    } else if (window.getComputedStyle(homeGalleryImagesMobile).display === "none") {
+    } else if (
+        window.getComputedStyle(homeGalleryImagesMobile).display === "none"
+    ) {
         imageDiv = homeGalleryImagesNonMobile;
     }
     return imageDiv;
-};
+}
 
 function currentImageWraper(totalImagesCount, currentImage) {
     let tempCurrentImageNumber;
-    if (currentImage < 1){
+    if (currentImage < 1) {
         tempCurrentImageNumber = totalImagesCount;
-    } else if (currentImage > totalImagesCount){
+    } else if (currentImage > totalImagesCount) {
         tempCurrentImageNumber = 1;
     } else {
         tempCurrentImageNumber = currentImage;
     }
     return tempCurrentImageNumber;
-};
+}
 
-function renderImagesinHomeGallery(currentImage, className, imageDiv, imageLinks) {
-
+function renderImagesinHomeGallery(
+    currentImage,
+    className,
+    imageDiv,
+    imageLinks,
+) {
     while (imageDiv.lastElementChild) {
         imageDiv.removeChild(imageDiv.lastElementChild);
-    };
+    }
     let count = 1;
     let imageLink_1, imageLink_2, imageLink_lastButOne, imageLink_last;
     let directionClassNameCount = ["left", "center", "right"];
     const totalImagesCount = imageLinks.length;
 
-    imageLinks.forEach(imageLink => {
+    imageLinks.forEach((imageLink) => {
         let classNameCount = count - currentImage + 1;
 
         if (currentImage > 1 && currentImage < totalImagesCount) {
@@ -133,34 +157,52 @@ function renderImagesinHomeGallery(currentImage, className, imageDiv, imageLinks
                 imageDiv.appendChild(imageTag);
             }
         } else {
-            if (count === 1) {imageLink_1 = imageLink }
-            else if(count === 2) {imageLink_2 = imageLink}
-            else if(count === totalImagesCount - 1) {imageLink_lastButOne = imageLink}
-            else if(count === totalImagesCount) {imageLink_last = imageLink};
+            if (count === 1) {
+                imageLink_1 = imageLink;
+            } else if (count === 2) {
+                imageLink_2 = imageLink;
+            } else if (count === totalImagesCount - 1) {
+                imageLink_lastButOne = imageLink;
+            } else if (count === totalImagesCount) {
+                imageLink_last = imageLink;
+            }
 
-            if(typeof imageLink_1 !== 'undefined' && typeof imageLink_2 !== 'undefined' && typeof imageLink_lastButOne !== 'undefined' && typeof imageLink_last !== 'undefined') {
+            if (
+                typeof imageLink_1 !== "undefined" &&
+                typeof imageLink_2 !== "undefined" &&
+                typeof imageLink_lastButOne !== "undefined" &&
+                typeof imageLink_last !== "undefined"
+            ) {
                 let specialImageLinks = [];
                 let classNameCount = 0;
                 let directionClassNameCount = ["left", "center", "right"];
 
                 if (currentImage === 1) {
-                    specialImageLinks.push(imageLink_last, imageLink_1, imageLink_2);
+                    specialImageLinks.push(
+                        imageLink_last,
+                        imageLink_1,
+                        imageLink_2,
+                    );
                 } else {
-                    specialImageLinks.push(imageLink_lastButOne, imageLink_last, imageLink_1);
+                    specialImageLinks.push(
+                        imageLink_lastButOne,
+                        imageLink_last,
+                        imageLink_1,
+                    );
                 }
 
-                specialImageLinks.forEach(specialImageLink => {
+                specialImageLinks.forEach((specialImageLink) => {
                     const imageTag = document.createElement("img");
                     imageTag.className = `${directionClassNameCount[classNameCount]} ${className}`;
                     imageTag.src = `${specialImageLink}`;
                     imageDiv.appendChild(imageTag);
                     classNameCount++;
                 });
-            };
-        };
+            }
+        }
         count++;
     });
-};
+}
 
 function renderHomeGallery(data, currentImage) {
     const imageDiv = currentImageDiv();
@@ -168,50 +210,63 @@ function renderHomeGallery(data, currentImage) {
     let imageLinks = [];
 
     if (imageDivClassName === "homeGalleryImagesNonMobile") {
-        data.forEach(row => {
+        data.forEach((row) => {
             imageLinks.push(row.nonMobileImageLink);
         });
     } else {
-        data.forEach(row => {
+        data.forEach((row) => {
             imageLinks.push(row.mobileImageLink);
         });
     }
 
     preloadImages(imageLinks).then(() => {
-        renderImagesinHomeGallery(currentImage, imageDivClassName, imageDiv, imageLinks);
+        renderImagesinHomeGallery(
+            currentImage,
+            imageDivClassName,
+            imageDiv,
+            imageLinks,
+        );
     });
-};
+}
 
 function homeImageGallery(currentImage, direction) {
     const imageDiv = currentImageDiv();
-    const imgs = imageDiv.querySelectorAll('img');
+    const imgs = imageDiv.querySelectorAll("img");
 
-    imgs.forEach(img => img.classList.add(
-        direction === 'next' ? 'sliding-left' : 'sliding-right'
-    ));
+    imgs.forEach((img) =>
+        img.classList.add(
+            direction === "next" ? "sliding-left" : "sliding-right",
+        ),
+    );
 
     setTimeout(() => {
-        currentImageNumber = currentImageWraper(homeGalleryData.length, currentImage);
+        currentImageNumber = currentImageWraper(
+            homeGalleryData.length,
+            currentImage,
+        );
         renderHomeGallery(homeGalleryData, currentImageNumber);
     }, 400);
-};
+}
 
 let autoSlideInterval = null;
 
 function startAutoSlide() {
     if (autoSlideInterval) return;
     autoSlideInterval = setInterval(() => {
-        currentImageNumber = currentImageWraper(homeGalleryData.length, currentImageNumber + 1);
-        homeImageGallery(currentImageNumber, 'next');
+        currentImageNumber = currentImageWraper(
+            homeGalleryData.length,
+            currentImageNumber + 1,
+        );
+        homeImageGallery(currentImageNumber, "next");
     }, 3000);
-};
+}
 
 function stopAutoSlide() {
     if (autoSlideInterval) {
         clearInterval(autoSlideInterval);
         autoSlideInterval = null;
     }
-};
+}
 
 function initGalleryObserver() {
     const gallerySection = document.getElementById("homeGallery");
@@ -219,7 +274,7 @@ function initGalleryObserver() {
 
     const observer = new IntersectionObserver(
         (entries) => {
-            entries.forEach(entry => {
+            entries.forEach((entry) => {
                 const visibleHeight = entry.intersectionRect.height;
                 const viewportHeight = window.innerHeight;
                 if (visibleHeight >= viewportHeight * 0.8) {
@@ -229,21 +284,23 @@ function initGalleryObserver() {
                 }
             });
         },
-        { threshold: Array.from({ length: 101 }, (_, i) => i / 100) }
+        { threshold: Array.from({ length: 101 }, (_, i) => i / 100) },
     );
 
     observer.observe(gallerySection);
-};
+}
 
 function isElementInViewport(el) {
-  const rect = el.getBoundingClientRect();
-  return (
-    rect.top >= 0 &&
-    rect.left >= 0 &&
-    rect.bottom <= (window.innerHeight || document.documentElement.clientHeight) &&
-    rect.right <= (window.innerWidth || document.documentElement.clientWidth)
-  );
-};
+    const rect = el.getBoundingClientRect();
+    return (
+        rect.top >= 0 &&
+        rect.left >= 0 &&
+        rect.bottom <=
+            (window.innerHeight || document.documentElement.clientHeight) &&
+        rect.right <=
+            (window.innerWidth || document.documentElement.clientWidth)
+    );
+}
 
 function homeEventsMetaInfo() {
     let numberOfCards;
@@ -256,13 +313,13 @@ function homeEventsMetaInfo() {
         numberOfCards = 3;
     }
     return numberOfCards;
-};
+}
 
 function renderHomeEvents(currentCard, data) {
     const homeEventsDiv = document.getElementById("homeEvents");
     while (homeEventsDiv.lastElementChild) {
         homeEventsDiv.removeChild(homeEventsDiv.lastElementChild);
-    };
+    }
     const homeEventsDescription = document.createElement("div");
     homeEventsDescription.className = "homeEventsDescription";
     homeEventsDescription.innerHTML = `
@@ -278,31 +335,33 @@ function renderHomeEvents(currentCard, data) {
     homeEventsPrev.innerHTML += `<i class="fa-solid fa-angles-left"></i>`;
     homeEventsDiv.appendChild(homeEventsPrev);
 
-    const homeEventsPrevIcon = document.getElementById("homeEventsPrev").children[0];
-    homeEventsPrevIcon.addEventListener("click", ()=> {
+    const homeEventsPrevIcon =
+        document.getElementById("homeEventsPrev").children[0];
+    homeEventsPrevIcon.addEventListener("click", () => {
         homeEventCardSwipe(false, numberOfEventCards);
     });
 
     const homeEventCards = document.createElement("div");
     homeEventCards.className = "homeEventCards";
     let count = 1;
-    data.forEach(row => {
+    data.forEach((row) => {
         renderHomeEventCards(currentCard, row, count, homeEventCards);
         count++;
     });
 
-    homeEventsDiv.appendChild(homeEventCards);    
+    homeEventsDiv.appendChild(homeEventCards);
     const homeEventsNext = document.createElement("button");
     homeEventsNext.id = "homeEventsNext";
     homeEventsNext.className = "start";
     homeEventsNext.innerHTML += `<i class="fa-solid fa-angles-right"></i>`;
     homeEventsDiv.appendChild(homeEventsNext);
 
-    const homeEventsNextIcon = document.getElementById("homeEventsNext").children[0];
+    const homeEventsNextIcon =
+        document.getElementById("homeEventsNext").children[0];
     homeEventsNextIcon.addEventListener("click", () => {
         homeEventCardSwipe(true, numberOfEventCards);
     });
-};
+}
 
 function adjustDisplayAndPlacement(currentCard, numberOfCards) {
     const homeEvents = document.getElementById("homeEvents");
@@ -311,28 +370,29 @@ function adjustDisplayAndPlacement(currentCard, numberOfCards) {
     const nextButton = homeEvents.children[3];
 
     let count = 1;
-    Array.from(eventCards.children).forEach(eventCard => {
-        const visible = count >= currentCard && count < currentCard + numberOfCards;
+    Array.from(eventCards.children).forEach((eventCard) => {
+        const visible =
+            count >= currentCard && count < currentCard + numberOfCards;
         eventCard.style.display = visible ? "flex" : "none";
-        eventCard.classList.toggle('visible', visible);
+        eventCard.classList.toggle("visible", visible);
         count++;
     });
 
     let eventDescriptionHeight = 0;
-    Array.from(eventCards.children).forEach(eventCard => {
+    Array.from(eventCards.children).forEach((eventCard) => {
         if (window.getComputedStyle(eventCard).display === "flex") {
             eventDescriptionHeight = eventCard.children[1].clientHeight;
         }
     });
 
-    Array.from(eventCards.children).forEach(eventCard => {
+    Array.from(eventCards.children).forEach((eventCard) => {
         eventCard.children[1].style.marginTop = `-${eventDescriptionHeight}px`;
     });
 
     const padding = `${(numberOfCards === 1 ? 0.5 : 0.55) * eventDescriptionHeight}px`;
     prevButton.style.paddingBottom = padding;
     nextButton.style.paddingBottom = padding;
-};
+}
 
 function renderHomeEventCards(currentCard, dictObj, count, parentDiv) {
     const homeEventCard = document.createElement("div");
@@ -362,15 +422,17 @@ function renderHomeEventCards(currentCard, dictObj, count, parentDiv) {
     homeEventCard.appendChild(cardImageDiv);
     homeEventCard.appendChild(homeEventCardDetails);
     parentDiv.appendChild(homeEventCard);
-};
+}
 
-function homeEventCardSwipe(moveRight, numberOfCards) { 
+function homeEventCardSwipe(moveRight, numberOfCards) {
     console.log("outside Ran");
-    const eventCardsLength = document.getElementsByClassName("homeEventCards")[0].children.length;
+    const eventCardsLength =
+        document.getElementsByClassName("homeEventCards")[0].children.length;
     const homeEventsPrev = document.getElementById("homeEventsPrev");
     const homeEventsNext = document.getElementById("homeEventsNext");
     if (!moveRight && currentEventCard === 1) return;
-    if (moveRight && currentEventCard >= eventCardsLength + 1 - numberOfCards) return;
+    if (moveRight && currentEventCard >= eventCardsLength + 1 - numberOfCards)
+        return;
 
     if (moveRight) {
         currentEventCard += 1;
@@ -381,7 +443,10 @@ function homeEventCardSwipe(moveRight, numberOfCards) {
     if (currentEventCard === 1) {
         homeEventsPrev.className = "start";
         homeEventsNext.className = "start";
-    } else if (currentEventCard > 1 && currentEventCard < eventCardsLength + 1 - numberOfEventCards) {
+    } else if (
+        currentEventCard > 1 &&
+        currentEventCard < eventCardsLength + 1 - numberOfEventCards
+    ) {
         homeEventsPrev.className = "middle";
         homeEventsNext.className = "middle";
     } else {
@@ -410,21 +475,28 @@ function academicYearCalculator(date) {
         academicYear = `${currentYear - 1}-` + `${currentYear}`.slice(2, 4);
     }
     return String(academicYear);
-};
+}
 
 /* execution of functions */
-setInterval(() => {
-}, 30 * 1000);
+setInterval(() => {}, 30 * 1000);
 
-window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", e => {
-    if (!localStorage.getItem("theme")) {
-        if (e.matches) {
-            document.documentElement.classList.replace("lightMode", "darkMode");
-        } else {
-            document.documentElement.classList.replace("darkMode", "lightMode");
+window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", (e) => {
+        if (!localStorage.getItem("theme")) {
+            if (e.matches) {
+                document.documentElement.classList.replace(
+                    "lightMode",
+                    "darkMode",
+                );
+            } else {
+                document.documentElement.classList.replace(
+                    "darkMode",
+                    "lightMode",
+                );
+            }
         }
-    }
-});
+    });
 
 let academicYear = academicYearCalculator();
 
@@ -437,23 +509,22 @@ const hamburgerMenu = document.getElementById("navHamburgerClickable");
 
 function mainFinder() {
     const mains = document.getElementsByTagName("main");
-    Array.from(mains).forEach(visibleMain => {
+    Array.from(mains).forEach((visibleMain) => {
         if (window.getComputedStyle(visibleMain).display === "flex") {
             main = visibleMain;
             main.addEventListener("click", () => {
                 if (hamburgerMenuOpened) {
-                hamburgerMenuOpened = false;
-                navMobileMenu();
+                    hamburgerMenuOpened = false;
+                    navMobileMenu();
                 }
             });
         }
-    })
+    });
 }
-document.addEventListener("DOMContentLoaded", ()=> {
+document.addEventListener("DOMContentLoaded", () => {
     mainFinder();
     initGalleryObserver();
-})
-
+});
 
 hamburgerMenu.addEventListener("click", (e) => {
     e.stopPropagation();
@@ -461,4 +532,7 @@ hamburgerMenu.addEventListener("click", (e) => {
     navMobileMenu();
 });
 
-document.documentElement.style.setProperty("--navHeight", nav.offsetHeight + "px");
+document.documentElement.style.setProperty(
+    "--navHeight",
+    nav.offsetHeight + "px",
+);

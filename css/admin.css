@@ -37,13 +37,38 @@ main {
     height: fit-content;
     width: 420px;
     height: 240px;
-    background-color: color-mix(in srgb, var(--background1Color) 35%, var(--accent1Color));
+    background-color: color-mix(
+        in srgb,
+        var(--background1Color) 15%,
+        var(--accent1Color)
+    );
     border-radius: 2rem;
     backdrop-filter: blur(2px);
     overflow: hidden;
+    max-height: 180px;
 }
 .adminAlertText {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    color: var(--text2Color);
+    font-size: clamp(0.45rem, 0.45rem + 2vw, 1.15rem);
     height: 50%;
+}
+.adminAlertText p {
+    flex: 0 1 35%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.adminAlertText p:first-child {
+    flex: 1 0 65%;
+    color: var(--accent1Color);
+    background-color: var(--background1Color);
+    width: 100%;
+    border-radius: 2rem;
+    margin-top: 0;
 }
 .adminAlertButtons {
     height: 50%;
@@ -73,7 +98,8 @@ main {
     font-size: clamp(0.45rem, 0.45rem + 1.5vw, 1.15rem);
     gap: clamp(0.35rem, 0.35rem + 0.5vh, 1.15rem);
 }
-.logOutButton, .addEventSubmit {
+.logOutButton,
+.addEventSubmit {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -81,7 +107,8 @@ main {
     color: var(--text2Color);
     background-color: var(--accent1Color);
     font-weight: 505;
-    padding: clamp(0.15rem, 0.15rem + 0.5vh, 0.95rem) clamp(0.35rem, 0.35rem + 1vw, 1.05rem);
+    padding: clamp(0.15rem, 0.15rem + 0.5vh, 0.95rem)
+        clamp(0.35rem, 0.35rem + 1vw, 1.05rem);
     border-radius: 3rem;
 }
 .eventDataForm {
@@ -92,7 +119,8 @@ main {
     justify-content: center;
     max-width: 85vw;
     background-color: var(--background1Color);
-    padding: clamp(0.15rem, 0.15rem + 2vh, 1.5rem) clamp(0.35rem, 0.35rem + 3vw, 2rem);
+    padding: clamp(0.15rem, 0.15rem + 2vh, 1.5rem)
+        clamp(0.35rem, 0.35rem + 3vw, 2rem);
     border-radius: 2rem;
     margin-top: clamp(0.3rem, 0.3rem + 2vw, 0.75rem);
 }
@@ -113,13 +141,13 @@ main {
     color: var(--text1Color);
     background-color: var(--background1Color);
     font-size: clamp(0.5rem, 0.35rem + 2.5vw, 1.15rem);
-    margin-left:  clamp(0.5rem, 0.5rem + 2.5vw, 1rem);
+    margin-left: clamp(0.5rem, 0.5rem + 2.5vw, 1rem);
     margin-bottom: clamp(-0.5rem, -0.5rem - 5vw, -1rem);
     padding: 0 clamp(0.15rem, 0.15rem + 0.5vw, 0.5rem);
 }
 #eventDataForm input::placeholder.eventFormInput,
 #eventDataForm textarea.eventFormInput {
-    color: color-mix(in srgb, var(--text1Color) 70%, transparent); 
+    color: color-mix(in srgb, var(--text1Color) 70%, transparent);
 }
 .eventFormInput,
 #eventDataForm input.eventFormInput,
@@ -133,7 +161,8 @@ main {
     text-align: justify;
     border: 1px solid var(--background2Color);
     margin-bottom: clamp(0.25rem, 0.15rem + 1vw, 0.65rem);
-    padding: clamp(0.3rem, 0.3rem + 1vw, 0.7rem) clamp(0.65rem, 0.65rem + 7vw, 1.25rem);
+    padding: clamp(0.3rem, 0.3rem + 1vw, 0.7rem)
+        clamp(0.65rem, 0.65rem + 7vw, 1.25rem);
     max-width: 95vw;
     border-radius: 2rem;
 }
@@ -176,7 +205,6 @@ main {
     flex-direction: row;
     justify-content: end;
     padding: clamp(0.6rem, 0.6rem + 2vw, 1.4rem) 6vw;
-
 }
 .addEventSubmit {
     max-width: 30vw;
@@ -219,7 +247,8 @@ main {
         z-index: 0;
         font-size: clamp(0.65rem, 0.65rem + 0.9vw, 1.25rem);
     }
-    #eventFormField-eventDescription_oneLine, #eventFormField-eventDescription_multipleLine {
+    #eventFormField-eventDescription_oneLine,
+    #eventFormField-eventDescription_multipleLine {
         flex: 1 0 100%;
     }
 }
