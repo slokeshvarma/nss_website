@@ -1,47 +1,74 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en" class="lightMode">
-    <head style="display: none; ">
+    <head style="display: none">
         <title>CMS Admin</title>
-        <meta charset="UTF-8">
-        <meta name="description" content="NSSGVPCE Events Website">
-        <meta name="keywords" content="National, Service, Scheme, Gayatri Vidhya Parishad, NSS, GVP, NSSGVPCE">
-        <meta name="author" content="Lokesh Anand Varma Sayyaparaju">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-        <link rel="stylesheet" href="css/main.css">
-        <link rel="stylesheet" href="css/admin.css">
-        <link rel="icon" href="images/logo/favicon.ico" type="image/x-icon">
+        <meta charset="UTF-8" />
+        <meta name="description" content="NSSGVPCE Events Website" />
+        <meta
+            name="keywords"
+            content="National, Service, Scheme, Gayatri Vidhya Parishad, NSS, GVP, NSSGVPCE"
+        />
+        <meta name="author" content="Lokesh Anand Varma Sayyaparaju" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+        />
+        <link rel="stylesheet" href="css/main.css" />
+        <link rel="stylesheet" href="css/admin.css" />
+        <link rel="stylesheet" href="css/date-picker.css" />
+        <link rel="icon" href="images/logo/favicon.ico" type="image/x-icon" />
     </head>
-    
+
     <body>
-        
         <header class="sticked">
             <nav>
                 <div class="navLogo">
                     <div class="navImage">
-                        <img src="images/logo/nss_logo.png" alt="NSS Logo">
+                        <img src="images/logo/nss_logo.png" alt="NSS Logo" />
                     </div>
                     <div class="navTitle">
                         <p>National Service Scheme</p>
                     </div>
                 </div>
                 <div class="navLinks">
-                    <a class="navLink active" href="/"><span class="navLinkSymbol"><i class="fa-solid fa-house"></i></span>Home</a>
-                    <a class="navLink" href="/gallery"><span class="navLinkSymbol"><i class="fa-solid fa-image"></i></span>Gallery</a>
-                    <a class="navLink" href="/events"><span class="navLinkSymbol"><i class="fa-solid fa-calendar"></i></span>Events</a>
-                    <a class="navLink" href="/team"><span class="navLinkSymbol"><i class="fa-solid fa-users"></i></span>Team</a>
-                    <a class="navLink" href="/"><span class="navLinkSymbol"><i class="fa-solid fa-phone"></i></span>Contact</a>
+                    <a class="navLink active" href="/"
+                        ><span class="navLinkSymbol"
+                            ><i class="fa-solid fa-house"></i></span
+                        >Home</a
+                    >
+                    <a class="navLink" href="/gallery"
+                        ><span class="navLinkSymbol"
+                            ><i class="fa-solid fa-image"></i></span
+                        >Gallery</a
+                    >
+                    <a class="navLink" href="/events"
+                        ><span class="navLinkSymbol"
+                            ><i class="fa-solid fa-calendar"></i></span
+                        >Events</a
+                    >
+                    <a class="navLink" href="/team"
+                        ><span class="navLinkSymbol"
+                            ><i class="fa-solid fa-users"></i></span
+                        >Team</a
+                    >
+                    <a class="navLink" href="/"
+                        ><span class="navLinkSymbol"
+                            ><i class="fa-solid fa-phone"></i></span
+                        >Contact</a
+                    >
                 </div>
                 <div class="navHamburger">
                     <span class="navHamburgerLine"></span>
-                    <span id="navHamburgerClickable" class="navHamburgerLine"></span>
+                    <span
+                        id="navHamburgerClickable"
+                        class="navHamburgerLine"
+                    ></span>
                     <span class="navHamburgerLine"></span>
                 </div>
             </nav>
         </header>
-        <main id="admin" class="alertActive">
-
-        </main>
+        <main id="admin" class="alertActive"></main>
         <div id="adminAlertDiv"></div>
         <footer class="alertActive">
             <div class="footerTop">
@@ -59,27 +86,43 @@
                     </div>
                     <div class="footerLinksColumn">
                         <p class="footerLinksHeading">Resources</p>
-                        <a href="https://nss.gov.in/" target="_blank">NSS India</a>
-                        <a href="https://www.gvpce.ac.in/" target="_blank">GVPCE</a>
+                        <a href="https://nss.gov.in/" target="_blank"
+                            >NSS India</a
+                        >
+                        <a href="https://www.gvpce.ac.in/" target="_blank"
+                            >GVPCE</a
+                        >
                     </div>
                     <div class="footerLinksColumn">
                         <p class="footerLinksHeading">Social</p>
-                        <a href="#" target="_blank"><i class="fa-brands fa-instagram"></i> Instagram</a>
-                        <a href="mailto:nss@gvpce.ac.in"><i class="fa-solid fa-envelope"></i> Email</a>
+                        <a href="#" target="_blank"
+                            ><i class="fa-brands fa-instagram"></i> Instagram</a
+                        >
+                        <a href="mailto:nss@gvpce.ac.in"
+                            ><i class="fa-solid fa-envelope"></i> Email</a
+                        >
                     </div>
                 </div>
             </div>
             <div class="footerBottom">
-                <p>Madhurwada, Visakhapatnam, 530048 <span class="actingBr"><br></span> <span class="actingVr">&nbsp;|&nbsp;</span> Andhra Pradesh, India</p>
+                <p>
+                    Madhurwada, Visakhapatnam, 530048
+                    <span class="actingBr"><br /></span>
+                    <span class="actingVr">&nbsp;|&nbsp;</span> Andhra Pradesh,
+                    India
+                </p>
                 <div class="footerCopyright">
-                    <p>©&nbsp;<span id="footerYear"></span>&nbsp;NSS GVPCE (A).</p>
+                    <p>
+                        ©&nbsp;<span id="footerYear"></span>&nbsp;NSS GVPCE (A).
+                    </p>
                     <p>All rights reserved.</p>
                 </div>
             </div>
         </footer>
     </body>
-    
+
     <script src="dependencies/PapaParse-5.0.2.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/air-datepicker@3"></script>
     <script src="js/main.js"></script>
     <script src="js/admin.js"></script>
 </html>

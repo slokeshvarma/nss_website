@@ -117,7 +117,15 @@ function alertDivRender(alertDiv, userLogged) {
 let redirectingInterval;
 
 function noUserLoggedInAlert(alertTextDiv) {
-    setMsg("alertMessage", "", "accent1");
+    const body = document.body;
+    body.classList.add("unAuthorized");
+    body.addEventListener(
+        "touchstart",
+        function (e) {
+            e.preventDefault();
+        },
+        { passive: false },
+    );
 
     redirectingMessage = document.createElement("p");
     redirectingMessage.className = "alertMessage";
@@ -248,6 +256,15 @@ function eventFormFieldInputRender(
             }
             e.target.value = value;
         });
+        new AirDatepicker(formFieldInput, {
+            dateFormat: "dd/MM/yyyy",
+            autoClose: true,
+            keyboardNav: true,
+            onSelect({ formattedDate }) {
+                formFieldInput.value = formattedDate;
+            },
+        });
+        formFieldDiv.appendChild(formFieldInput);
     } else if (formField === "eventUnit") {
         formFieldInput = document.createElement("div");
         formFieldInput.className = "eventFormInput";
@@ -258,6 +275,7 @@ function eventFormFieldInputRender(
             formFieldOption.className = "subFormFieldOption";
 
             const subFormFieldInput = document.createElement("input");
+            subFormFieldInput.tabIndex = "0";
             subFormFieldInput.type = "radio";
             subFormFieldInput.name = "eventUnit";
             subFormFieldInput.id = `unit_${unit}`;
@@ -398,6 +416,7 @@ function eventFormFieldInputRender(
         formFieldMSG.className = `formFieldMessage`;
         formFieldDiv.appendChild(formFieldMSG);
     }
+    formFieldInput.tabIndex = "0";
 }
 
 const logInAppScriptLink =
